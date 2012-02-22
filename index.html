@@ -304,7 +304,6 @@ console.log("voxel placed:", x, y, z, colindex);
 			}
 
 			function setBrushColor( value ) {
-console.log("setBrushColor:", value);
 				color = value;
 				brush.material[ 0 ].color.setHex( colors[ color ] ^ 0x4C000000 );
 
@@ -501,7 +500,6 @@ console.log("setBrushColor:", value);
 							else {
 								colindex = 5;
 							}
-console.log("voxel placed:", x, y, z, colindex);
 							setBrushColor(colindex);
 							return;
 
