@@ -33,6 +33,8 @@
 		<script type="text/javascript">
 			var cursor = [0,0,0];
 			var grid = {};
+			var isRunning = false;
+			var frame = 1;
 			var container, interval,
 			camera, scene, renderer,
 			projector, plane, cube, linesMaterial,
@@ -176,6 +178,13 @@
 
 				}
 
+				setInterval(mainLoop, 500);
+			}
+			
+			function mainLoop() {
+				if (isRunning) {
+					console.log("frame:", frame++)
+				}
 			}
 
 			function onDocumentKeyDown( event ) {
@@ -216,6 +225,12 @@ console.log("key:", event.keyCode);
 						cursor[1]--;
 						setBrushPosition(cursor);
 						render(); 
+						break;
+					case 82:
+						isRunning = true;
+						break;
+					case 83:
+						isRunning = false;
 						break;
 					case 32:
 						var obj = getGrid(cursor);
