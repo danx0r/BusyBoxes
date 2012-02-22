@@ -45,7 +45,7 @@
             color = 0,colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50, 0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF, 0xEFEFEF, 0x303030 ],
             ray, brush, objectHovered,
             mouse3D, isMouseDown = false, onMouseDownPosition,
-            radious = 1600, theta = 45, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60,
+            radious = 1600, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60,
             isShiftDown = false;
 
             init();
@@ -62,8 +62,8 @@
                 info.style.width = '100%';
                 info.style.textAlign = 'center';
                 info.innerHTML = '<span style="color: #444; background-color: #fff; border-bottom: 1px solid #ddd; padding: 8px 10px;">' +
-                '<strong> click</strong>: add cell, <strong>shift + click</strong>:' +
-                'remove voxel, <strong>drag</strong>: rotate | <a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>';
+                '<b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | SPACE to run; S to step | </b>' +
+                '<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>';
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -71,7 +71,7 @@
                 camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                 camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
                 camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
-                camera.position.y = 200;
+//                camera.position.y = 200;
 
                 scene = new THREE.Scene();
 
@@ -366,6 +366,7 @@ console.log("grid:", temp)
                     camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                     camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
                     camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+                    console.log("camera:", camera.position)
                     camera.updateMatrix();
 
                 }
