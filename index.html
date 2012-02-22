@@ -182,7 +182,7 @@
                                 var d1 = offs1[i];
                                 var d2 = offs2[i];
                                 console.log("  d1, d2:", d1, d2, "dxyz:", xyz[0] + d1, 0, xyz[2] + d2, "getGrid:", getGrid([xyz[0] + d1, 0, xyz[2] + d2]));
-                                if (getGrid([xyz[0] + d1, 0, xyz[2] + d2])) {
+                                if (getGrid([xyz[0] + d1, xyz[1], xyz[2] + d2])) {
                                     var mv = [move1[i], 0, move2[i]];
                                     console.log("  mv:", mv);
                                     if (move == null) {
