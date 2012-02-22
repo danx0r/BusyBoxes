@@ -242,15 +242,18 @@ console.log("key:", event.keyCode);
 						setBrushPosition(cursor);
 						render(); 
 						break;
-					case 82:
-						isRunning = true;
-						setBrushPosition([0,2000,0]);
-						break;
-					case 83:
-						isRunning = false;
-						setBrushPosition(cursor);
-						break;
 					case 32:
+						if (isRunning) {
+							isRunning = false;
+							setBrushPosition(cursor);
+						}
+						else {
+							isRunning = true;
+							setBrushPosition([0,2000,0]);
+						}
+						break;
+					case 10:
+					case 13:
 						var obj = getGrid(cursor);
 						if (obj) {
 							scene.removeObject(obj);
