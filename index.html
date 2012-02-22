@@ -31,7 +31,11 @@
         </script>
 
         <script type="text/javascript">
-            var cursor = [0,0,0];
+            var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
+            var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
+            var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
+            var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+            var cursor = [0, 0, 0];
             var grid = {};
             var isRunning = false;
             var frame = 1;
@@ -164,11 +168,37 @@
                         cell = cells[i];
                         console.log(cell[0], cell[1]);
                         xyz = eval('[' + cell[0] + ']');
-                        nu = [xyz[0] + 1, xyz[1] + 1, xyz[2]];
-                        moveCell(xyz, cell[1], nu);
+                        
+                        // test moveCell
+                        //nu = [xyz[0] + 1, xyz[1] + 1, xyz[2]];
+                        //moveCell(xyz, cell[1], nu);
+                        // here's the rub:
+                        // initial test on y=0 only -- xz plane
+                        // need to do this in every plane, for all 3 planes: xy, yz, xz
+                        var move = null;
+                        for (i=0; i<8; i++) {
+                            var d1 = offs1[i];
+                            var d2 = offs2[i];
+                            if (getGrid(xyz[0]+d1, 0, xyz[2]+d2)) {
+                                var mv = [move1[i], 0, move2[i]];
+                                if (move == null) {
+                                    move = mv;
+                                }
+                                else {
+                                    if (!v3eq(move, mv)) {
+                                        move = false;       // conflicting moves -- give up
+                                    }
+                                }
+                            }
+                        }
+                        console.log("DEBUG cell:", xyz, "move:", move);
                     }
                     render();
                  }
+            }
+            
+            function v3eq(v1, v2){
+                return (v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2]);
             }
 
             function moveCell(oldxyz, mesh, newxyz) {
