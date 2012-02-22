@@ -17,7 +17,6 @@
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
         <script type="text/javascript" src="js/Plane.js"></script>
-
         <script type="text/javascript"> 
           var _gaq = _gaq || [];
           _gaq.push(['_setAccount', 'UA-86951-7']);
@@ -31,6 +30,7 @@
         </script>
 
         <script type="text/javascript">
+            var DEBUG = false;
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
             var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
             var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -61,13 +61,14 @@
                 info.style.top = '5px';
                 info.style.width = '100%';
                 info.style.textAlign = 'center';
-                info.innerHTML = '<span style="color: #444; background-color: #fff; border-bottom: 1px solid #ddd; padding: 8px 10px;">' +
-                '<b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | SPACE to run; S to step | </b>' +
-                '<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>';
+                info.innerHTML = '<p><span style="color: #444; background-color: #fff; border-bottom: 1px solid #ddd; padding: 8px 10px;">' +
+                '<b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step | </b>' +
+                '<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>' +
+                '</p><button onclick="isRunning?isRunning=false:isRunning=true">RUN/STOP</button></br>';
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-                console.log("camera:", camera);
+                if(DEBUG) console.log("camera:", camera);
                 camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                 camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
                 camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
@@ -158,15 +159,15 @@
             
             function mainLoop() {
                 if (isRunning) {
-                    console.log("frame:", frame)
+                    if(DEBUG) console.log("frame:", frame)
                     var cells = [];
                     for(key in grid) {
                         cells.push([key, grid[key]]);
                     }
-                    console.log("cells:", cells)
+                    if(DEBUG) console.log("cells:", cells)
                     for (var i in cells) {
                         cell = cells[i];
-                        console.log(cell[0], cell[1]);
+                        if(DEBUG) console.log(cell[0], cell[1]);
                         xyz = eval('[' + cell[0] + ']');
                         
                         // test moveCell
@@ -177,29 +178,29 @@
                         // need to do this in every plane, for all 3 planes: xy, yz, xz
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
                             var move = null;
-                            console.log("DEBUG cell:", xyz, "-----------------------------------");
+                            if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
                             for (i = 0; i < 8; i++) {
                                 var d1 = offs1[i];
                                 var d2 = offs2[i];
-                                console.log("  d1, d2:", d1, d2, "dxyz:", xyz[0] + d1, 0, xyz[2] + d2, "getGrid:", getGrid([xyz[0] + d1, 0, xyz[2] + d2]));
+                                if(DEBUG) console.log("  d1, d2:", d1, d2, "dxyz:", xyz[0] + d1, 0, xyz[2] + d2, "getGrid:", getGrid([xyz[0] + d1, 0, xyz[2] + d2]));
                                 if (getGrid([xyz[0] + d1, xyz[1], xyz[2] + d2])) {
                                     var mv = [move1[i], 0, move2[i]];
-                                    console.log("  mv:", mv);
+                                    if(DEBUG) console.log("  mv:", mv);
                                     if (move == null) {
                                         move = mv;
-                                        console.log("  move:", move);
+                                        if(DEBUG) console.log("  move:", move);
                                     }
                                     else {
                                         if (!v3eq(move, mv)) {
                                             move = false; // conflicting moves -- give up
-                                            console.log("  move:", move);
+                                            if(DEBUG) console.log("  move:", move);
                                         }
                                     }
                                 }
                             }
                             if (move) {
                                 move = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
-                                console.log("  move:", move);
+                                if(DEBUG) console.log("  move:", move);
                                 moveCell(xyz, cell[1], move);
                             }
                         }
@@ -250,7 +251,7 @@
 
             function onDocumentKeyDown( event ) {
 
-console.log("key:", event.keyCode);
+if(DEBUG) console.log("key:", event.keyCode);
                 switch( event.keyCode ) {
                     case 16: 
                         isShiftDown = true; 
@@ -320,7 +321,7 @@ console.log("key:", event.keyCode);
                         render(); 
 var temp = [];
 for(var e in grid) temp.push(e);
-console.log("grid:", temp)
+if(DEBUG) console.log("grid:", temp)
                         break;
                 }
 
@@ -353,7 +354,7 @@ console.log("grid:", temp)
 
                 var dx = event.clientX - onMouseDownPosition.x;
                 var dy = event.clientY - onMouseDownPosition.y;
-//console.log("dx, dy:", dx, dy)
+//if(DEBUG) console.log("dx, dy:", dx, dy)
                 event.preventDefault();
 
                 if ( isMouseDown ) {
@@ -366,7 +367,7 @@ console.log("grid:", temp)
                     camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                     camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
                     camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
-                    console.log("camera:", camera.position)
+                    if(DEBUG) console.log("camera:", camera.position)
                     camera.updateMatrix();
 
                 }
