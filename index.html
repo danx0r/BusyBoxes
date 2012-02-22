@@ -197,9 +197,11 @@
                                     }
                                 }
                             }
-                            move = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
-                            console.log("  move:", move);
-                            moveCell(xyz, cell[1], move);
+                            if (move) {
+                                move = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
+                                console.log("  move:", move);
+                                moveCell(xyz, cell[1], move);
+                            }
                         }
                     }
                     render();
