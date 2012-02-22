@@ -53,15 +53,15 @@
 			}
 
 			function putGrid(obj, xyz) {
-				grid["x"+xyz[0]+"y"+xyz[1]+"z"+xyz[2]] = obj;
+				grid[xyz] = obj;
 			}
 
 			function getGrid(xyz) {
-				return grid["x"+xyz[0]+"y"+xyz[1]+"z"+xyz[2]];
+				return grid[xyz];
 			}
 
 			function delGrid(xyz) {
-				grid["x"+xyz[0]+"y"+xyz[1]+"z"+xyz[2]] = null;
+				grid[xyz] = null;
 			}
 
 			function init() {
