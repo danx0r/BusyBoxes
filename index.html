@@ -269,21 +269,12 @@ console.log("fergetit")
 
 							var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
 							
-							var x = Math.floor( position.x / 50 );
-							var y = Math.floor( position.y / 50 );
-							var z = Math.floor( position.z / 50 );
-							var colindex;
-							if ((x + y + z) % 2 == 0) {
-								colindex = 0;
-							} 
-							else {
-								colindex = 5;
-							}
-console.log("voxel placed:", x, y, z, colindex);
-							setBrushColor(colindex);
+							/*
 							voxel.position.x = Math.floor( position.x / 50 ) * 50 + 25;
 							voxel.position.y = Math.floor( position.y / 50 ) * 50 + 25;
 							voxel.position.z = Math.floor( position.z / 50 ) * 50 + 25;
+							*/
+							setObjPosition(voxel, cursor);
 							voxel.overdraw = true;
 							scene.addObject( voxel );
 
@@ -479,18 +470,6 @@ console.log("voxel placed:", x, y, z, colindex);
 							brush.position.y = Math.floor( position.y / 50 ) * 50 + 25;
 							brush.position.z = Math.floor( position.z / 50 ) * 50 + 25;
 							*/
-
-							var x = Math.floor( position.x / 50 );
-							var y = Math.floor( position.y / 50 );
-							var z = Math.floor( position.z / 50 );
-							var colindex;
-							if ((x + y + z) % 2 == 0) {
-								colindex = 0;
-							} 
-							else {
-								colindex = 5;
-							}
-							setBrushColor(colindex);
 							return;
 
 						}
