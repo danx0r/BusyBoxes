@@ -155,6 +155,19 @@
 			function mainLoop() {
 				if (isRunning) {
 					console.log("frame:", frame++)
+					var cells = [];
+					for(key in grid) {
+						cells.push([key, grid[key]]);
+					}
+					cell = cells[0];
+					console.log(cell[0], cell[1]);
+					xyz = eval('['+cell[0]+']');
+					xyz[0]++;
+					xyz[1]++;
+					setObjPosition(cell[1], xyz);
+					delGrid(cell[0]);
+					putGrid(cell[1], xyz);
+					render();
 				}
 			}
 
@@ -228,9 +241,11 @@ console.log("key:", event.keyCode);
 						break;
 					case 82:
 						isRunning = true;
+						setBrushPosition([0,2000,0]);
 						break;
 					case 83:
 						isRunning = false;
+						setBrushPosition(cursor);
 						break;
 					case 32:
 						var obj = getGrid(cursor);
