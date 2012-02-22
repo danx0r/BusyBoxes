@@ -157,23 +157,50 @@
 
 			function onDocumentKeyDown( event ) {
 
-//console.log("key:", event.keyCode);
+console.log("key:", event.keyCode);
 				switch( event.keyCode ) {
-					/*
-					case 49: setBrushColor( 0 ); break;
-					case 50: setBrushColor( 1 ); break;
-					case 51: setBrushColor( 2 ); break;
-					case 52: setBrushColor( 3 ); break;
-					case 53: setBrushColor( 4 ); break;
-					case 54: setBrushColor( 5 ); break;
-					case 55: setBrushColor( 6 ); break;
-					case 56: setBrushColor( 7 ); break;
-					case 57: setBrushColor( 8 ); break;
-					case 48: setBrushColor( 9 ); break;
-					*/
-
-					case 16: isShiftDown = true; interact(); render(); break;
-
+					case 16: 
+						isShiftDown = true; 
+						interact(); 
+						render(); 
+						break;
+					case 37: 
+						cursor[0]--;
+						setObjPosition(brush, cursor);
+						render(); 
+						break;
+					case 38: 
+						cursor[2]--;
+						setObjPosition(brush, cursor);
+						render(); 
+						break;
+					case 39: 
+						cursor[0]++;
+						setObjPosition(brush, cursor);
+						render(); 
+						break;
+					case 40: 
+						cursor[2]++;
+						setObjPosition(brush, cursor);
+						render(); 
+						break;
+					case 85: 
+						cursor[1]++;
+						setObjPosition(brush, cursor);
+						render(); 
+						break;
+					case 68: 
+						cursor[1]--;
+						setObjPosition(brush, cursor);
+						render(); 
+						break;
+					case 32:
+						var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
+						setObjPosition(voxel, cursor);
+						voxel.overdraw = true;
+						scene.addObject( voxel );
+						render(); 
+						break;
 				}
 
 			}
@@ -205,7 +232,7 @@
 
 				var dx = event.clientX - onMouseDownPosition.x;
 				var dy = event.clientY - onMouseDownPosition.y;
-console.log("dx, dy:", dx, dy)
+//console.log("dx, dy:", dx, dy)
 				event.preventDefault();
 
 				if ( isMouseDown ) {
