@@ -32,6 +32,7 @@
 
 		<script type="text/javascript">
 			var cursor = [0,0,0];
+			var grid = {};
 			var container, interval,
 			camera, scene, renderer,
 			projector, plane, cube, linesMaterial,
@@ -49,6 +50,18 @@
 				obj.position.x = xyz[0] * 50 + 25;
 				obj.position.y = xyz[1] * 50 + 25;
 				obj.position.z = xyz[2] * 50 + 25;
+			}
+
+			function putGrid(obj, xyz) {
+				grid["x"+xyz[0]+"y"+xyz[1]+"z"+xyz[2]] = obj;
+			}
+
+			function getGrid(xyz) {
+				return grid["x"+xyz[0]+"y"+xyz[1]+"z"+xyz[2]];
+			}
+
+			function delGrid(xyz) {
+				grid["x"+xyz[0]+"y"+xyz[1]+"z"+xyz[2]] = null;
 			}
 
 			function init() {
@@ -195,10 +208,18 @@ console.log("key:", event.keyCode);
 						render(); 
 						break;
 					case 32:
-						var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
-						setObjPosition(voxel, cursor);
-						voxel.overdraw = true;
-						scene.addObject( voxel );
+						var obj = getGrid(cursor);
+console.log("obj:", obj)
+						if (obj) {
+							scene.removeObject(obj);
+						}
+						else {
+							var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
+							putGrid(voxel, cursor);
+							setObjPosition(voxel, cursor);
+							voxel.overdraw = true;
+							scene.addObject( voxel );
+						}
 						render(); 
 						break;
 				}
