@@ -275,6 +275,11 @@ console.log("key:", event.keyCode);
                         setBrushPosition(cursor);
                         render(); 
                         break;
+                    case 83:
+                        isRunning = true;
+                        mainLoop();
+                        isRunning = false;
+                        break;
                     case 32:
                         if (isRunning) {
                             isRunning = false;
