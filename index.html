@@ -31,7 +31,7 @@
 		</script>
 
 		<script type="text/javascript">
-
+			var cursor = [0,0,0];
 			var container, interval,
 			camera, scene, renderer,
 			projector, plane, cube, linesMaterial,
@@ -43,6 +43,13 @@
 
 			init();
 			render();
+
+			// convert grid coord to 3D coord and set obj.position accordingly given vector [x,y,z]
+			function setObjPosition(obj, xyz) {
+				obj.position.x = xyz[0] * 50 + 25;
+				obj.position.y = xyz[1] * 50 + 25;
+				obj.position.z = xyz[2] * 50 + 25;
+			}
 
 			function init() {
 
@@ -100,7 +107,8 @@
 				ray = new THREE.Ray( camera.position, null );
 
 				brush = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ], 0.4 ) );
-				brush.position.y = 2000;
+				//brush.position.y = brushY;
+				setObjPosition(brush, cursor);
 				brush.overdraw = true;
 				scene.addObject( brush );
 
@@ -151,6 +159,7 @@
 
 //console.log("key:", event.keyCode);
 				switch( event.keyCode ) {
+					/*
 					case 49: setBrushColor( 0 ); break;
 					case 50: setBrushColor( 1 ); break;
 					case 51: setBrushColor( 2 ); break;
@@ -161,13 +170,9 @@
 					case 56: setBrushColor( 7 ); break;
 					case 57: setBrushColor( 8 ); break;
 					case 48: setBrushColor( 9 ); break;
+					*/
 
 					case 16: isShiftDown = true; interact(); render(); break;
-
-					case 37: offsetScene( - 1, 0 ); break;
-					case 38: offsetScene( 0, - 1 ); break;
-					case 39: offsetScene( 1, 0 ); break;
-					case 40: offsetScene( 0, 1 ); break;
 
 				}
 
@@ -435,28 +440,6 @@ console.log("voxel placed:", x, y, z, colindex);
 
 			}
 
-			function offsetScene( x, z ) {
-
-				var offset = new THREE.Vector3( x, 0, z ).multiplyScalar( 50 );
-
-				for ( var i in scene.objects ) {
-
-					object = scene.objects[ i ];
-
-					if ( object instanceof THREE.Mesh && object !== plane && object !== brush ) {
-
-						object.position.addSelf( offset );
-
-					}
-
-				}
-
-				updateHash();
-				interact();
-				render();
-
-			}
-
 			function interact() {
 
 				if ( objectHovered ) {
@@ -491,9 +474,11 @@ console.log("voxel placed:", x, y, z, colindex);
 
 							position = new THREE.Vector3().add( intersect.point, intersect.object.matrixRotation.transform( intersect.face.normal.clone() ) );
 
+							/*
 							brush.position.x = Math.floor( position.x / 50 ) * 50 + 25;
 							brush.position.y = Math.floor( position.y / 50 ) * 50 + 25;
 							brush.position.z = Math.floor( position.z / 50 ) * 50 + 25;
+							*/
 
 							var x = Math.floor( position.x / 50 );
 							var y = Math.floor( position.y / 50 );
@@ -514,7 +499,8 @@ console.log("voxel placed:", x, y, z, colindex);
 
 				}
 
-				brush.position.y = 2000;
+				//brush.position.y = brushY;
+				setObjPosition(brush, cursor);
 
 			}
 
@@ -527,7 +513,8 @@ console.log("voxel placed:", x, y, z, colindex);
 			function save() {
 
 				linesMaterial.color.setRGBA( 0, 0, 0, 0 );
-				brush.position.y = 2000;
+				//brush.position.y = brushY;
+				setObjPosition(brush, cursor);
 				render();
 
 				window.open( renderer.domElement.toDataURL('image/png'), 'mywindow' );
