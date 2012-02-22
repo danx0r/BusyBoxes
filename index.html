@@ -162,13 +162,16 @@
 					cell = cells[0];
 					console.log(cell[0], cell[1]);
 					xyz = eval('['+cell[0]+']');
-					xyz[0]++;
-					xyz[1]++;
-					setObjPosition(cell[1], xyz);
-					delGrid(cell[0]);
-					putGrid(cell[1], xyz);
+					nu = [xyz[0]+1, xyz[1]+1, xyz[2]];
+					moveCell(xyz, cell[1], nu);
 					render();
 				}
+			}
+
+			function moveCell(oldxyz, mesh, newxyz) {
+				setObjPosition(mesh, newxyz);
+				delGrid(oldxyz);
+				putGrid(mesh, newxyz);
 			}
 
 			// convert grid coord to 3D coord and set obj.position accordingly given vector [x,y,z]
