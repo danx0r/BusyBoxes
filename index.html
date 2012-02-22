@@ -73,7 +73,7 @@
 			}
 
 			function delGrid(xyz) {
-				grid[xyz] = null;
+				delete grid[xyz];
 			}
 
 			function init() {
@@ -234,7 +234,6 @@ console.log("key:", event.keyCode);
 						break;
 					case 32:
 						var obj = getGrid(cursor);
-console.log("obj:", obj)
 						if (obj) {
 							scene.removeObject(obj);
 							delGrid(cursor);
@@ -248,6 +247,9 @@ console.log("obj:", obj)
 						}
 						updateHash();
 						render(); 
+var temp = [];
+for(var e in grid) temp.push(e);
+console.log("grid:", temp)
 						break;
 				}
 
