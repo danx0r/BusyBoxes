@@ -51,6 +51,16 @@
 				obj.position.y = xyz[1] * 50 + 25;
 				obj.position.z = xyz[2] * 50 + 25;
 			}
+			
+			function setBrushPosition(xyz) {
+				setObjPosition(brush, xyz);
+				if ((xyz[0] + xyz[1] + xyz[2]) % 2 == 0) {
+					setBrushColor(0);					
+				}
+				else {
+					setBrushColor(5);					
+				}
+			}
 
 			function putGrid(obj, xyz) {
 				grid[xyz] = obj;
@@ -179,32 +189,32 @@ console.log("key:", event.keyCode);
 						break;
 					case 37: 
 						cursor[0]--;
-						setObjPosition(brush, cursor);
+						setBrushPosition(cursor);
 						render(); 
 						break;
 					case 38: 
 						cursor[2]--;
-						setObjPosition(brush, cursor);
+						setBrushPosition(cursor);
 						render(); 
 						break;
 					case 39: 
 						cursor[0]++;
-						setObjPosition(brush, cursor);
+						setBrushPosition(cursor);
 						render(); 
 						break;
 					case 40: 
 						cursor[2]++;
-						setObjPosition(brush, cursor);
+						setBrushPosition(cursor);
 						render(); 
 						break;
 					case 85: 
 						cursor[1]++;
-						setObjPosition(brush, cursor);
+						setBrushPosition(cursor);
 						render(); 
 						break;
 					case 68: 
 						cursor[1]--;
-						setObjPosition(brush, cursor);
+						setBrushPosition(cursor);
 						render(); 
 						break;
 					case 32:
