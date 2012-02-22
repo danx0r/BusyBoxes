@@ -47,35 +47,6 @@
 			init();
 			render();
 
-			// convert grid coord to 3D coord and set obj.position accordingly given vector [x,y,z]
-			function setObjPosition(obj, xyz) {
-				obj.position.x = xyz[0] * 50 + 25;
-				obj.position.y = xyz[1] * 50 + 25;
-				obj.position.z = xyz[2] * 50 + 25;
-			}
-			
-			function setBrushPosition(xyz) {
-				setObjPosition(brush, xyz);
-				if ((xyz[0] + xyz[1] + xyz[2]) % 2 == 0) {
-					setBrushColor(0);					
-				}
-				else {
-					setBrushColor(5);					
-				}
-			}
-
-			function putGrid(obj, xyz) {
-				grid[xyz] = obj;
-			}
-
-			function getGrid(xyz) {
-				return grid[xyz];
-			}
-
-			function delGrid(xyz) {
-				delete grid[xyz];
-			}
-
 			function init() {
 
 				container = document.createElement( 'div' );
@@ -185,6 +156,35 @@
 				if (isRunning) {
 					console.log("frame:", frame++)
 				}
+			}
+
+			// convert grid coord to 3D coord and set obj.position accordingly given vector [x,y,z]
+			function setObjPosition(obj, xyz) {
+				obj.position.x = xyz[0] * 50 + 25;
+				obj.position.y = xyz[1] * 50 + 25;
+				obj.position.z = xyz[2] * 50 + 25;
+			}
+			
+			function setBrushPosition(xyz) {
+				setObjPosition(brush, xyz);
+				if ((xyz[0] + xyz[1] + xyz[2]) % 2 == 0) {
+					setBrushColor(0);					
+				}
+				else {
+					setBrushColor(5);					
+				}
+			}
+
+			function putGrid(obj, xyz) {
+				grid[xyz] = obj;
+			}
+
+			function getGrid(xyz) {
+				return grid[xyz];
+			}
+
+			function delGrid(xyz) {
+				delete grid[xyz];
 			}
 
 			function onDocumentKeyDown( event ) {
