@@ -161,11 +161,11 @@
                         
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
                             if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
-                            var move = getMove(xyz);
+                            var move = getMove(xyz, 0, 1);
                             if (move) {
                                 var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
                                 if(!getGrid(mvto)) {
-                                    var mv = getMove(mvto);                                     // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
+                                    var mv = getMove(mvto, 0, 1);                                     // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
                                     if (mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
                                         if(DEBUG) console.log("  mvto:", mvto);
                                         moves.push([xyz, cell[1], mvto]);
@@ -183,14 +183,19 @@
                  }
             }
             
-            function getMove(xyz){
+            function getMove(xyz, x1, x2) {
+                if(x1 == null) x1 = 0;
+                if(x2 == null) x2 = 2;
                 var move = null;
+                var d = [0, 0, 0]
                 for (i = 0; i < 8; i++) {
-                    var d1 = offs1[i];
-                    var d2 = offs2[i];
+                    d[x1] = offs1[i];
+                    d[x2] = offs2[i];
                                                                             if (DEBUG) console.log("  d1, d2:", d1, d2, "dxyz:", xyz[0] + d1, 0, xyz[2] + d2, "getGrid:", getGrid([xyz[0] + d1, 0, xyz[2] + d2]));
-                    if (getGrid([xyz[0] + d1, xyz[1], xyz[2] + d2])) {
-                        var mv = [move1[i], 0, move2[i]];
+                    if (getGrid([xyz[0] + d[0], xyz[1] + d[1], xyz[2] + d[2]])) {
+                        var mv = [0, 0, 0];
+                        mv[x1] = move1[i];
+                        mv[x2] = move2[i];
                                                                             if (DEBUG) console.log("  mv:", mv);
                         if (move == null) {
                             move = mv;
