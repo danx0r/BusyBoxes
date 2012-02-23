@@ -18,7 +18,7 @@
         <script type="text/javascript" src="js/Cube.js"></script>
         <script type="text/javascript" src="js/Plane.js"></script>
         <script type="text/javascript">
-            var DEBUG = false;
+            var DEBUG = true;
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
             var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
             var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -33,7 +33,7 @@
             color = 0,colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50, 0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF, 0xEFEFEF, 0x303030 ],
             ray, brush, objectHovered,
             mouse3D, isMouseDown = false, onMouseDownPosition,
-            radious = 1600, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60,
+            radious = 1600, theta = 0, onMouseDownTheta = 45, phi = 160, onMouseDownPhi = 60,
             isShiftDown = false;
 
             init();
@@ -158,12 +158,6 @@
                         if(DEBUG) console.log(cell[0], cell[1]);
                         xyz = eval('[' + cell[0] + ']');
                         
-                        // test moveCell
-                        //nu = [xyz[0] + 1, xyz[1] + 1, xyz[2]];
-                        //moveCell(xyz, cell[1], nu);
-                        // here's the rub:
-                        // initial test on y=0 only -- xz plane
-                        // need to do this in every plane, for all 3 planes: xy, yz, xz
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
                             var move = null;
                             if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
@@ -378,52 +372,6 @@ if(DEBUG) console.log("grid:", temp)
 
                 onMouseDownPosition.x = event.clientX - onMouseDownPosition.x;
                 onMouseDownPosition.y = event.clientY - onMouseDownPosition.y;
-
-                if ( onMouseDownPosition.length() > 5 ) {
-                    return;
-
-                }
-
-                var intersect, intersects = ray.intersectScene( scene );
-
-                if ( intersects.length > 0 ) {
-
-                    intersect = intersects[ 0 ].object == brush ? intersects[ 1 ] : intersects[ 0 ];
-
-                    if ( intersect ) {
-
-                        if ( isShiftDown ) {
-
-                            if ( intersect.object != plane ) {
-
-                                scene.removeObject( intersect.object );
-
-                            }
-
-                        } else {
-
-                            var position = new THREE.Vector3().add( intersect.point, intersect.object.matrixRotation.transform( intersect.face.normal.clone() ) );
-
-                            var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
-                            
-                            /*
-                            voxel.position.x = Math.floor( position.x / 50 ) * 50 + 25;
-                            voxel.position.y = Math.floor( position.y / 50 ) * 50 + 25;
-                            voxel.position.z = Math.floor( position.z / 50 ) * 50 + 25;
-                            */
-                            setObjPosition(voxel, cursor);
-                            voxel.overdraw = true;
-                            scene.addObject( voxel );
-
-                        }
-
-                    }
-
-                }
-
-                updateHash();
-                interact();
-                render();
 
             }
 
