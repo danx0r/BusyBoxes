@@ -14,6 +14,10 @@
         </style>
     </head>
     <body>
+        <div style="position:absolute;background-color:white;font-size:large">
+            GENERATION:
+            <span id="generation" ></span>
+        </div>
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
         <script type="text/javascript" src="js/Plane.js"></script>
@@ -146,6 +150,7 @@
             }
             
             function mainLoop() {
+                document.getElementById("generation").innerHTML = frame;
                 if (isRunning) {
                     if(DEBUG) console.log("frame:", frame)
                     var cells = [];
