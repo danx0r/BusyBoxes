@@ -142,7 +142,7 @@
 
                 }
 
-                setInterval(mainLoop, 500);
+                setInterval(mainLoop, 140);
             }
             
             function mainLoop() {
@@ -161,11 +161,17 @@
                         
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
                             if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
-                            var move = getMove(xyz, 0, 1);
+                            var x1, x2                                          // our two axes for today
+                            switch(frame % 3) {
+                                case 0: x1=0; x2=1; break;
+                                case 1: x1=1; x2=2; break;
+                                case 2: x1=2; x2=0; break;
+                            }
+                            var move = getMove(xyz, x1, x2);
                             if (move) {
                                 var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
                                 if(!getGrid(mvto)) {
-                                    var mv = getMove(mvto, 0, 1);                                     // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
+                                    var mv = getMove(mvto, x1, x2);                             // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
                                     if (mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
                                         if(DEBUG) console.log("  mvto:", mvto);
                                         moves.push([xyz, cell[1], mvto]);
