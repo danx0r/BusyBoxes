@@ -44,7 +44,7 @@
             render();
 
             function init() {
-
+                if(DEBUG) console.log("init start")
                 container = document.createElement( 'div' );
                 document.body.appendChild( container );
 
@@ -143,10 +143,10 @@
                 if ( window.location.hash ) {
 
                     buildFromHash();
-
                 }
 
                 setInterval(mainLoop, 140);
+                render();
             }
             
             function mainLoop() {
@@ -202,7 +202,6 @@
                 for (i = 0; i < 8; i++) {
                     d[x1] = offs1[i];
                     d[x2] = offs2[i];
-                                                                            if (DEBUG) console.log("  d1, d2:", d1, d2, "dxyz:", xyz[0] + d1, 0, xyz[2] + d2, "getGrid:", getGrid([xyz[0] + d1, 0, xyz[2] + d2]));
                     if (getGrid([xyz[0] + d[0], xyz[1] + d[1], xyz[2] + d[2]])) {
                         var mv = [0, 0, 0];
                         mv[x1] = move1[i];
