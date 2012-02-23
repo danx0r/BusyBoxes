@@ -153,6 +153,7 @@
                         cells.push([key, grid[key]]);
                     }
                     if(DEBUG) console.log("cells:", cells)
+                    var moves = []
                     for (var i in cells) {
                         cell = cells[i];
                         if(DEBUG) console.log(cell[0], cell[1]);
@@ -182,10 +183,16 @@
                             }
                             if (move) {
                                 move = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
-                                if(DEBUG) console.log("  move:", move);
-                                moveCell(xyz, cell[1], move);
+                                if(!getGrid(move)) {
+                                    if(DEBUG) console.log("  move:", move);
+                                    moves.push([xyz, cell[1], move]);
+                                }
                             }
                         }
+                    }
+                    for (i in moves) {
+                        var args = moves[i];
+                        moveCell(args[0], args[1], args[2]);
                     }
                     render();
                     frame++;
