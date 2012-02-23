@@ -56,7 +56,7 @@
                 info.innerHTML = '<p><span style="color: #444; background-color: #fff; border-bottom: 1px solid #ddd; padding: 8px 10px; font-size:medium">' +
                 '<b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step | </b>' +
                 '<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>' +
-                '</p><button onclick="isRunning?isRunning=false:isRunning=true">RUN/STOP</button>' +
+                '</p><button onclick="toggleRunning()">RUN/STOP</button>' +
                 '<button onclick="window.location.reload(true)">RESET</button></br>';
                 container.appendChild( info );
  
@@ -262,6 +262,18 @@
             function delGrid(xyz) {
                 delete grid[xyz];
             }
+            
+            function toggleRunning(){
+                if (isRunning) {
+                    cursor = [0, 0, 0];
+                    isRunning = false;
+                }
+                else {
+                    cursor = [0, 2000, 0];
+                    isRunning = true;
+                }
+                setBrushPosition(cursor);
+            }
 
             function onDocumentKeyDown( event ) {
 
@@ -308,14 +320,7 @@ if(DEBUG) console.log("key:", event.keyCode);
                         isRunning = false;
                         break;
                     case 32:
-                        if (isRunning) {
-                            isRunning = false;
-                            setBrushPosition(cursor);
-                        }
-                        else {
-                            isRunning = true;
-                            setBrushPosition([0,2000,0]);
-                        }
+                        toggleRunning();
                         break;
                     case 10:
                     case 13:
