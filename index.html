@@ -163,10 +163,10 @@
                             if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
                             var move = getMove(xyz);
                             if (move) {
-                                move = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
-                                if(!getGrid(move)) {
-                                    if(DEBUG) console.log("  move:", move);
-                                    moves.push([xyz, cell[1], move]);
+                                var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
+                                if(!getGrid(mvto)) {
+                                    if(DEBUG) console.log("  mvto:", mvto);
+                                    moves.push([xyz, cell[1], mvto]);
                                 }
                             }
                         }
@@ -195,8 +195,9 @@
                         }
                         else {
                             if (!v3eq(move, mv)) {
-                                move = false; // conflicting moves -- give up
+                                move = false;                               // conflicting moves -- give up
                                                                             if (DEBUG) console.log("  move:", move);
+                                break;
                             }
                         }
                     }
