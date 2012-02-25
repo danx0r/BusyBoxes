@@ -15,11 +15,15 @@
     </head>
     <body>
         <div style="position:absolute;background-color:white;font-size:large">
-            GENERATION:
+            Generation:
             <span id="generation"></span>
             <br/>
             <span id="direction"></span>
             <br/>
+            Duplicate:
+            <span id="duplicates"></span>
+            <br/>
+            Hash:
             <span id="showhash" style="font-size:small;"></span>
         </div>
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
@@ -35,6 +39,8 @@
             var grid = {};
             var isRunning = false;
             var direction = "forward";
+            var hashmap = {};
+            var lasthash = "";
             var frame = 0;
             var container, interval,
             camera, scene, renderer,
@@ -574,7 +580,13 @@ if(DEBUG) console.log("grid:", temp)
                     document.getElementById('link').href = "http://mrdoob.com/projects/voxels/#A/" + data;
                 }
                 document.getElementById('showhash').innerHTML = data;
-
+                if (data != lasthash) {
+                    if (data in hashmap) {
+                        document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data];
+                    }
+                }
+                hashmap[data] = frame;
+                lasthash = data;
             }
 
             function interact() {
