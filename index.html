@@ -295,12 +295,15 @@
             }
 
             function reverseDirection(){
+                hashmap = {}
+                document.getElementById("duplicates").innerHTML = "";
                 if (direction == "forward") {
                     direction = "reverse";
                 }
                 else {
                     direction = "forward";
                 }
+                updateHash(true);
             }
 
             function onDocumentKeyDown( event ) {
