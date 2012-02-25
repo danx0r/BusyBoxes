@@ -17,6 +17,8 @@
         <div style="position:absolute;background-color:white;font-size:large">
             GENERATION:
             <span id="generation" ></span>
+            <br/>
+            <span id="direction" ></span>
         </div>
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
@@ -30,6 +32,7 @@
             var cursor = [0, 0, 0];
             var grid = {};
             var isRunning = false;
+            var direction = "forward";
             var frame = 0;
             var container, interval,
             camera, scene, renderer,
@@ -57,7 +60,8 @@
                 '<b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step | </b>' +
                 '<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>' +
                 '</p><button onclick="toggleRunning()">RUN/STOP</button>' +
-                '<button onclick="window.location.reload(true)">RESET</button></br>';
+                '<button onclick="window.location.reload(true)">RESET</button>' +
+                '<button onclick="reverseDirection()">REVERSE</button></br>';
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -152,7 +156,11 @@
             
             function mainLoop() {
                 document.getElementById("generation").innerHTML = frame;
+                document.getElementById("direction").innerHTML = direction;
                 if (isRunning) {
+                    if (direction == "reverse") {
+                        frame--;
+                    }
                     if(DEBUG) console.log("frame:", frame)
                     var cells = [];
                     for(key in grid) {
@@ -168,7 +176,7 @@
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
                             if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
                             var x1, x2                                          // our two axes for today
-                            switch(frame % 3) {
+                            switch( (frame % 3 + 3) %3 ) {                      // ach, Javascript you old goat
                                 case 0: x1=0; x2=1; break;
                                 case 1: x1=1; x2=2; break;
                                 case 2: x1=2; x2=0; break;
@@ -191,7 +199,9 @@
                         moveCell(args[0], args[1], args[2]);
                     }
                     render();
-                    frame++;
+                    if (direction == "forward") {
+                        frame++;
+                    }
                  }
             }
             
@@ -273,6 +283,15 @@
                     isRunning = true;
                 }
                 setBrushPosition(cursor);
+            }
+
+            function reverseDirection(){
+                if (direction == "forward") {
+                    direction = "reverse";
+                }
+                else {
+                    direction = "forward";
+                }
             }
 
             function onDocumentKeyDown( event ) {
