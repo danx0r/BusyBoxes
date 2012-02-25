@@ -178,7 +178,7 @@
                                 var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
                                 if(!getGrid(mvto)) {
                                     var mv = getMove(mvto, x1, x2);                             // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
-                                    if (mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
+                                    if (mv && mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
                                         if(DEBUG) console.log("  mvto:", mvto);
                                         moves.push([xyz, cell[1], mvto]);
                                     }
