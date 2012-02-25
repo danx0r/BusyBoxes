@@ -468,7 +468,6 @@ if(DEBUG) console.log("grid:", temp)
             function buildFromHash() {
                 var hash = window.location.hash;
                 var phase = hash.substr(hash.length-1, hash.length);
-                console.log("hash:", hash, "phase:", phase)
                 frame = parseInt(phase);
                 if ('' + frame == "NaN") {
                     frame = 0;
@@ -478,7 +477,6 @@ if(DEBUG) console.log("grid:", temp)
                 }
                 hash = hash.substr( 1 );
                 version = hash.substr( 0, 2 );
-                console.log("fixed hash:", hash, "version:", version)
 
                 if ( version == "A/" ) {
 
@@ -587,7 +585,6 @@ if(DEBUG) console.log("grid:", temp)
                 }
 
                 data = encode( data );
-                console.log("rebuilt hash:", data);
                 data +=     (frame % 6 + 6) %6
                 if (!noLink) {
                     window.location.hash = "A/" + data;
