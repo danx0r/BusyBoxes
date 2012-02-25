@@ -19,6 +19,8 @@
             <span id="generation" ></span>
             <br/>
             <span id="direction" ></span>
+            <br/>
+            <span id="showhash" ></span>
         </div>
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
@@ -157,6 +159,7 @@
             function mainLoop() {
                 document.getElementById("generation").innerHTML = frame;
                 document.getElementById("direction").innerHTML = direction;
+                updateHash(true);
                 if (isRunning) {
                     if (direction == "reverse") {
                         frame--;
@@ -504,7 +507,7 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
-            function updateHash() {
+            function updateHash(noLink) {
 
                 var data = [],
                 current = { x: 0, y: 0, z: 0, c: 0 },
@@ -566,8 +569,11 @@ if(DEBUG) console.log("grid:", temp)
                 }
 
                 data = encode( data );
-                window.location.hash = "A/" + data;
-                document.getElementById( 'link' ).href = "http://mrdoob.com/projects/voxels/#A/" + data;
+                if (!noLink) {
+                    window.location.hash = "A/" + data;
+                    document.getElementById('link').href = "http://mrdoob.com/projects/voxels/#A/" + data;
+                }
+                document.getElementById('showhash').innerHTML = data;
 
             }
 
