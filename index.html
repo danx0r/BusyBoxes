@@ -48,9 +48,7 @@
             color = 0,colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50, 0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF, 0xEFEFEF, 0x303030 ],
             ray, brush, objectHovered,
             mouse3D, isMouseDown = false, onMouseDownPosition,
-            radious = 1600, theta = 0, onMouseDownTheta = 45, phi = 75, onMouseDownPhi = 60,
-            isShiftDown = false;
-
+            radious = 1600, theta = 0, onMouseDownTheta = 45, phi = 75, onMouseDownPhi = 60;
             init();
             render();
 
@@ -145,7 +143,6 @@
                 container.appendChild(renderer.domElement);
 
                 document.addEventListener( 'keydown', onDocumentKeyDown, false );
-                document.addEventListener( 'keyup', onDocumentKeyUp, false );
 
                 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
                 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -310,11 +307,6 @@
 
 if(DEBUG) console.log("key:", event.keyCode);
                 switch( event.keyCode ) {
-                    case 16: 
-                        isShiftDown = true; 
-                        interact(); 
-                        render(); 
-                        break;
                     case 37: 
                         cursor[0]--;
                         setBrushPosition(cursor);
@@ -377,16 +369,6 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
-            function onDocumentKeyUp( event ) {
-
-                switch( event.keyCode ) {
-
-                    case 16: isShiftDown = false; interact(); render(); break;
-
-                }
-
-            }
-
             function onDocumentMouseDown( event ) {
 
                 event.preventDefault();
@@ -425,9 +407,6 @@ if(DEBUG) console.log("grid:", temp)
                 mouse3D = projector.unprojectVector( new THREE.Vector3( ( event.clientX / renderer.domElement.width ) * 2 - 1, - ( event.clientY / renderer.domElement.height ) * 2 + 1, 0.5 ), camera );
                 ray.direction = mouse3D.subSelf( camera.position ).normalize();
 
-                if(!isMouseDown || Math.sqrt(dx*dx+dy*dy) < 8) {
-                    interact();
-                }
                 render();
 
             }
@@ -452,7 +431,6 @@ if(DEBUG) console.log("grid:", temp)
                 camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                 camera.updateMatrix();
 
-                interact();
                 render();
 
             }
@@ -598,58 +576,6 @@ if(DEBUG) console.log("grid:", temp)
                 }
                 hashmap[data] = frame;
                 lasthash = data;
-            }
-
-            function interact() {
-
-                if ( objectHovered ) {
-
-                    objectHovered.material[ 0 ].color.a = 1;
-                    objectHovered.material[ 0 ].color.updateStyleString();
-                    objectHovered = null;
-
-                }
-
-                var position, intersect, intersects = ray.intersectScene( scene );
-
-                if ( intersects.length > 0 ) {
-
-                    intersect = intersects[ 0 ].object != brush ? intersects[ 0 ] : intersects[ 1 ];
-
-                    if ( intersect ) {
-
-                        if ( isShiftDown ) {
-
-                            if ( intersect.object != plane ) {
-
-                                objectHovered = intersect.object;
-                                objectHovered.material[ 0 ].color.a = 0.5;
-                                objectHovered.material[ 0 ].color.updateStyleString();
-
-                                return;
-
-                            }
-
-                        } else {
-
-                            position = new THREE.Vector3().add( intersect.point, intersect.object.matrixRotation.transform( intersect.face.normal.clone() ) );
-
-                            /*
-                            brush.position.x = Math.floor( position.x / 50 ) * 50 + 25;
-                            brush.position.y = Math.floor( position.y / 50 ) * 50 + 25;
-                            brush.position.z = Math.floor( position.z / 50 ) * 50 + 25;
-                            */
-                            return;
-
-                        }
-
-                    }
-
-                }
-
-                //brush.position.y = brushY;
-                setObjPosition(brush, cursor);
-
             }
 
             function render() {
