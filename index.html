@@ -25,6 +25,9 @@
             <br/>
             Hash:
             <span id="showhash" style="font-size:small;"></span>
+            <br/>
+            Cells:
+            <span id="cellcount"></span>
         </div>
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
@@ -42,6 +45,7 @@
             var hashmap = {};
             var lasthash = "";
             var frame = 0;
+            var cellCount = 0;
             var container, interval,
             camera, scene, renderer,
             projector, plane, cube, linesMaterial,
@@ -507,13 +511,14 @@ if(DEBUG) console.log("grid:", temp)
                 current = { x: 0, y: 0, z: 0, c: 0 },
                 last = { x: 0, y: 0, z: 0, c: 0 },
                 code;
+                cellCount = 0;
 
                 for ( var i in scene.objects ) {
 
                     object = scene.objects[ i ];
 
                     if ( object instanceof THREE.Mesh && object !== plane && object !== brush ) {
-
+                        cellCount++;
                         current.x = ( object.position.x - 25 ) / 50;
                         current.y = ( object.position.y - 25 ) / 50;
                         current.z = ( object.position.z - 25 ) / 50;
@@ -574,6 +579,7 @@ if(DEBUG) console.log("grid:", temp)
                         document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data];
                     }
                 }
+                document.getElementById('cellcount').innerHTML = cellCount;
                 hashmap[data] = frame;
                 lasthash = data;
             }
