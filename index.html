@@ -467,7 +467,7 @@ if(DEBUG) console.log("grid:", temp)
 
             function buildFromHash() {
 
-                var hash = window.location.hash.substr( 1 ),
+                var hash = window.location.hash.substr( 1, window.location.hash.length-2 ),
                 version = hash.substr( 0, 2 );
 
                 if ( version == "A/" ) {
@@ -578,6 +578,7 @@ if(DEBUG) console.log("grid:", temp)
                 }
 
                 data = encode( data );
+                data += (frame % 6 + 6) %6
                 if (!noLink) {
                     window.location.hash = "A/" + data;
                     document.getElementById('link').href = "http://mrdoob.com/projects/voxels/#A/" + data;
