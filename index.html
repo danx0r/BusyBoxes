@@ -470,7 +470,13 @@ if(DEBUG) console.log("grid:", temp)
                 var phase = hash.substr(hash.length-1, hash.length);
                 console.log("phase:", phase)
                 frame = parseInt(phase);
-                hash = hash.substr( 1, hash.length-2 ),
+                if ('' + frame == "NaN") {
+                    frame = 0;
+                }
+                else {
+                    hash = hash.substr( 0, hash.length-2 );
+                }
+                hash = hash.substr( 1 );
                 version = hash.substr( 0, 2 );
 
                 if ( version == "A/" ) {
