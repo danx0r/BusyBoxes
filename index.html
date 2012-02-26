@@ -56,7 +56,7 @@
             color = 0,colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50, 0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF, 0xEFEFEF, 0x303030 ],
             ray, brush, objectHovered,
             mouse3D, isMouseDown = false, onMouseDownPosition,
-            radious = 1600, theta = 0, onMouseDownTheta = 45, phi = 75, onMouseDownPhi = 60;
+            radious = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
             init();
             render();
 
@@ -91,19 +91,19 @@
                 // Grid
 
                 var geometry = new THREE.Geometry();
-                geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( - 500, 0, 0 ) ) );
-                geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( 500, 0, 0 ) ) );
+                geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( axisMin * 50, 0, 0 ) ) );
+                geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( (axisMax+1) * 50, 0, 0 ) ) );
 
                 linesMaterial = new THREE.LineColorMaterial( 0x000000, 0.2 );
 
-                for ( var i = 0; i <= 20; i ++ ) {
+                for ( var i = 0; i <= axisMax - axisMin + 1; i ++ ) {
 
                     var line = new THREE.Line( geometry, linesMaterial );
-                    line.position.z = ( i * 50 ) - 500;
+                    line.position.z = ( i * 50 ) + axisMin * 50;
                     scene.addObject( line );
 
                     var line = new THREE.Line( geometry, linesMaterial );
-                    line.position.x = ( i * 50 ) - 500;
+                    line.position.x = ( i * 50 ) + axisMin * 50;
                     line.rotation.y = 90 * Math.PI / 180;
                     scene.addObject( line );
 
