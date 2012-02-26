@@ -80,7 +80,7 @@
                 '<button onclick="window.location.reload(true)">RESET</button>' +
                 '<button onclick="reverseDirection()">REVERSE</button>' +
                 '<button onclick="clearScreen()">CLEAR</button>' +
-                '<button onclick="randomCells(16, -3, 2)">RANDOM</button>';
+                '<button onclick="randomCells(16, -2, 2)">RANDOM</button>';
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -640,10 +640,11 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function clearScreen(noReload) {
-                if ( !confirm( 'Are you sure?' ) ) {
-
-                    return
-
+                grid = {};
+                if (!noReload) {
+                    if (!confirm('Are you sure?')) {
+                        return
+                    }
                 }
 
                 window.location.hash = "";
@@ -670,10 +671,17 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function randomCells(count, axisMin, axisMax) {
+                if (!confirm('Are you sure?')) {
+                    return
+                }
                 clearScreen(true);
                 for (i = 0; i < count; i++) {
-                    for (var axis = 0; axis < 3; axis++) {
-                        cursor[axis] = Math.floor(Math.random() * (axisMax-axisMin+1) + axisMin);
+                    var phase = -1;
+                    while ( (cursor in grid) || (phase != (i & 1)) ) {
+                        for (var axis = 0; axis < 3; axis++) {
+                            cursor[axis] = Math.floor(Math.random() * (axisMax - axisMin + 1) + axisMin);
+                        }
+                        phase = (cursor[0] + cursor[1] + cursor[2]) & 1;
                     }
                     setBrushPosition(cursor);
                     var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[color]));
