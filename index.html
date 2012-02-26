@@ -46,6 +46,9 @@
             var lasthash = "";
             var frame = 0;
             var cellCount = 0;
+            var mode = "mirror";
+            var axisMin = -9;
+            var axisMax = 10;
             var container, interval,
             camera, scene, renderer,
             projector, plane, cube, linesMaterial,
@@ -239,6 +242,18 @@
                                                                             if (DEBUG) console.log("  move:", move);
                                 break;
                             }
+                        }
+                    }
+                }
+                if (move && mode == "mirror") {
+                    for (var axis = 0; axis < 3; axis++) {
+                        if (xyz[axis] + move[axis] > axisMax) {
+                            move = false;
+                            break;
+                        }
+                        if (xyz[axis] + move[axis] < axisMin) {
+                            move = false;
+                            break;
                         }
                     }
                 }
