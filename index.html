@@ -68,10 +68,11 @@
                 info.style.textAlign = 'center';
                 info.innerHTML = '<p><span style="color: #444; background-color: #fff; border-bottom: 1px solid #ddd; padding: 8px 10px; font-size:medium">' +
                 '<b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step | </b>' +
-                '<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>' +
+                //'<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>' +
                 '</p><button onclick="toggleRunning()">RUN/STOP</button>' +
                 '<button onclick="window.location.reload(true)">RESET</button>' +
-                '<button onclick="reverseDirection()">REVERSE</button></br>';
+                '<button onclick="reverseDirection()">REVERSE</button>' +
+                '<button onclick="clearScreen()">CLEAR</button>';
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -571,7 +572,7 @@ if(DEBUG) console.log("grid:", temp)
                 data +=     (frame % 6 + 6) %6
                 if (!noLink) {
                     window.location.hash = "A/" + data;
-                    document.getElementById('link').href = "http://mrdoob.com/projects/voxels/#A/" + data;
+//                    document.getElementById('link').href = "http://mrdoob.com/projects/voxels/#A/" + data;
                 }
                 document.getElementById('showhash').innerHTML = data;
                 if (data != lasthash) {
@@ -604,8 +605,7 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
-            function clear() {
-
+            function clearScreen() {
                 if ( !confirm( 'Are you sure?' ) ) {
 
                     return
