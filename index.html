@@ -28,6 +28,9 @@
             <br/>
             Cells:
             <span id="cellcount"></span>
+            <br/>
+            Cursor:
+            <span id="cursorpos"></span>
         </div>
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
@@ -76,7 +79,8 @@
                 '</p><button onclick="toggleRunning()">RUN/STOP</button>' +
                 '<button onclick="window.location.reload(true)">RESET</button>' +
                 '<button onclick="reverseDirection()">REVERSE</button>' +
-                '<button onclick="clearScreen()">CLEAR</button>';
+                '<button onclick="clearScreen()">CLEAR</button>' +
+                '<button onclick="randomCells(16, -3, 2)">RANDOM</button>';
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -286,6 +290,7 @@
                 else {
                     setBrushColor(5);                    
                 }
+                document.getElementById("cursorpos").innerHTML = xyz[0] + "," + xyz[1] + "," + xyz[2]
             }
 
             function putGrid(obj, xyz) {
@@ -311,6 +316,13 @@
                 }
                 setBrushPosition(cursor);
             }
+            
+            function clampCursor() {
+                for (var x=0; x<3; x++) {
+                    if (cursor[x] < axisMin) cursor[x] = axisMin;
+                    if (cursor[x] > axisMax) cursor[x] = axisMax;
+                }
+            }
 
             function reverseDirection(){
                 hashmap = {}
@@ -330,31 +342,37 @@ if(DEBUG) console.log("key:", event.keyCode);
                 switch( event.keyCode ) {
                     case 37: 
                         cursor[0]--;
+                        clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 38: 
                         cursor[2]--;
+                        clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 39: 
                         cursor[0]++;
+                        clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 40: 
                         cursor[2]++;
+                        clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 85: 
                         cursor[1]++;
+                        clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 68: 
                         cursor[1]--;
+                        clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
@@ -621,7 +639,7 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
-            function clearScreen() {
+            function clearScreen(noReload) {
                 if ( !confirm( 'Are you sure?' ) ) {
 
                     return
@@ -646,7 +664,26 @@ if(DEBUG) console.log("grid:", temp)
                 }
 
                 updateHash();
-//                render();
+                if (!noReload) {
+                    window.location.reload(true);
+                }
+            }
+
+            function randomCells(count, axisMin, axisMax) {
+                clearScreen(true);
+                for (i = 0; i < count; i++) {
+                    for (var axis = 0; axis < 3; axis++) {
+                        cursor[axis] = Math.floor(Math.random() * (axisMax-axisMin+1) + axisMin);
+                    }
+                    setBrushPosition(cursor);
+                    var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[color]));
+                    putGrid(voxel, cursor);
+                    setObjPosition(voxel, cursor);
+                    voxel.overdraw = true;
+                    scene.addObject(voxel);
+                }
+
+                updateHash();
                 window.location.reload(true);
             }
 
