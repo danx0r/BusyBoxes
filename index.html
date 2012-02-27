@@ -54,8 +54,7 @@
             var mode = "mirror";
             var axisMin = -16;
             var axisMax = 15;
-            var processEvery = 20;
-            var processCount = 0;
+            var processSpeed = "slow";
             var container, interval,
             camera, scene, renderer,
             projector, plane, cube, linesMaterial,
@@ -172,15 +171,24 @@
                     buildFromHash();
                 }
 
-                setInterval(mainLoop, 10);
+                setInterval(mainLoopFast, 10);
+                setInterval(mainLoopSlow, 140);
                 render();
             }
             
-            function mainLoop() {
-                if (processCount++ < processEvery) {
-                    return;
+            function mainLoopFast() {
+                if (processSpeed == "fast") {
+                    mainLoop();
                 }
-                processCount = 0;
+            }
+            
+            function mainLoopSlow() {
+                if (processSpeed == "slow") {
+                    mainLoop();
+                }
+            }
+            
+            function mainLoop() {
                 document.getElementById("generation").innerHTML = frame;
                 document.getElementById("direction").innerHTML = direction;
                 if (isRunning) {
@@ -722,11 +730,11 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function fastSlow() {
-                if (processEvery == 1) {
-                    processEvery = 20;
+                if (processSpeed == "fast") {
+                    processSpeed = "slow";
                 }
                 else {
-                    processEvery = 1;
+                    processSpeed = "fast";
                 }
             }
         </script>
