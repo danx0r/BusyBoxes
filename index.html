@@ -52,8 +52,8 @@
             var frame = 0;
             var cellCount = 0;
             var mode = "mirror";
-            var axisMin = -16;
-            var axisMax = 15;
+            var axisMin = -12;
+            var axisMax = 11;
             var processSpeed = "slow";
             var container, interval,
             camera, scene, renderer,
@@ -171,7 +171,7 @@
                     buildFromHash();
                 }
 
-                setInterval(mainLoopFast, 10);
+                setInterval(mainLoopFast, 16);
                 setInterval(mainLoopSlow, 140);
                 render();
             }
