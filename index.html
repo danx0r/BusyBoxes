@@ -23,9 +23,11 @@
             Duplicate:
             <span id="duplicates"></span>
             <br/>
+            <!--
             Hash:
             <span id="showhash" style="font-size:small;"></span>
             <br/>
+            -->
             Cells:
             <span id="cellcount"></span>
             <br/>
@@ -52,7 +54,7 @@
             var mode = "mirror";
             var axisMin = -16;
             var axisMax = 15;
-            var processEvery = 25;
+            var processEvery = 20;
             var processCount = 0;
             var container, interval,
             camera, scene, renderer,
@@ -614,7 +616,7 @@ if(DEBUG) console.log("grid:", temp)
                     window.location.hash = "A/" + data;
 //                    document.getElementById('link').href = "http://mrdoob.com/projects/voxels/#A/" + data;
                 }
-                document.getElementById('showhash').innerHTML = data;
+                //document.getElementById('showhash').innerHTML = data;
                 if (data != lasthash) {
                     if (data in hashmap) {
                         document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data];
@@ -721,7 +723,7 @@ if(DEBUG) console.log("grid:", temp)
 
             function fastSlow() {
                 if (processEvery == 1) {
-                    processEvery = 25;
+                    processEvery = 20;
                 }
                 else {
                     processEvery = 1;
