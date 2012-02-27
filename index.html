@@ -400,6 +400,10 @@ if(DEBUG) console.log("key:", event.keyCode);
                     case 32:
                         toggleRunning();
                         break;
+                    case 70:
+                        processSpeed = "fast";
+                        toggleRunning();
+                        break;
                     case 10:
                     case 13:
                         var obj = getGrid(cursor);
