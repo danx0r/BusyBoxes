@@ -52,7 +52,8 @@
             var mode = "mirror";
             var axisMin = -16;
             var axisMax = 15;
-            var fps = 100;
+            var processEvery = 25;
+            var processCount = 0;
             var container, interval,
             camera, scene, renderer,
             projector, plane, cube, linesMaterial,
@@ -78,8 +79,9 @@
                 //'<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>' +
                 '</p><button onclick="toggleRunning()">RUN/STOP</button>' +
                 '<button onclick="window.location.reload(true)">RESET</button>' +
-                '<button onclick="reverseDirection()">REVERSE</button>' +
+                '<button onclick="reverseDirection()">DIRECTION</button>' +
                 '<button onclick="clearScreen()">CLEAR</button>' +
+                '<button onclick="fastSlow()">FAST/SLOW</button>' +
                 '<button onclick="randomCells(12, -2, 1)">RANDOM</button>';
                 container.appendChild( info );
  
@@ -168,11 +170,15 @@
                     buildFromHash();
                 }
 
-                setInterval(mainLoop, 1000 / fps);
+                setInterval(mainLoop, 10);
                 render();
             }
             
             function mainLoop() {
+                if (processCount++ < processEvery) {
+                    return;
+                }
+                processCount = 0;
                 document.getElementById("generation").innerHTML = frame;
                 document.getElementById("direction").innerHTML = direction;
                 if (isRunning) {
@@ -713,6 +719,14 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
+            function fastSlow() {
+                if (processEvery == 1) {
+                    processEvery = 25;
+                }
+                else {
+                    processEvery = 1;
+                }
+            }
         </script>
 
     </body>
