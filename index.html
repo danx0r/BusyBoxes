@@ -698,10 +698,15 @@ if(DEBUG) console.log("grid:", temp)
                 }
             }
 
-            function randomCells(count, axisMin, axisMax) {
-                if (!confirm('Are you sure?')) {
-                    return
-                }
+            function randomCells() {
+                var val = prompt("specify width, number:", "5, 12");
+                if (!val) return;
+                var i = val.indexOf(",");
+                if (i < 0) return;
+                var width = parseInt(val.substr(0,i));
+                var count = parseInt(val.substr(i+1));
+                var axisMax = parseInt(width / 2);
+                var axisMin = axisMax - width;
                 clearScreen(true);
                 for (i = 0; i < count; i++) {
                     var phase = -1;
