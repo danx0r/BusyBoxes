@@ -633,7 +633,7 @@ if(DEBUG) console.log("grid:", temp)
                 //document.getElementById('showhash').innerHTML = data;
                 if (data != lasthash) {
                     if (data in hashmap) {
-                        document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data];
+                        document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data] + " cycle: " + Math.abs(frame - hashmap[data]);
                     }
                 }
                 document.getElementById('cellcount').innerHTML = cellCount;
