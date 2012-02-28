@@ -18,6 +18,10 @@
             Generation:
             <span id="generation"></span>
             <br/>
+            phase:
+            <span id="showphase"></span>
+            <br/>
+            Direction:
             <span id="direction"></span>
             <br/>
             Duplicate:
@@ -190,6 +194,7 @@
             
             function mainLoop() {
                 document.getElementById("generation").innerHTML = frame;
+                document.getElementById("showphase").innerHTML = (frame % 6 + 6) %6;
                 document.getElementById("direction").innerHTML = direction;
                 if (isRunning) {
                     updateHash(true);
