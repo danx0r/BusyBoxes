@@ -705,8 +705,8 @@ if(DEBUG) console.log("grid:", temp)
                 if (i < 0) return;
                 var width = parseInt(val.substr(0,i));
                 var count = parseInt(val.substr(i+1));
-                var axisMax = parseInt(width / 2);
-                var axisMin = axisMax - width;
+                var axisMax = parseInt(width - .5) >> 1;
+                var axisMin = axisMax - (width - 1);
                 clearScreen(true);
                 for (i = 0; i < count; i++) {
                     var phase = -1;
