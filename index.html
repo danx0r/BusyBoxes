@@ -699,20 +699,36 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function randomCells() {
-                var val = prompt("specify width, number:", "5, 20");
+                var val = prompt("specify width, number (or just number for half):", "5, 20");
                 if (!val) return;
                 var i = val.indexOf(",");
-                if (i < 0) return;
-                var width = parseInt(val.substr(0,i));
-                var count = parseInt(val.substr(i+1));
-                var axisMax = parseInt(width - .5) >> 1;
-                var axisMin = axisMax - (width - 1);
+                var width, count;
+                if (i < 0) {
+                    width = "half";
+                    count = parseInt(val);
+                }
+                else {
+                    width = val.substr(0,i);
+                    count = parseInt(val.substr(i+1));
+                }
+                var axMax, axMin;
+                if (width == "half") {
+                    axMax = [axisMax, axisMax, axisMax];
+                    axMin = [0, axisMin, axisMin];
+                }
+                else {
+                    width = parseInt(width);
+                    axMax = parseInt(width - .5) >> 1;
+                    axMin = axMax - (width - 1);
+                    axMax = [axMax, axMax, axMax];
+                    axMin = [axMin, axMin, axMin];
+                }
                 clearScreen(true);
                 for (i = 0; i < count; i++) {
                     var phase = -1;
                     while ( (cursor in grid) || (phase != (i & 1)) ) {
                         for (var axis = 0; axis < 3; axis++) {
-                            cursor[axis] = Math.floor(Math.random() * (axisMax - axisMin + 1) + axisMin);
+                            cursor[axis] = Math.floor(Math.random() * (axMax[axis] - axMin[axis] + 1) + axMin[axis]);
                         }
                         phase = (cursor[0] + cursor[1] + cursor[2]) & 1;
                     }
