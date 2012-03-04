@@ -62,5 +62,32 @@
             <a href="/?31/#A/boblbihbecmkdehleRQfdfib0">like this</a>.
         </p>
         <br/>
+        <p>
+            <b style="font-size:larger">Q:</b> So what are the rules?
+        </p>
+        <p>
+            <b style="font-size:larger">A:</b> The rules of this Cellular Automata are as follows:
+        </p>
+        <p>
+            <ul>
+                <li>Play takes place on a 3D Cartesian lattice of cells.  This implementation runs in a 24 X 24 X 24 cube.</li>
+                <li>Each cell in the lattice is either <i>odd</i> or <i>even</i>, depending on whether the sum of the three coordinates specifying each cell's location in the lattice is odd or even.</li>
+                <li>Cells are either 1 or 0.  1 cells are shown as red if they are <i>even</i>, or blue if they are <i>odd</i>. 0 cells are not shown.</li>
+                <li>There are six phases in the evolution of the CA, numbered 0 to 5.  During even phases, only <i>even</i> cells are operated on. During odd phases, <i>odd</i> cells are operated on.</li>
+                <li>During phase 0 and 3, the <i>planar rule</i> is applied to the XY plane. During phase 1 and 4, it is applied to the YZ plane.  During phase 2 and 5, it is applied to the ZX plane.</li>
+                <li>The <i>planar rule</i> is this: for each diagonally situated pair of cells on the plane, if a 1 exists at either of their <i>knight's move</i> 
+                positions, the value of the two cells in that diagonal pair is swapped.  However, this only happens if there is no conflicting swap for either cell.</li>
+                <li>The <i>knight's move</i> positions for a diagonal pair of cells are the cells that can be reached from both cells in the pair by moving two in one axis and one in another. A picture helps:
+                <pre>
+                    X - - -                 - - - X
+                    - - * -                 - * - -
+                    - * - -                 - - * -
+                    - - - X                 X - - -
+                </pre>
+                The X's are the <i>knight's move</i> positions for the pairs of cells represented by two asterisks.
+                 </li>
+                <li>In this bounded implementation, swaps are not allowed with cells outside the boundary.</li>
+            </ul>
+        </p>
     </body>
 </html>
