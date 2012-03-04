@@ -9,7 +9,7 @@
             <b style="font-size:larger">Q:</b> What is Busy Boxes? Is it a game? A research project? What?
         </p>
         <p>
-            <b style="font-size:larger">A:</b> Busy Boxes (BB) is an implementation of the 3D reversible cellular automata developed by Ed Fredkin and Daniel B. Miller in their 2005 paper,
+            <b style="font-size:larger">A:</b> Busy Boxes (BBX) is an implementation of the 3D reversible cellular automata developed by Ed Fredkin and Daniel B. Miller in their 2005 paper,
             <a href="http://dl.acm.org/citation.cfm?id=1062261.1062271">Two State, Reversible, Universal Cellular Automata In Three Dimensions</a>. 
             A preprint is available <a href="http://arxiv.org/pdf/nlin/0501022">here</a>.
         </p>
@@ -18,16 +18,16 @@
             <b style="font-size:larger">Q:</b> What is the point? Are there any goals, or levels?
         </p>
         <p>
-            <b style="font-size:larger">A:</b> There are open questions about what the BB algorithm is capable of. In particular, we would like to know if BB is capable of 
+            <b style="font-size:larger">A:</b> There are open questions about what the BBX algorithm is capable of. In particular, we would like to know if BBX is capable of 
             Universal Construction, in the sense outlined by Von Neumann in <i>The Theory of Self-Reproducing Automata (1966)</i>.
-            In simple terms the question is, can  you build a machine in BB that can build another machine similar to itself?
+            In simple terms the question is, can  you build a machine in BBX that can build another machine similar to itself?
         </p>
         <p>
-            Before we answer that question, we will need to answer a number of smaller but interesting questions. While we know that BB is capable of Universal Computation,
-            it's not at all clear how to build practical examples of effective computation in a finite implementation of BB. As discussed in the paper, we can
+            Before we answer that question, we will need to answer a number of smaller but interesting questions. While we know that BBX is capable of Universal Computation,
+            it's not at all clear how to build practical examples of effective computation in a finite implementation of BBX. As discussed in the paper, we can
             <a href="/?16#A/Tflebhkbhib0">route information</a>, and perform
             <a href="/?17#A/ablbfelfriWbbhil0">rudimentary logic operations</a>.
-            However, it is far from obvious how, in practical terms, useful computation can be performed within a limited, finite 3-dimensional BB lattice. Presumably, 
+            However, it is far from obvious how, in practical terms, useful computation can be performed within a limited, finite 3-dimensional BBX lattice. Presumably, 
             <a href="http://en.wikipedia.org/wiki/Reversible_logic">reversible logic</a> would be used; however, it is interesting to note that while our Universe
             is based on reversible physics, we generally build computation machines based on traditional, irreversible Boolean logic. The extra information created by
             these operations is turned into heat (which is why faster computers need bigger fans!)
@@ -37,17 +37,17 @@
             <b style="font-size:larger">Q:</b> What's all this about reversibility? Isn't this just like the Game Of Life, only in 3D?
         </p>
         <p>
-            <b style="font-size:larger">A:</b> The Game Of Life (GOL) and BB are both cellular automata, and both have been shown to be 
+            <b style="font-size:larger">A:</b> The Game Of Life (GOL) and BBX are both cellular automata, and both have been shown to be 
             <i>Turing complete</i>, which means that you can build computers inside the game that can process information in arbitrary ways.
-            The interesting thing about BB and related algorithms (such as the <a href="http://en.wikipedia.org/wiki/Billiard_ball_computer">Billiard Ball computer</a>,
+            The interesting thing about BBX and related algorithms (such as the <a href="http://en.wikipedia.org/wiki/Billiard_ball_computer">Billiard Ball computer</a>,
             <a href="http://arxiv.org/pdf/0806.0127v1">implemented as a Cellular Automata</a>)
             is that they have a set of rules that is reversible, meaning that you can reverse the flow of time and recover the exact states that you had before.
             You can't do that in the GOL (think of a single cell which dies; reversing time, it's just a blank cell forever.)
         </p>
         <p>
             Reversibility introduces some very interesting properties, including a number of things which seem intriguingly related to physical laws that we observe 
-            in our own universe (the laws of physics are reversible too!). For instance, because BB is reversible, if we run it in a finite space (this implmentation
-            uses a 3D lattice of 24 * 24 * 24, or 13,284 cells), we know that eventually, any pattern will repeat itself. This means that it is impossible (in a finite implementation of BB)
+            in our own universe (the laws of physics are reversible too!). For instance, because BBX is reversible, if we run it in a finite space (this implmentation
+            uses a 3D lattice of 24 * 24 * 24, or 13,284 cells), we know that eventually, any pattern will repeat itself. This means that it is impossible (in a finite implementation of BBX)
             to build a structure that lasts forever. That's how we knew that 
             <a href="/?23#A/fiZilfamfbfddVlbjebbi1lfbfPbfjfdlfhuibecdpfdfplelhWffambfshYlfTjlbebhmfpjjlfqZUbfWnWlfjRtbfcqdlfkkfbfdcqlfhiYbfaijlfnYmbfesVlfiVmbfZicl0">this</a>
             would eventually come to 
