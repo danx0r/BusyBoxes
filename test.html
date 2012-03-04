@@ -38,17 +38,27 @@
         </style>
     </head>
     <body>
-        <audio id="music" src="prisoner_ambient003.ogg" autobuffer="true" loop="true"></audio>
+        <audio id="music" src="prisoner_ambient003.ogg" loop="true"></audio>
         <button onclick="play()">MUSIC!</button>
         <button onclick="stop()">SILENCE!</button>
+        <button onclick="resume()">resume</button>
     </body>
     <script>
         function play() {
+            document.getElementById("music").load();            // well this fixes the chrome bug, but forces play from middle of piece
             document.getElementById("music").play();
             console.log(document.getElementById("music"))
         }
         function stop() {
-            document.getElementById("music").pause();
+//            document.getElementById("music").pause();
+            document.getElementById("music").volume=0;
         }
+        function resume() {
+//            document.getElementById("music").pause();
+            document.getElementById("music").volume=1.0;
+        }
+        setInterval(function(){
+            console.log(document.getElementById("music").currentTime);
+        }, 1000)
     </script>
 </html>
