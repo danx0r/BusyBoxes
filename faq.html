@@ -24,12 +24,12 @@
         </p>
         <p>
             Before we answer that question, we will need to answer a number of smaller but interesting questions. While we know that BBX is capable of Universal Computation,
-            it's not at all clear how to build practical examples of effective computation in a finite implementation of BBX. As discussed in the paper, we can
+            it's not at all clear how to build practical examples of effective computation within a finite implementation. As discussed in the paper, we can
             <a href="/?16#A/Tflebhkbhib0">route information</a>, and perform
             <a href="/?17#A/ablbfelfriWbbhil0">rudimentary logic operations</a>.
-            However, it is far from obvious how, in practical terms, useful computation can be performed within a limited, finite 3-dimensional BBX lattice. Presumably, 
-            <a href="http://en.wikipedia.org/wiki/Reversible_logic">reversible logic</a> would be used; however, it is interesting to note that while our Universe
-            is based on reversible physics, we generally build computation machines based on traditional, irreversible Boolean logic. The extra information created by
+            However, it is far from obvious how, in practical terms, useful computation can be performed within a limited, finite lattice. Presumably, 
+            <a href="http://en.wikipedia.org/wiki/Reversible_logic">reversible logic</a> would be used; however, it is interesting to note that while our universe
+            is based on reversible physics, we generally build computation machines using traditional, irreversible Boolean logic. The extra information created by
             these operations is turned into heat (which is why faster computers need bigger fans!)
         </p>
         <br/>
@@ -71,11 +71,11 @@
         <p>
             <ul>
                 <li>Play takes place on a 3D Cartesian lattice of cells.  This implementation runs in a 24 X 24 X 24 cube.</li>
-                <li>Each cell in the lattice is either <i>odd</i> or <i>even</i>, depending on whether the sum of the three coordinates specifying each cell's location in the lattice is odd or even.</li>
+                <li>Each cell in the lattice is either <i>odd</i> or <i>even</i>, depending on whether the sum of the three coordinates specifying that cell's location in the lattice is odd or even.</li>
                 <li>Cells are either 1 or 0.  1 cells are shown as red if they are <i>even</i>, or blue if they are <i>odd</i>. 0 cells are not shown.</li>
                 <li>There are six phases in the evolution of the CA, numbered 0 to 5.  During even phases, only <i>even</i> cells are operated on. During odd phases, <i>odd</i> cells are operated on.</li>
                 <li>During phase 0 and 3, the <i>planar rule</i> is applied to the XY plane. During phase 1 and 4, it is applied to the YZ plane.  During phase 2 and 5, it is applied to the ZX plane.</li>
-                <li>The <i>planar rule</i> is this: for each diagonally situated pair of cells on the plane, if a 1 exists at either of their <i>knight's move</i> 
+                <li>The <i>planar rule</i> is this: for each diagonally situated pair of cells on the plane, if a 1 exists at either of the pair's <i>knight's move</i> 
                 positions, the value of the two cells in that diagonal pair is swapped.  However, this only happens if there is no conflicting swap for either cell.</li>
                 <li>The <i>knight's move</i> positions for a diagonal pair of cells are the cells that can be reached from both cells in the pair by moving two in one axis and one in another. A picture helps:
                 <pre>
@@ -84,9 +84,12 @@
                     - * - -                 - - * -
                     - - - X                 X - - -
                 </pre>
-                The X's are the <i>knight's move</i> positions for the pairs of cells represented by two asterisks.
+                The X's are the <i>knight's move</i> positions for the pairs of cells represented by asterisks.
                  </li>
                 <li>In this bounded implementation, swaps are not allowed with cells outside the boundary.</li>
+                <p>
+                    Note that since only swaps are allowed, the number of 1's and 0's is fixed for any set of initial conditions. One may think of the BBX CA as a set of rules for moving 1's around on the lattice.
+                </p>
             </ul>
         </p>
     </body>
