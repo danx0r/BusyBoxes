@@ -47,11 +47,14 @@
         function play() {
             document.getElementById("music").load();            // well this fixes the chrome bug, but forces play from middle of piece
             document.getElementById("music").play();
-            console.log(document.getElementById("music"))
+//            document.getElementById("music").currentTime=0;
+            document.getElementById("music").volume=1.0;
+//            console.log(document.getElementById("music").seekable.start(1))
         }
         function stop() {
+            document.getElementById("music").currentTime=20;
 //            document.getElementById("music").pause();
-            document.getElementById("music").volume=0;
+//            document.getElementById("music").volume=0;
         }
         function resume() {
 //            document.getElementById("music").pause();
