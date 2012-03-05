@@ -162,7 +162,7 @@
                 info.style.width = '100%';
                 info.style.textAlign = 'center';
                 info.innerHTML = '<p><span style="background-color: #fff; opacity:0.5; border-bottom: 1px solid #ddd; padding: 8px 10px; font-size:medium">' +
-                '<b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step</b>' +
+                '<b>click & drag to rotate | scroll wheel zooms | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step</b>' +
                 //'<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>' +
                 '<div style="opacity:0.7"></p><button onclick="toggleRunning()">RUN/STOP</button>' +
                 '<button onclick="fastSlow()">FAST/SLOW</button>' +
@@ -251,6 +251,7 @@
                 document.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
                 document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
+                document.addEventListener( 'DOMMouseScroll', onDocumentMouseWheel, false );
 
                 if ( window.location.hash ) {
 
@@ -571,8 +572,18 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function onDocumentMouseWheel( event ) {
-
-                radious -= event.wheelDeltaY;
+				if (event.detail) {							/// ugh, dumb Firefox hack
+					if (event.detail > 0) {
+						radious += 120;
+					}
+					else {
+						radious -= 120;
+					}
+				}
+				else {
+	                radious -= event.wheelDeltaY;
+				}
+            	if (DEBUG) console.log("mw ev:", radious)
 
                 camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                 camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
