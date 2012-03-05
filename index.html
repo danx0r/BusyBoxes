@@ -120,6 +120,23 @@
             <br/>
             <a href="faq.html" target="_blank">faq</a>
         </div>
+        <div style="display:none">
+            <div id="banner">
+                <p>
+                <span style="background-color: #fff; opacity:0.5; border-bottom: 1px solid #ddd; padding: 8px 10px; font-size:medium">
+                    <b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step</b>
+                </span>
+                <div style="opacity:0.7">
+                    </p><button onclick="toggleRunning()">RUN/STOP</button>
+                    <button onclick="fastSlow()">FAST/SLOW</button>
+                    <button onclick="window.location.reload(true)">RESET</button>
+                    <button onclick="reverseDirection()">DIRECTION</button>
+                    <button onclick="clearScreen()">CLEAR</button>
+                    <button onclick="randomCells(12, -2, 1)">RANDOM</button>
+                </div>
+                </p>
+            </div>
+        </div>
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
         <script type="text/javascript" src="js/Plane.js"></script>
@@ -161,15 +178,7 @@
                 info.style.top = '5px';
                 info.style.width = '100%';
                 info.style.textAlign = 'center';
-                info.innerHTML = '<p><span style="background-color: #fff; opacity:0.5; border-bottom: 1px solid #ddd; padding: 8px 10px; font-size:medium">' +
-                '<b>click & drag to rotate view | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step</b>' +
-                //'<a id="link" href="" target="_blank">share</a> <a href="javascript:save();">save</a> <a href="javascript:clear();">clear</a></span>' +
-                '<div style="opacity:0.7"></p><button onclick="toggleRunning()">RUN/STOP</button>' +
-                '<button onclick="fastSlow()">FAST/SLOW</button>' +
-                '<button onclick="window.location.reload(true)">RESET</button>' +
-                '<button onclick="reverseDirection()">DIRECTION</button>' +
-                '<button onclick="clearScreen()">CLEAR</button>' +
-                '<button onclick="randomCells(12, -2, 1)">RANDOM</button></div>';
+                info.innerHTML = document.getElementById("banner").innerHTML;
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
