@@ -298,6 +298,12 @@
                     }
                     if(DEBUG) console.log("cells:", cells)
                     var moves = []
+                    var x1, x2                                          // our two axes for today
+                    switch( (frame % 3 + 3) %3 ) {                      // ach, Javascript you old goat
+                        case 0: x1=0; x2=1; break;
+                        case 1: x1=1; x2=2; break;
+                        case 2: x1=2; x2=0; break;
+                    }
                     for (var i in cells) {
                         cell = cells[i];
                         if(DEBUG) console.log(cell[0], cell[1]);
@@ -305,12 +311,6 @@
                         
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
                             if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
-                            var x1, x2                                          // our two axes for today
-                            switch( (frame % 3 + 3) %3 ) {                      // ach, Javascript you old goat
-                                case 0: x1=0; x2=1; break;
-                                case 1: x1=1; x2=2; break;
-                                case 2: x1=2; x2=0; break;
-                            }
                             var move = getMove(xyz, x1, x2);
                             if (move) {
                                 var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
