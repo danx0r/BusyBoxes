@@ -304,6 +304,7 @@
                         case 1: x1=1; x2=2; break;
                         case 2: x1=2; x2=0; break;
                     }
+                    if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2])
                     for (var i in cells) {
                         cell = cells[i];
                         if(DEBUG) console.log(cell[0], cell[1]);
