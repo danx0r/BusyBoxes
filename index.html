@@ -688,44 +688,35 @@ if(DEBUG) console.log("grid:", temp)
                         var cur = [0, 0, 0];
                         var x=0;
                         var delta, sign;
-                        while(x < data.length) {
-                            if (data.charAt(x) == "_") {
-                                x++;
-                                delta = encodeString.indexOf(data.charAt(x++));
-                                sign = 1;
-                                if (delta >= 32) {
-                                    sign = -1;
-                                }
-                                delta = (delta & 0x1f) << 6;
-                                delta += encodeString.indexOf(data.charAt(x++))
-                                delta *= sign;
-                            }
-                            else {
-                                delta = encodeString.indexOf(data.charAt(x++)) - 32;
-                            }
-                            console.log("decode delta:", delta)
-                        }
-                        /*
-                            xyz = eval("[" + key + "]");
-                            for (var j=0; j<3; j++) {
-                                var delta = xyz[j] - cur[j];
-                                console.log("delta:", delta)
-                                if (delta < -32 || delta > 31) {
-                                    data += "_";
-                                    msb =  Math.abs(delta) >> 6;
-                                    if (delta < 0) msb |= 32;
-                                    lsb = Math.abs(delta) & 0x3f;
-                                    data += encodeString[msb];
-                                    data += encodeString[lsb];
-                                    console.log("msb:", msb, "lsb:", lsb, "encoding:", data.substr(data.length-3))
+                        while (x < data.length) {
+                            for (var i = 0; i < 3; i++) {
+                                if (data.charAt(x) == "_") {
+                                    x++;
+                                    delta = encodeString.indexOf(data.charAt(x++));
+                                    sign = 1;
+                                    if (delta >= 32) {
+                                        sign = -1;
+                                    }
+                                    delta = (delta & 0x1f) << 6;
+                                    delta += encodeString.indexOf(data.charAt(x++))
+                                    delta *= sign;
                                 }
                                 else {
-                                    data += encodeString[delta + 32];
+                                    delta = encodeString.indexOf(data.charAt(x++)) - 32;
                                 }
+                                if(DEBUG)console.log("decode delta:", delta)
+                                cur[i] += delta;
                             }
-                            cur = xyz;
+                            console.log("decode cell:", cur[0], cur[1], cur[2])
+                            var parity = (cur[0] + cur[1] + cur[2]) & 1;
+                            var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                            voxel.position.x = cur[0] * 50 + 25;
+                            voxel.position.y = cur[1] * 50 + 25;
+                            voxel.position.z = cur[2] * 50 + 25;
+                            voxel.overdraw = true;
+                            scene.addObject( voxel );
+                            putGrid(voxel, cur);
                         }
-                        */
                     }
                     else {
                         alert("Unknown encoding type: " + version);
