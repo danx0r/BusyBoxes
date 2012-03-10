@@ -683,19 +683,7 @@ if(DEBUG) console.log("grid:", temp)
 
                 } else {
 
-                    var data = decode( hash );
-
-                    for ( var i = 0; i < data.length; i += 4 ) {
-
-                        var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ data[ i + 3 ] ] ) );
-                        voxel.position.x = ( data[ i ] - 20 ) * 25;
-                        voxel.position.y = ( data[ i + 1 ] + 1 ) * 25;
-                        voxel.position.z = ( data[ i + 2 ] - 20 ) * 25;
-                        voxel.overdraw = true;
-                        scene.addObject( voxel );
-
-                    }
-
+                    alert("Unknown encoding type: " + version);
                 }
                 updateHash();
 
