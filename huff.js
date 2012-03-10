@@ -103,9 +103,11 @@ function deHuff(bits){
     return data;
 }
 
+/*
 data=[14,7,0,0,1,-1,-2,3,4,15,206];
 console.log("data:", data);
 bits = huff(data);
 console.log("bits:", bits, "length:", bits.length);
 data = deHuff(bits);
 console.log("data:", data);
+*/
