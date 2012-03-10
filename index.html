@@ -139,7 +139,7 @@
         <script type="text/javascript" src="js/Cube.js"></script>
         <script type="text/javascript" src="js/Plane.js"></script>
         <script type="text/javascript">
-            var DEBUG = false;
+            var DEBUG = 1||false;
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
             var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
             var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -193,7 +193,14 @@
 
             function init() {
                 if (DEBUG) console.log("init start")
-                if (DEBUG) console.log("DEBUG query args:", parseQueryArgs())
+                var qargs = parseQueryArgs();
+                if (qargs.size) {
+                    var size = parseInt(qargs.size);
+                    axisMax = parseInt(size / 2) - 1;
+                    axisMin = axisMax - (size - 1);
+                    radious *= size/24.0;
+                } 
+                if (DEBUG) console.log("DEBUG query args:", qargs, "axisMax:", axisMax, "axisMin:", axisMin)
                 container = document.createElement( 'div' );
                 document.body.appendChild( container );
 
