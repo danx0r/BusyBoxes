@@ -106,7 +106,7 @@ function deHuff(bits){
 encAsciiBook = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.";
 function encAscii(bits){
     var last = (bits.length + 3) % 6;
-    console.log("last:",last, [last & 1, (last >> 1) & 1, last >> 2])
+    //console.log("last:",last, [last & 1, (last >> 1) & 1, last >> 2])
     bits = [last >> 2, (last >> 1) & 1, last & 1].concat(bits); // so decoder can determine bitcount
     while (bits.length < 6) {
         bits.push(0);
@@ -120,7 +120,7 @@ function encAscii(bits){
             if (i == bits.length) 
                 break;
         }
-        console.log("c:", c)
+        //console.log("c:", c)
         s += encAsciiBook[c];
     }
     return s;
@@ -128,28 +128,26 @@ function encAscii(bits){
 
 function decAsciiBits(s) {
     var last = encAsciiBook.indexOf(s[0]) >> 3;
-    console.log("last:",last, "first char:", encAsciiBook.indexOf(s[0]))
+    //console.log("last:",last, "first char:", encAsciiBook.indexOf(s[0]))
     var i = 0;
     var bits = [];
     var top = 32;
     for (var j=0; j<s.length; j++) {
         var b = encAsciiBook.indexOf(s[j]);
         if (last && (j == s.length-1)) top = 1 << (last - 1);
-        console.log("b:", b, "top:", top, "len:", bits.length)
+        //console.log("b:", b, "top:", top, "len:", bits.length)
         for (var k = top; k != 0; k >>= 1) {
             if (b & k) {
                 bits.push(1);
-//                console.log("push 1", bits.length)
             }
             else {
                 bits.push(0);
-//                console.log("push 0", bits.length)
            }
         }
     }
     return bits.slice(3)
 }
-
+/*
 data=[0,1,-1,2,13,-444,1,2,4,-2,22];
 console.log("data:", data);
 bits = enHuff(data);
@@ -160,3 +158,4 @@ bits = decAsciiBits(chars);
 console.log("bits:", bits, bits.length);
 data = deHuff(bits);
 console.log("data:", data);
+*/
