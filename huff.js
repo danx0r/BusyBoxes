@@ -38,8 +38,8 @@ function huff(data) {
                         alert("huff exceeds limit of +/- 1034");
                         return;
                     }
-                    bits = bits.concat([1, 1, 1, 1, 0, v < 0 ? 1 : 0]);
-                    for (var j = 1; j < 1024; j <<= 1) {
+                    bits = bits.concat([1, 1, 1, 1, v < 0 ? 1 : 0]);
+                    for (var j = 0x200; j != 0; j >>= 1) {
                         bits.push((Math.abs(v) - 10) & j ? 1 : 0)
                     }
                 }            
@@ -57,20 +57,23 @@ function deHuff(bits){
             if (bits[i++]) {
                 if (bits[i++]) {
                     if (bits[i++]) {                // 1111xxxxxxxxxxx
+                        console.log("11110etc", i);
                         var sign = bits[i++];
+                        console.log("sign:", sign)
                         var n = 0;
                         for (var j = 0; j < 10; j++) {
                             n <<= 1;
                             n |= bits[i++];
+                            console.log("another bit:", i, j, n.toString(2))
                         }
                         n += 10;
                         if (sign) n = -n;
                         data.push(n);
+                        console.log("should be done, i =", i, "data:",data)
                     }
                     else {                          // 1110xxxx
-                        console.log("1110xxxx");
+                        console.log("1110*");
                         var sign = bits[i++];
-                        console.log("sign:", sign)
                         var n = 0;
                         for (var j = 0; j < 3; j++) {
                             n <<= 1;
@@ -82,23 +85,27 @@ function deHuff(bits){
                     }
                 }
                 else {                              // 110
+                    console.log("110");
                     data.push(-2);
                 }
             }
             else {                                  // 10x
+                console.log("10x");
                 data.push(bits[i++] ? 2 : -1)
             }
         }
         else {                                      // 0x
+            console.log("0x");
             data.push(bits[i++]);
         }
+        console.log("---loop---", i)
     }
     return data;
 }
 
-data=[3,4,-3,5,10,-10]//1,1,-2,3,-7,14,-100];
+data=[14,7,0,0,1,-1,-2,3,4,15,206];
 console.log("data:", data);
 bits = huff(data);
-console.log("bits:", bits);
+console.log("bits:", bits, "length:", bits.length);
 data = deHuff(bits);
 console.log("data:", data);
