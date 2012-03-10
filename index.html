@@ -166,8 +166,34 @@
             init();
             render();
 
+            function parseQueryArgs() {
+                var queryArgs = {};
+                var searchString = document.URL;
+                var i = searchString.indexOf("?");
+                if (i < 0) return queryArgs;
+                searchString = searchString.substr(i + 1);
+                i = searchString.indexOf("/");
+                if (i < 0) {
+                    i = searchString.indexOf("#");
+                }
+                if (i < 0) {
+                    i = searchString.length;
+                }
+                searchString = searchString.substr(0, i);
+                var queryArgList = searchString.substr(searchString).split("&");
+                for (var i = 0; i < queryArgList.length; i++) {
+                    var query = queryArgList[i];
+                    var keyval = query.split("=");
+                    var key = keyval[0];
+                    if (keyval.length <= 1) keyval.push(true);
+                    queryArgs[key] = keyval[1];
+                }
+                return queryArgs;
+            }
+
             function init() {
-                if(DEBUG) console.log("init start")
+                if (DEBUG) console.log("init start")
+                if (DEBUG) console.log("DEBUG query args:", parseQueryArgs())
                 container = document.createElement( 'div' );
                 document.body.appendChild( container );
 
