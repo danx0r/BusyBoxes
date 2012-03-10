@@ -745,6 +745,7 @@ if(DEBUG) console.log("grid:", temp)
                     }
                     cur = xyz;
                 }
+                data +=     (frame % 6 + 6) %6
                 
                 if (!noLink) {
                     window.location.hash = "X/" + data;
