@@ -21,14 +21,14 @@ function enHuff(data) {
         var v = data[i];
         //console.log("case:", v)
         switch (v) {
-            case 0:  bits = bits.concat([0, 0]); break;
-            case 1:  bits = bits.concat([0, 1]); break;
-            case -1: bits = bits.concat([1, 0, 0]); break;
-            case 2:  bits = bits.concat([1, 0, 1]); break;
-            case -2: bits = bits.concat([1, 1, 0]); break;
+            case 0:  bits.push(0, 0); break;
+            case 1:  bits.push(0, 1); break;
+            case -1: bits.push(1, 0, 0); break;
+            case 2:  bits.push(1, 0, 1); break;
+            case -2: bits.push(1, 1, 0); break;
             default: {
                 if (Math.abs(v) <= 10) {
-                    bits = bits.concat([1, 1, 1, 0, v < 0 ? 1 : 0]);
+                    bits.push(1, 1, 1, 0, v < 0 ? 1 : 0);
                     for (var j = 4; j != 0; j >>= 1) {
                         bits.push((Math.abs(v) - 3) & j ? 1 : 0)
                     }
@@ -38,7 +38,7 @@ function enHuff(data) {
                         alert("huff exceeds limit of +/- 1034");
                         return;
                     }
-                    bits = bits.concat([1, 1, 1, 1, v < 0 ? 1 : 0]);
+                    bits.push(1, 1, 1, 1, v < 0 ? 1 : 0);
                     for (var j = 0x200; j != 0; j >>= 1) {
                         bits.push((Math.abs(v) - 10) & j ? 1 : 0)
                     }
@@ -101,6 +101,14 @@ function deHuff(bits){
         //console.log("---loop---", i)
     }
     return data;
+}
+
+encAsciiBook = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
+function encAscii(bits) {
+    var s = "";
+    for(var i=0; i<bits.length; i++) {
+        
+    }    
 }
 
 data=[14,7,0,0,1,-1,-2,3,4,15,206,-444,1,0];
