@@ -103,17 +103,30 @@ function deHuff(bits){
     return data;
 }
 
-encAsciiBook = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
-function encAscii(bits) {
+encAsciiBook = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.";
+function encAscii(bits){
+    var last = bits.length % 6;
+    bits = [last >> 2, (last >> 1) & 1, last & 1].concat(bits); // so decoder can determine bitcount
     var s = "";
-    for(var i=0; i<bits.length; i++) {
-        
-    }    
+    var i = 0;
+    while (i < bits.length) {
+        var c = 0;
+        for (var j = 0; j < 6; j++) {
+            c = (c << 1) | bits[i++];
+            if (i == bits.length) 
+                break;
+        }
+        console.log("c:", c)
+        s += encAsciiBook[c];
+    }
+    return s;
 }
 
 data=[14,7,0,0,1,-1,-2,3,4,15,206,-444,1,0];
 console.log("data:", data);
 bits = enHuff(data);
+chars = encAscii(bits);
 console.log("bits:", bits, "length:", bits.length);
+console.log("enc:", chars);
 data = deHuff(bits);
 console.log("data:", data);
