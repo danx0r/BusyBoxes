@@ -57,22 +57,22 @@ function deHuff(bits){
             if (bits[i++]) {
                 if (bits[i++]) {
                     if (bits[i++]) {                // 1111xxxxxxxxxxx
-                        console.log("11110etc", i);
+                        //console.log("11110etc", i);
                         var sign = bits[i++];
-                        console.log("sign:", sign)
+                        //console.log("sign:", sign)
                         var n = 0;
                         for (var j = 0; j < 10; j++) {
                             n <<= 1;
                             n |= bits[i++];
-                            console.log("another bit:", i, j, n.toString(2))
+                            //console.log("another bit:", i, j, n.toString(2))
                         }
                         n += 10;
                         if (sign) n = -n;
                         data.push(n);
-                        console.log("should be done, i =", i, "data:",data)
+                        //console.log("should be done, i =", i, "data:",data)
                     }
                     else {                          // 1110xxxx
-                        console.log("1110*");
+                        //console.log("1110*");
                         var sign = bits[i++];
                         var n = 0;
                         for (var j = 0; j < 3; j++) {
@@ -85,20 +85,20 @@ function deHuff(bits){
                     }
                 }
                 else {                              // 110
-                    console.log("110");
+                    //console.log("110");
                     data.push(-2);
                 }
             }
             else {                                  // 10x
-                console.log("10x");
+                //console.log("10x");
                 data.push(bits[i++] ? 2 : -1)
             }
         }
         else {                                      // 0x
-            console.log("0x");
+            //console.log("0x");
             data.push(bits[i++]);
         }
-        console.log("---loop---", i)
+        //console.log("---loop---", i)
     }
     return data;
 }
