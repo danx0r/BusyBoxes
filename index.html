@@ -704,10 +704,8 @@ if(DEBUG) console.log("grid:", temp)
                                 else {
                                     delta = encodeString.indexOf(data.charAt(x++)) - 32;
                                 }
-                                if(DEBUG)console.log("decode delta:", delta)
                                 cur[i] += delta;
                             }
-                            console.log("decode cell:", cur[0], cur[1], cur[2])
                             var parity = (cur[0] + cur[1] + cur[2]) & 1;
                             var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
                             voxel.position.x = cur[0] * 50 + 25;
@@ -733,7 +731,6 @@ if(DEBUG) console.log("grid:", temp)
                     xyz = eval("[" + key + "]");
                     for (var j=0; j<3; j++) {
                         var delta = xyz[j] - cur[j];
-                        console.log("delta:", delta)
                         if (delta < -32 || delta > 31) {
                             data += "_";
                             msb =  Math.abs(delta) >> 6;
@@ -741,7 +738,6 @@ if(DEBUG) console.log("grid:", temp)
                             lsb = Math.abs(delta) & 0x3f;
                             data += encodeString[msb];
                             data += encodeString[lsb];
-                            console.log("msb:", msb, "lsb:", lsb, "encoding:", data.substr(data.length-3))
                         }
                         else {
                             data += encodeString[delta + 32];
