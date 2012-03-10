@@ -150,6 +150,7 @@
             var direction = "forward";
             var hashmap = {};
             var lasthash = "";
+            var encodeString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
             var frame = 0;
             var cellCount = 0;
             var mode = "mirror";
@@ -682,15 +683,59 @@ if(DEBUG) console.log("grid:", temp)
                     }
 
                 } else {
-
-                    alert("Unknown encoding type: " + version);
+                    if (version == "X/") {
+                        var data = hash.substr(2);
+                        var cur = [0, 0, 0];
+                        var x=0;
+                        var delta, sign;
+                        while(x < data.length) {
+                            if (data.charAt(x) == "_") {
+                                x++;
+                                delta = encodeString.indexOf(data.charAt(x++));
+                                sign = 1;
+                                if (delta >= 32) {
+                                    sign = -1;
+                                }
+                                delta = (delta & 0x1f) << 6;
+                                delta += encodeString.indexOf(data.charAt(x++))
+                                delta *= sign;
+                            }
+                            else {
+                                delta = encodeString.indexOf(data.charAt(x++)) - 32;
+                            }
+                            console.log("decode delta:", delta)
+                        }
+                        /*
+                            xyz = eval("[" + key + "]");
+                            for (var j=0; j<3; j++) {
+                                var delta = xyz[j] - cur[j];
+                                console.log("delta:", delta)
+                                if (delta < -32 || delta > 31) {
+                                    data += "_";
+                                    msb =  Math.abs(delta) >> 6;
+                                    if (delta < 0) msb |= 32;
+                                    lsb = Math.abs(delta) & 0x3f;
+                                    data += encodeString[msb];
+                                    data += encodeString[lsb];
+                                    console.log("msb:", msb, "lsb:", lsb, "encoding:", data.substr(data.length-3))
+                                }
+                                else {
+                                    data += encodeString[delta + 32];
+                                }
+                            }
+                            cur = xyz;
+                        }
+                        */
+                    }
+                    else {
+                        alert("Unknown encoding type: " + version);
+                    }
                 }
                 updateHash();
 
             }
 
             function updateHash(noLink) {
-                var enc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
                 var data = "";
                 var cur = [0, 0, 0];
                 for (key in grid) {
@@ -703,12 +748,12 @@ if(DEBUG) console.log("grid:", temp)
                             msb =  Math.abs(delta) >> 6;
                             if (delta < 0) msb |= 32;
                             lsb = Math.abs(delta) & 0x3f;
-                            data += enc[msb];
-                            data += enc[lsb];
+                            data += encodeString[msb];
+                            data += encodeString[lsb];
                             console.log("msb:", msb, "lsb:", lsb, "encoding:", data.substr(data.length-3))
                         }
                         else {
-                            data += enc[delta + 32];
+                            data += encodeString[delta + 32];
                         }
                     }
                     cur = xyz;
