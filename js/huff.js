@@ -15,7 +15,7 @@
 /*
  * takes a list of numbers, returns a list of bits
  */
-function huff(data) {
+function enHuff(data) {
     bits = [];
     for (var i = 0; i < data.length; i++) {
         var v = data[i];
@@ -103,11 +103,9 @@ function deHuff(bits){
     return data;
 }
 
-/*
-data=[14,7,0,0,1,-1,-2,3,4,15,206];
+data=[14,7,0,0,1,-1,-2,3,4,15,206,-444,1,0];
 console.log("data:", data);
-bits = huff(data);
+bits = enHuff(data);
 console.log("bits:", bits, "length:", bits.length);
 data = deHuff(bits);
 console.log("data:", data);
-*/
