@@ -29,7 +29,7 @@ function huff(data) {
             default: {
                 if (Math.abs(v) <= 10) {
                     bits = bits.concat([1, 1, 1, 0, v < 0 ? 1 : 0]);
-                    for (var j = 1; j < 8; j <<= 1) {
+                    for (var j = 4; j != 0; j >>= 1) {
                         bits.push((Math.abs(v) - 3) & j ? 1 : 0)
                     }
                 }
@@ -68,7 +68,7 @@ function deHuff(bits){
                         data.push(n);
                     }
                     else {                          // 1110xxxx
-                        console.log("1110x");
+                        console.log("1110xxxx");
                         var sign = bits[i++];
                         console.log("sign:", sign)
                         var n = 0;
@@ -96,7 +96,7 @@ function deHuff(bits){
     return data;
 }
 
-data=[0,-10,3,-3,4,7,-5,-6]//1,1,-2,3,-7,14,-100];
+data=[3,4,-3,5,10,-10]//1,1,-2,3,-7,14,-100];
 console.log("data:", data);
 bits = huff(data);
 console.log("bits:", bits);
