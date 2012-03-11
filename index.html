@@ -130,9 +130,9 @@
                     <button onclick="fastSlow()">FAST/SLOW</button>
                     <button onclick="reverseDirection()">DIRECTION</button>
                     <button onclick="randomCells(12, -2, 1)">RANDOM</button>
-                    <button onclick="clearScreen()">CLEAR</button>
-                    <button onclick="updateHash();document.location = gUpdateUrl">UPDATE</button>
-                    <button onclick="document.location =  gUpdateUrl">RESET</button>
+                    <button onclick="clear()">CLEAR</button>
+                    <button onclick="updateHash();refreshUrl(hash2url(gUpdateHash))">UPDATE</button>
+                    <button onclick="reset()">RESET</button>
                 </div>
             </div>
         </div>
@@ -152,7 +152,7 @@
             var direction = "forward";
             var hashmap = {};
             var lasthash = "";
-            var gUpdateUrl = "";
+            var gUpdateHash = "";
             var encodeString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
             var frame = 0;
             var cellCount = 0;
@@ -650,6 +650,10 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
+            function refreshUrl(url) {
+                console.log("should refresh:", url);
+            }
+
             function buildFromHash(hash) {
                 var version = false;
                 if (hash) {
@@ -802,7 +806,7 @@ if(DEBUG) console.log("grid:", temp)
                 data +=     (frame % 6 + 6) % 6
 
                 if (!noLink) {                          // yuck. The part of my job I hate
-                    gUpdateUrl = hash2url(data);
+                    gUpdateHash = data;
                 }
                 //document.getElementById('showhash').innerHTML = data;
                 if (data != lasthash) {
@@ -821,30 +825,26 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
-            function save() {
-
-                linesMaterial.color.setRGBA( 0, 0, 0, 0 );
-                //brush.position.y = brushY;
-                setObjPosition(brush, cursor);
-                render();
-
-                window.open( renderer.domElement.toDataURL('image/png'), 'mywindow' );
-
-                linesMaterial.color.setRGBA( 0, 0, 0, 0.2 );
-                render();
-
+            function clear() {
+                clearScreen();
+                isRunning = false;
+                direction = "forward";
+                processSpeed = "slow";
+                updateHash();
+                refreshUrl(gUpdateHash);
             }
 
-            function clearScreen(noReload) {
+            function reset() {
+                var temp = gUpdateHash;
+                clearScreen();
+                isRunning = false;
+                direction = "forward";
+                buildFromHash(temp);
+                refreshUrl(gUpdateHash);
+            }
+
+            function clearScreen() {
                 grid = {};
-                if (!noReload) {
-                    if (!confirm('Are you sure?')) {
-                        return
-                    }
-                }
-
-                window.location.hash = "";
-
                 var i = 0;
 
                 while ( i < scene.objects.length ) {
@@ -861,12 +861,8 @@ if(DEBUG) console.log("grid:", temp)
                 }
 
                 frame = 0;
-                updateHash();
-                if (!noReload) {
-                    window.location.reload(true);
-                }
             }
-
+            
             function randomCells(){
                 var val = prompt("specify width, count:", "5, 20");
                 if (!val) {
@@ -894,7 +890,9 @@ if(DEBUG) console.log("grid:", temp)
                     axMax = [axMax, axMax, axMax];
                     axMin = [axMin, axMin, axMin];
                 }
-                clearScreen(true);
+                clearScreen();
+                isRunning = false;
+                direction = "forward";
                 for (i = 0; i < count; i++) {
                     var phase = -1;
                     while ( (cursor in grid) || (phase != (i & 1)) ) {
@@ -912,7 +910,6 @@ if(DEBUG) console.log("grid:", temp)
                 }
 
                 updateHash();
-                window.location.reload(true);
             }
 
             // https://gist.github.com/665235
