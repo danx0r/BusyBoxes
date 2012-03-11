@@ -651,7 +651,13 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function refreshUrl(url) {
-                console.log("should refresh:", url);
+                //console.log("should refresh:", url);
+                if (history.pushState) {
+                    history.pushState(url, url, url);
+                }
+                else {
+                    document.location = url;
+                }
             }
 
             function buildFromHash(hash) {
@@ -831,7 +837,7 @@ if(DEBUG) console.log("grid:", temp)
                 direction = "forward";
                 processSpeed = "slow";
                 updateHash();
-                refreshUrl(gUpdateHash);
+                refreshUrl(hash2url(gUpdateHash));
             }
 
             function reset() {
@@ -840,7 +846,7 @@ if(DEBUG) console.log("grid:", temp)
                 isRunning = false;
                 direction = "forward";
                 buildFromHash(temp);
-                refreshUrl(gUpdateHash);
+                refreshUrl(hash2url(gUpdateHash));
             }
 
             function clearScreen() {
@@ -910,6 +916,7 @@ if(DEBUG) console.log("grid:", temp)
                 }
 
                 updateHash();
+                refreshUrl(hash2url(gUpdateHash));
             }
 
             // https://gist.github.com/665235
