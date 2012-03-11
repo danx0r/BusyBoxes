@@ -103,7 +103,7 @@ function encdec_deHuff(bits){
     return data;
 }
 
-encAsciiBook = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.";
+encAsciiBook = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.";
 function encdec_encAscii(bits){
     var last = (bits.length + 3) % 6;
     //console.log("last:",last, [last & 1, (last >> 1) & 1, last >> 2])
