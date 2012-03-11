@@ -838,10 +838,10 @@ if(DEBUG) console.log("grid:", temp)
                 refreshUrl(hash2url(gUpdateHash));
             }
 
-            function reset() {
-                var temp = gUpdateHash;
+            function reset(hash) {
+                if (!hash) hash = gUpdateHash;
                 clearScreen();
-                buildFromHash(temp);
+                buildFromHash(hash);
                 refreshUrl(hash2url(gUpdateHash));
             }
 
@@ -871,6 +871,7 @@ if(DEBUG) console.log("grid:", temp)
                 document.getElementById("showphase").innerHTML = "";
                 document.getElementById("duplicates").innerHTML = "";
                 document.getElementById("cellcount").innerHTML = "";
+                setTimeout(render, 100);
             }
             
             function randomCells(){
