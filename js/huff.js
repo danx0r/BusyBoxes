@@ -128,27 +128,40 @@ function encAscii(bits){
 
 function decAsciiBits(s) {
     var last = encAsciiBook.indexOf(s[0]) >> 3;
-    //console.log("last:",last, "first char:", encAsciiBook.indexOf(s[0]))
-    var i = 0;
+    //console.log("last:",last, "first char:", encAsciiBook.indexOf(s[0]).toString(2))
+    if (s == '') return [];
+    var i = 0, b = 0;
     var bits = [];
     var top = 32;
-    for (var j=0; j<s.length; j++) {
-        var b = encAsciiBook.indexOf(s[j]);
-        if (last && (j == s.length-1)) top = 1 << (last - 1);
-        //console.log("b:", b, "top:", top, "len:", bits.length)
-        for (var k = top; k != 0; k >>= 1) {
-            if (b & k) {
-                bits.push(1);
+    if (s.length == 1) {
+        b = encAsciiBook.indexOf(s[0]) & 7;
+        for (i = 0; i < last; i++) {
+            bits.push(b >> 5);
+            b <<= 1;
+        }
+    }
+    else {
+        for (var j = 0; j < s.length; j++) {
+            b = encAsciiBook.indexOf(s[j]);
+            if (last && (j == s.length - 1)) {
+                top = 1 << (last - 1);
             }
-            else {
-                bits.push(0);
-           }
+            //console.log("b:", b, "top:", top, "len:", bits.length)
+            for (var k = top; k != 0; k >>= 1) {
+                if (b & k) {
+                    bits.push(1);
+                }
+                else {
+                    bits.push(0);
+                }
+            }
         }
     }
     return bits.slice(3)
 }
+
 /*
-data=[0,1,-1,2,13,-444,1,2,4,-2,22];
+data=[1,0,0,1,444,-10,9,11,23,-1];
 console.log("data:", data);
 bits = enHuff(data);
 console.log("bits:", bits, "length:", bits.length);
