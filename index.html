@@ -130,7 +130,7 @@
                     <button onclick="fastSlow()">FAST/SLOW</button>
                     <button onclick="reverseDirection()">DIRECTION</button>
                     <button onclick="randomCells(12, -2, 1)">RANDOM</button>
-                    <button onclick="clear()">CLEAR</button>
+                    <button onclick="clearGrid()">CLEAR</button>
                     <button onclick="updateHash();refreshUrl(hash2url(gUpdateHash))">UPDATE</button>
                     <button onclick="reset()">RESET</button>
                 </div>
@@ -831,10 +831,8 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
-            function clear() {
+            function clearGrid() {
                 clearScreen();
-                isRunning = false;
-                direction = "forward";
                 processSpeed = "slow";
                 updateHash();
                 refreshUrl(hash2url(gUpdateHash));
@@ -843,13 +841,12 @@ if(DEBUG) console.log("grid:", temp)
             function reset() {
                 var temp = gUpdateHash;
                 clearScreen();
-                isRunning = false;
-                direction = "forward";
                 buildFromHash(temp);
                 refreshUrl(hash2url(gUpdateHash));
             }
 
             function clearScreen() {
+                isRunning = false;
                 grid = {};
                 var i = 0;
 
@@ -867,6 +864,13 @@ if(DEBUG) console.log("grid:", temp)
                 }
 
                 frame = 0;
+                hashmap = {};
+                lasthash = "";
+                direction = "forward";
+                document.getElementById("generation").innerHTML = "";
+                document.getElementById("showphase").innerHTML = "";
+                document.getElementById("duplicates").innerHTML = "";
+                document.getElementById("cellcount").innerHTML = "";
             }
             
             function randomCells(){
@@ -897,8 +901,6 @@ if(DEBUG) console.log("grid:", temp)
                     axMin = [axMin, axMin, axMin];
                 }
                 clearScreen();
-                isRunning = false;
-                direction = "forward";
                 for (i = 0; i < count; i++) {
                     var phase = -1;
                     while ( (cursor in grid) || (phase != (i & 1)) ) {
