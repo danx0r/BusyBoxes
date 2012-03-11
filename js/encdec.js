@@ -161,11 +161,15 @@ function encdec_decAsciiBits(s) {
 }
 
 function encdec_encode(bits) {
-    return encdec_encAscii(encdec_enHuff(bits));
+    var r = encdec_encAscii(encdec_enHuff(bits));
+    //console.log("DEBUG encdec_encode", bits, "-->", r)
+    return r;
 }
 
 function encdec_decode(bits) {
-    return encdec_deHuff(encdec_decAsciiBits(bits));
+    var r = encdec_deHuff(encdec_decAsciiBits(bits));
+    //console.log("DEBUG encdec_decode", bits, "-->", r)
+    return r;
 }
 
 /*

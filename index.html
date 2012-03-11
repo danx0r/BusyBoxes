@@ -687,7 +687,7 @@ if(DEBUG) console.log("grid:", temp)
                     if (version == "X/") {
                         var data = hash.substr(2);
                         var cur = [0, 0, 0];
-                        var x=0;
+                        var x = 0;
                         var delta, sign;
                         while (x < data.length) {
                             for (var i = 0; i < 3; i++) {
@@ -708,17 +708,40 @@ if(DEBUG) console.log("grid:", temp)
                                 cur[i] += delta;
                             }
                             var parity = (cur[0] + cur[1] + cur[2]) & 1;
-                            var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                            var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
                             voxel.position.x = cur[0] * 50 + 25;
                             voxel.position.y = cur[1] * 50 + 25;
                             voxel.position.z = cur[2] * 50 + 25;
                             voxel.overdraw = true;
-                            scene.addObject( voxel );
+                            scene.addObject(voxel);
                             putGrid(voxel, cur);
                         }
                     }
                     else {
-                        alert("Unknown encoding type: " + version);
+                        if (version == "Y/") {
+                            var data = hash.substr(2);
+                            data = encdec_decode(data);
+                            var cur = [0, 0, 0];
+                            var x = 0;
+                            var delta, sign;
+                            while (x < data.length) {
+                                for (var i = 0; i < 3; i++) {
+                                    delta = data[x++];
+                                    cur[i] += delta;
+                                }
+                                var parity = (cur[0] + cur[1] + cur[2]) & 1;
+                                var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
+                                voxel.position.x = cur[0] * 50 + 25;
+                                voxel.position.y = cur[1] * 50 + 25;
+                                voxel.position.z = cur[2] * 50 + 25;
+                                voxel.overdraw = true;
+                                scene.addObject(voxel);
+                                putGrid(voxel, cur);
+                            }
+                        }
+                        else {
+                            alert("Unknown encoding type: " + version);
+                        }
                     }
                 }
                 updateHash();
