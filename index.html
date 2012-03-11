@@ -758,9 +758,15 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function updateHash(noLink) {
+                var key, keys = [];
+                for (key in grid) {
+                    keys.push(key);
+                }
+                keys.sort();
                 var data = [];
                 var cur = [0, 0, 0];
-                for (key in grid) {
+                for (var k in keys) {
+                    key = keys[k];
                     xyz = eval("[" + key + "]");
                     for (var j=0; j<3; j++) {
                         var delta = xyz[j] - cur[j];
