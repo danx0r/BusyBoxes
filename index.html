@@ -132,6 +132,7 @@
                     <button onclick="reverseDirection()">DIRECTION</button>
                     <button onclick="clearScreen()">CLEAR</button>
                     <button onclick="randomCells(12, -2, 1)">RANDOM</button>
+                    <button onclick="updateHash();document.location = gUpdateUrl">UPDATE</button>
                 </div>
             </div>
         </div>
@@ -771,27 +772,25 @@ if(DEBUG) console.log("grid:", temp)
                 data +=     (frame % 6 + 6) % 6
 
                 if (!noLink) {                          // yuck. The part of my job I hate
-                    var sep = "&";
+                    var sep = "?";
                     var url = "" + window.location;
-                    console.log("url:", url)
                     var i = url.indexOf('?hash=');
                     if (i == -1) {
                         i = url.indexOf('&hash=');
-                    }
-                    if (i == -1) {
-                        if (url.indexOf("?") == -1) sep = "?"
-                        i = url.indexOf("/#");
                         if (i == -1) {
-                            i = url.length;
+                            if (url.indexOf("?") > -1) 
+                                sep = "&"
+                            i = url.indexOf("/#");
+                            if (i == -1) {
+                                i = url.length;
+                            }
+                        }
+                        else {
+                            sep = "&";
                         }
                     }
                     url = url.substr(0, i) + sep + "hash=" + data
-                    console.log("new url:", "" + url)
-//                    window.location = url;
-
-
-//                    window.location.hash = "Y/" + data;
-//                    document.getElementById('link').href = "http://mrdoob.com/projects/voxels/#A/" + data;
+                    gUpdateUrl = url;
                 }
                 //document.getElementById('showhash').innerHTML = data;
                 if (data != lasthash) {
