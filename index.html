@@ -37,6 +37,19 @@
             }
         </style>
     </head>
+    <style>
+        .fakelink {
+            font-family:monospace;
+            font-size:large;
+            #color:blue;
+            #background:none;
+            border:none;
+            #padding:0;
+            #border-bottom:1px solid;
+            background-color:#ddd;
+            opacity:0.7;
+        }
+    </style>
     <body>
         <div style="position:absolute;font-size:large">
             Generation:
@@ -62,6 +75,10 @@
             Cursor:
             <span id="cursorpos"></span>
             <br/>
+            <br/>
+            <button class="fakelink" onclick="selectHash('GJR0', this)">Glider 1</button>
+            <br/>
+            <button class="fakelink" onclick="selectHash('UMlSpB0', this)">Glider 2</button>
             <br/>
             <a href="?hash=GJR0">Glider 1</a>
             <br/>
@@ -160,6 +177,7 @@
             var axisMin = -12;
             var axisMax = 11;
             var processSpeed = "slow";
+            var lastSelectedEl;
             var container, interval,
             camera, scene, renderer,
             projector, plane, cube, linesMaterial,
@@ -843,6 +861,16 @@ if(DEBUG) console.log("grid:", temp)
                 clearScreen();
                 buildFromHash(hash);
                 refreshUrl(hash2url(gUpdateHash));
+            }
+            
+            function selectHash(hash, el) {
+                console.log("lastSelectedEl:", lastSelectedEl)
+                if (lastSelectedEl) {
+                    lastSelectedEl.style.backgroundColor="#ddd";
+                }
+                el.style.backgroundColor="cyan";
+                lastSelectedEl = el;
+                reset(hash);
             }
 
             function clearScreen() {
