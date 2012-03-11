@@ -81,15 +81,15 @@
             <br/>
             <a href="?hash=AQGk0">Cycle 3</a> (24)
             <br/>
-            <a href="?hash=UMXTUukA0">Cycle 4</a> (42)
+            <a href="?hash=BwF6Ao40">Cycle 4</a> (36)
             <br/>
-            <a href="?hash=cMVmAE0">Cycle 5</a> (24)
+            <a href="?hash=UMXTUukA0">Cycle 5</a> (42)
             <br/>
             <a href="?hash=ACRAs0">Cycle 6</a> (60)
             <br/>
-            <a href="?hash=oA9NnAIHAPJ0">Cycle 7</a> (108)
+            <a href="?hash=IQEEcwBBHA0">Cycle 7</a> (84)
             <br/>
-            <a href="?hash=WgCCTA1A0">Cycle 8</a> (48)
+            <a href="?hash=IDYCyj0B5">Cycle 8</a> (144)
             <br/>
             <a href="?hash=cICOg2CB0">Cycle 9</a> (582)
             <br/>
@@ -128,11 +128,11 @@
                 <div style="opacity:0.7">
                     </p><button onclick="toggleRunning()">RUN/STOP</button>
                     <button onclick="fastSlow()">FAST/SLOW</button>
-                    <button onclick="window.location.reload(true)">RESET</button>
                     <button onclick="reverseDirection()">DIRECTION</button>
-                    <button onclick="clearScreen()">CLEAR</button>
                     <button onclick="randomCells(12, -2, 1)">RANDOM</button>
+                    <button onclick="clearScreen()">CLEAR</button>
                     <button onclick="updateHash();document.location = gUpdateUrl">UPDATE</button>
+                    <button onclick="document.location =  gUpdateUrl">RESET</button>
                 </div>
             </div>
         </div>
@@ -152,6 +152,7 @@
             var direction = "forward";
             var hashmap = {};
             var lasthash = "";
+            var gUpdateUrl = "";
             var encodeString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
             var frame = 0;
             var cellCount = 0;
@@ -756,6 +757,28 @@ if(DEBUG) console.log("grid:", temp)
                 updateHash();
 
             }
+            
+            function hash2url(hash){
+                var sep = "?";
+                var url = "" + window.location;
+                var i = url.indexOf('?hash=');
+                if (i == -1) {
+                    i = url.indexOf('&hash=');
+                    if (i == -1) {
+                        if (url.indexOf("?") > -1) 
+                            sep = "&"
+                        i = url.indexOf("/#");
+                        if (i == -1) {
+                            i = url.length;
+                        }
+                    }
+                    else {
+                        sep = "&";
+                    }
+                }
+                url = url.substr(0, i) + sep + "hash=" + hash;
+                return url;
+            }
 
             function updateHash(noLink) {
                 var key, keys = [];
@@ -779,25 +802,7 @@ if(DEBUG) console.log("grid:", temp)
                 data +=     (frame % 6 + 6) % 6
 
                 if (!noLink) {                          // yuck. The part of my job I hate
-                    var sep = "?";
-                    var url = "" + window.location;
-                    var i = url.indexOf('?hash=');
-                    if (i == -1) {
-                        i = url.indexOf('&hash=');
-                        if (i == -1) {
-                            if (url.indexOf("?") > -1) 
-                                sep = "&"
-                            i = url.indexOf("/#");
-                            if (i == -1) {
-                                i = url.length;
-                            }
-                        }
-                        else {
-                            sep = "&";
-                        }
-                    }
-                    url = url.substr(0, i) + sep + "hash=" + data
-                    gUpdateUrl = url;
+                    gUpdateUrl = hash2url(data);
                 }
                 //document.getElementById('showhash').innerHTML = data;
                 if (data != lasthash) {
