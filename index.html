@@ -201,7 +201,7 @@
                     axisMax = parseInt(size / 2) - 1;
                     axisMin = axisMax - (size - 1);
                     radious *= size/24.0;
-                } 
+                }
                 if (DEBUG) console.log("DEBUG query args:", qargs, "axisMax:", axisMax, "axisMin:", axisMin)
                 container = document.createElement( 'div' );
                 document.body.appendChild( container );
@@ -296,9 +296,12 @@
                 document.addEventListener( 'DOMMouseScroll', onDocumentMouseWheel, false );
 
                 if ( window.location.hash ) {
-
                     buildFromHash();
                 }
+
+                if (qargs.hash) {
+                    buildFromHash(qargs.hash);
+                }                
 
                 setInterval(mainLoopFast, 14);
                 setInterval(mainLoopSlow, 140);
@@ -645,8 +648,15 @@ if(DEBUG) console.log("grid:", temp)
 
             }
 
-            function buildFromHash() {
-                var hash = window.location.hash;
+            function buildFromHash(hash) {
+                var version = false;
+                if (hash) {
+                    version = "Y"; 
+                }
+                else {
+                    version = window.location.hash.substr(1, 1);
+                    hash = window.location.hash.substr(3);
+                }
                 var phase = hash.substr(hash.length-1, hash.length);
                 frame = parseInt(phase);
                 if ('' + frame == "NaN") {
@@ -655,13 +665,11 @@ if(DEBUG) console.log("grid:", temp)
                 else {
                     hash = hash.substr( 0, hash.length - 1 );
                 }
-                hash = hash.substr( 1 );
-                version = hash.substr( 0, 2 );
 
-                if ( version == "A/" ) {
+                if ( version == "A" ) {
 
                     var current = { x: 0, y: 0, z: 0, c: 0 }
-                    var data = decode( hash.substr( 2 ) );
+                    var data = decode( hash );
                     var i = 0, l = data.length;
 
                     while ( i < l ) {
@@ -684,8 +692,8 @@ if(DEBUG) console.log("grid:", temp)
                     }
 
                 } else {
-                    if (version == "X/") {
-                        var data = hash.substr(2);
+                    if (version == "X") {
+                        var data = hash;
                         var cur = [0, 0, 0];
                         var x = 0;
                         var delta, sign;
@@ -718,8 +726,8 @@ if(DEBUG) console.log("grid:", temp)
                         }
                     }
                     else {
-                        if (version == "Y/") {
-                            var data = hash.substr(2);
+                        if (version == "Y") {
+                            var data = hash;
                             data = encdec_decode(data);
                             var cur = [0, 0, 0];
                             var x = 0;
