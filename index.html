@@ -138,7 +138,7 @@
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
         <script type="text/javascript" src="js/Plane.js"></script>
-        <script type="text/javascript" src="js/huff.js"></script>
+        <script type="text/javascript" src="js/encdec.js"></script>
         <script type="text/javascript">
             var DEBUG = false;
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
@@ -726,30 +726,21 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function updateHash(noLink) {
-                var data = "";
+                var data = [];
                 var cur = [0, 0, 0];
                 for (key in grid) {
                     xyz = eval("[" + key + "]");
                     for (var j=0; j<3; j++) {
                         var delta = xyz[j] - cur[j];
-                        if (delta < -32 || delta > 31) {
-                            data += "_";
-                            msb =  Math.abs(delta) >> 6;
-                            if (delta < 0) msb |= 32;
-                            lsb = Math.abs(delta) & 0x3f;
-                            data += encodeString[msb];
-                            data += encodeString[lsb];
-                        }
-                        else {
-                            data += encodeString[delta + 32];
-                        }
+                        data.push(delta);
                     }
                     cur = xyz;
                 }
-                data +=     (frame % 6 + 6) %6
-                
+                data = encdec_encode(data);
+                data +=     (frame % 6 + 6) % 6
+
                 if (!noLink) {
-                    window.location.hash = "X/" + data;
+                    window.location.hash = "Y/" + data;
 //                    document.getElementById('link').href = "http://mrdoob.com/projects/voxels/#A/" + data;
                 }
                 //document.getElementById('showhash').innerHTML = data;

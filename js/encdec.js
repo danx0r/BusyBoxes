@@ -15,7 +15,7 @@
 /*
  * takes a list of numbers, returns a list of bits
  */
-function enHuff(data) {
+function encdec_enHuff(data) {
     bits = [];
     for (var i = 0; i < data.length; i++) {
         var v = data[i];
@@ -49,7 +49,7 @@ function enHuff(data) {
     return bits;
 }
 
-function deHuff(bits){
+function encdec_deHuff(bits){
     data = [];
     var i = 0;
     while (i < bits.length) {
@@ -104,7 +104,7 @@ function deHuff(bits){
 }
 
 encAsciiBook = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.";
-function encAscii(bits){
+function encdec_encAscii(bits){
     var last = (bits.length + 3) % 6;
     //console.log("last:",last, [last & 1, (last >> 1) & 1, last >> 2])
     bits = [last >> 2, (last >> 1) & 1, last & 1].concat(bits); // so decoder can determine bitcount
@@ -126,7 +126,7 @@ function encAscii(bits){
     return s;
 }
 
-function decAsciiBits(s) {
+function encdec_decAsciiBits(s) {
     var last = encAsciiBook.indexOf(s[0]) >> 3;
     //console.log("last:",last, "first char:", encAsciiBook.indexOf(s[0]).toString(2))
     if (s == '') return [];
@@ -158,6 +158,14 @@ function decAsciiBits(s) {
         }
     }
     return bits.slice(3)
+}
+
+function encdec_encode(bits) {
+    return encdec_encAscii(encdec_enHuff(bits));
+}
+
+function encdec_decode(bits) {
+    return encdec_deHuff(encdec_decAsciiBits(bits));
 }
 
 /*
