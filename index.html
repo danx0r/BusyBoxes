@@ -135,6 +135,10 @@
             <br/>
             <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
             <br/>
+            <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
+            <br/>
         </div>
         <div style="display:none">
             <div id="banner">
@@ -325,10 +329,10 @@
                 else {
                     if (qargs.hash) {
                         buildFromHash(qargs.hash);
-                    }
-                    if (qargs.sel) {
-                        lastSelectedEl = document.getElementById(qargs.sel);
-                        lastSelectedEl.style.backgroundColor = "cyan";
+                        if (qargs.sel) {
+                            lastSelectedEl = document.getElementById(qargs.sel);
+                            lastSelectedEl.style.backgroundColor = "cyan";
+                        }
                     }
                     else {
                         selectHash('PeciXwDuTA0', document.getElementById("introHash"));
