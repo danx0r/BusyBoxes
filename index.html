@@ -76,9 +76,7 @@
             <span id="cursorpos"></span>
             <br/>
             <br/>
-            <button class="goHash" onclick="selectHash('GJR0', this)">Glider 1</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('UMlSpB0', this)">Glider 2</button>
+            <button class="goHash" id="introHash" onclick="selectHash('fYcUN4CGQF0', this)">Intro</button>
             <br/>
             <button class="goHash" onclick="selectHash('GJR0', this)">Glider 1</button>
             <br/>
@@ -178,6 +176,7 @@
             var axisMax = 11;
             var processSpeed = "slow";
             var lastSelectedEl;
+            var gLastRefreshedUrl;
             var container, interval,
             camera, scene, renderer,
             projector, plane, cube, linesMaterial,
@@ -321,6 +320,9 @@
 
                 if (qargs.hash) {
                     buildFromHash(qargs.hash);
+                }
+                else {
+                    selectHash('fYcUN4CGQF0', document.getElementById("introHash"));
                 }                
 
                 setInterval(mainLoopFast, 14);
@@ -671,7 +673,10 @@ if(DEBUG) console.log("grid:", temp)
             function refreshUrl(url) {
                 //console.log("should refresh:", url);
                 if (history.pushState) {
-                    history.pushState(url, url, url);
+                    if(url != gLastRefreshedUrl) {
+                        history.pushState(url, url, url);
+                    }
+                    gLastRefreshedUrl = url;
                 }
                 else {
                     document.location = url;
