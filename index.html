@@ -145,12 +145,14 @@
                     <button onclick="fastSlow()">FAST/SLOW</button>
                     <button onclick="reverseDirection()">DIRECTION</button>
                     <button onclick="randomCells(12, -2, 1)">RANDOM</button>
+                    <button onclick="playStopMusic()">MUSIC</button>
                     <button onclick="clearGrid()">CLEAR</button>
                     <button onclick="update()">UPDATE</button>
                     <button onclick="reset()">RESET</button>
                 </div>
             </div>
         </div>
+        <audio id="music" src="prisoner_ambient003.ogg" loop="true"></audio>
         <script type="text/javascript" src="js/ThreeCanvas.js"></script>
         <script type="text/javascript" src="js/Cube.js"></script>
         <script type="text/javascript" src="js/Plane.js"></script>
@@ -994,6 +996,18 @@ if(DEBUG) console.log("key:", event.keyCode);
                 }
                 else {
                     processSpeed = "fast";
+                }
+            }
+
+            function playStopMusic() {
+                if (!document.musicPlaying) {
+                    document.getElementById("music").load();            // well this fixes the chrome bug, but forces play from top
+                    document.getElementById("music").play();
+                    document.musicPlaying = true;
+                }
+                else {
+                    document.getElementById("music").pause();
+                    document.musicPlaying = false;
                 }
             }
         </script>
