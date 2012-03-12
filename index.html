@@ -148,7 +148,7 @@
                     <button onclick="reverseDirection()">DIRECTION</button>
                     <button onclick="randomCells(12, -2, 1)">RANDOM</button>
                     <button onclick="clearGrid()">CLEAR</button>
-                    <button onclick="updateHash();refreshUrl(hash2url(gUpdateHash))">UPDATE</button>
+                    <button onclick="update()">UPDATE</button>
                     <button onclick="reset()">RESET</button>
                 </div>
             </div>
@@ -851,6 +851,7 @@ if(DEBUG) console.log("grid:", temp)
 
             function clearGrid() {
                 clearScreen();
+                if (lastSelectedEl) lastSelectedEl.style.backgroundColor="#ddd";
                 processSpeed = "slow";
                 updateHash();
                 refreshUrl(hash2url(gUpdateHash));
@@ -858,19 +859,26 @@ if(DEBUG) console.log("grid:", temp)
 
             function reset(hash) {
                 if (!hash) hash = gUpdateHash;
-                clearScreen();
+                clearScreen(true);
                 buildFromHash(hash);
                 refreshUrl(hash2url(gUpdateHash));
             }
             
-            function selectHash(hash, el) {
-                console.log("lastSelectedEl:", lastSelectedEl)
+            function update(){
                 if (lastSelectedEl) {
                     lastSelectedEl.style.backgroundColor="#ddd";
                 }
+                updateHash();
+                refreshUrl(hash2url(gUpdateHash));
+            }
+            
+            function selectHash(hash, el) {
+                if (lastSelectedEl) {
+                    lastSelectedEl.style.backgroundColor="#ddd";
+                }
+                reset(hash);
                 el.style.backgroundColor="cyan";
                 lastSelectedEl = el;
-                reset(hash);
             }
 
             function clearScreen() {
@@ -930,6 +938,7 @@ if(DEBUG) console.log("grid:", temp)
                     axMin = [axMin, axMin, axMin];
                 }
                 clearScreen();
+                if (lastSelectedEl) lastSelectedEl.style.backgroundColor="#ddd";
                 for (i = 0; i < count; i++) {
                     var phase = -1;
                     while ( (cursor in grid) || (phase != (i & 1)) ) {
