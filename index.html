@@ -76,7 +76,7 @@
             <span id="cursorpos"></span>
             <br/>
             <br/>
-            <button class="goHash" id="introHash" onclick="selectHash('fYcUN4CGQF0', this)">Intro</button>
+            <button class="goHash" id="introHash" onclick="selectHash('PeciXwDuTA0', this)">Intro</button>
             <br/>
             <button class="goHash" onclick="selectHash('GJR0', this)">Glider 1</button>
             <br/>
@@ -162,6 +162,7 @@
             var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
             var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
             var cursor = [0, 0, 0];
+            var gLastCursor = cursor;
             var grid = {};
             var isRunning = false;
             var direction = "forward";
@@ -322,7 +323,7 @@
                     buildFromHash(qargs.hash);
                 }
                 else {
-                    selectHash('fYcUN4CGQF0', document.getElementById("introHash"));
+                    selectHash('PeciXwDuTA0', document.getElementById("introHash"));
                 }                
 
                 setInterval(mainLoopFast, 14);
@@ -479,10 +480,11 @@
             
             function toggleRunning(){
                 if (isRunning) {
-                    cursor = [0, 0, 0];
+                    cursor = gLastCursor;
                     isRunning = false;
                 }
                 else {
+                    gLastCursor = cursor;
                     cursor = [0, 2000, 0];
                     isRunning = true;
                 }
@@ -548,6 +550,9 @@ if(DEBUG) console.log("key:", event.keyCode);
                         setBrushPosition(cursor);
                         render(); 
                         break;
+                    case 82:
+                        reset();
+                        break;
                     case 83:
                         isRunning = true;
                         mainLoop();
@@ -578,9 +583,6 @@ if(DEBUG) console.log("key:", event.keyCode);
                         }
                         updateHash();
                         render(); 
-var temp = [];
-for(var e in grid) temp.push(e);
-if(DEBUG) console.log("grid:", temp)
                         break;
                 }
 
@@ -855,6 +857,8 @@ if(DEBUG) console.log("grid:", temp)
             }
 
             function clearGrid() {
+                cursor = [0, 0, 0]
+                setBrushPosition(cursor);
                 clearScreen();
                 if (lastSelectedEl) lastSelectedEl.style.backgroundColor="#ddd";
                 processSpeed = "slow";
@@ -864,7 +868,9 @@ if(DEBUG) console.log("grid:", temp)
 
             function reset(hash) {
                 if (!hash) hash = gUpdateHash;
-                clearScreen(true);
+                cursor = gLastCursor;
+                setBrushPosition(cursor);
+                clearScreen();
                 buildFromHash(hash);
                 refreshUrl(hash2url(gUpdateHash));
             }
