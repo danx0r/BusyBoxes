@@ -49,6 +49,23 @@
             background-color:#ddd;
             opacity:0.7;
         }
+        .hashbox {
+            font-size:larger;
+            position:absolute;
+            width:700px;
+            height:20px;
+            top:4px;
+            right:-680px;
+            text-align:left;
+            #background-color:pink;            
+            -moz-transform: rotate(90.0deg);  /* FF3.5+ */
+            -o-transform: rotate(90.0deg);  /* Opera 10.5 */
+            -webkit-transform: rotate(90.0deg);  /* Saf3.1+, Chrome */
+            -webkit-transform-origin: left;  /* Saf3.1+, Chrome */
+            filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=0.7854);  /* IE6,IE7 */
+            -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.7854)"; /* IE8 */
+            opacity:0.66;
+        }
     </style>
     <body>
         <div style="position:absolute;font-size:large">
@@ -64,11 +81,6 @@
             Duplicate:
             <span id="duplicates"></span>
             <br/>
-            <!--
-            Hash:
-            <span id="showhash" style="font-size:small;"></span>
-            <br/>
-            -->
             Cells:
             <span id="cellcount"></span>
             <br/>
@@ -135,9 +147,9 @@
             <br/>
             <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
             <br/>
-            <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
+            <button class="goHash" onclick="selectHash('EOjuPgFiYmJieAY8AnwIPgL4BzwBw0NDYnKeANLzngEo0aNH4DnwGSpUqVLR0', this, 40)" id="octave">Octave</button>
             <br/>
-            <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
+            <button class="goHash" onclick="selectHash('cDvPgDiQ0NiYngHPAN8CD4EeAc8AweA2Gh8DMSGhuc8APMcyWjRSpaPwGPgOlS0aB0', this, 40)" id="strung_out">Harmonic Chaos</button>
             <br/>
         </div>
         <div style="display:none">
@@ -239,7 +251,8 @@
                 info.style.top = '5px';
                 info.style.width = '100%';
                 info.style.textAlign = 'center';
-                info.innerHTML = document.getElementById("banner").innerHTML;
+                var hashDisplay = '<div class="hashbox"><span id="showhash"></span></div>'
+                info.innerHTML = document.getElementById("banner").innerHTML + hashDisplay;
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -361,7 +374,6 @@
                 document.getElementById("showphase").innerHTML = (frame % 6 + 6) %6;
                 document.getElementById("direction").innerHTML = direction;
                 if (isRunning) {
-                    updateHash(true);
                     if (direction == "reverse") {
                         frame--;
                     }
@@ -407,7 +419,8 @@
                     if (direction == "forward") {
                         frame++;
                     }
-                 }
+                    updateHash(true);
+                }
             }
             
             function getMove(xyz, x1, x2) {
@@ -852,7 +865,7 @@ if(DEBUG) console.log("key:", event.keyCode);
                 if (!noLink) {                          // yuck. The part of my job I hate
                     gUpdateHash = data;
                 }
-                //document.getElementById('showhash').innerHTML = data;
+                document.getElementById('showhash').innerHTML = data;
                 if (data != lasthash) {
                     if (data in hashmap) {
                         document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data] + " cycle: " + Math.abs(frame - hashmap[data]);
