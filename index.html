@@ -49,45 +49,31 @@
             background-color:#ddd;
             opacity:0.7;
         }
-        .hashbox {
-            font-size:larger;
-            position:absolute;
-            width:700px;
-            height:20px;
-            top:4px;
-            right:-680px;
-            text-align:left;
-            #background-color:pink;            
-            -moz-transform: rotate(90.0deg);  /* FF3.5+ */
-            -moz-transform-origin: left;  /* FF3.5+ */
-            -o-transform: rotate(90.0deg);  /* Opera 10.5 */
-            -webkit-transform: rotate(90.0deg);  /* Saf3.1+, Chrome */
-            -webkit-transform-origin: left;  /* Saf3.1+, Chrome */
-            filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=0.7854);  /* IE6,IE7 */
-            -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.7854)"; /* IE8 */
-            opacity:0.66;
-        }
     </style>
     <body>
         <div style="position:absolute;font-size:large">
-            Generation:
-            <span id="generation"></span>
-            <br/>
-            phase:
-            <span id="showphase"></span>
-            <br/>
-            Direction:
-            <span id="direction"></span>
-            <br/>
-            Duplicate:
-            <span id="duplicates"></span>
-            <br/>
-            Cells:
-            <span id="cellcount"></span>
-            <br/>
-            Cursor:
-            <span id="cursorpos"></span>
-            <br/>
+            <div style="opacity:0.7">
+                Generation:
+                <span id="generation"></span>
+                <br/>
+                phase:
+                <span id="showphase"></span>
+                <br/>
+                Direction:
+                <span id="direction"></span>
+                <br/>
+                Duplicate:
+                <span id="duplicates"></span>
+                <br/>
+                Cells:
+                <span id="cellcount"></span>
+                <br/>
+                Cursor:
+                <span id="cursorpos"></span>
+                <br/>
+                Hash:
+                <span id="showhash" style="font-size:smaller"></span>
+            </div>
             <br/>
             <button class="goHash" id="introHash" onclick="selectHash('PeciXwDuTA0', this)">Intro</button>
             <br/>
@@ -251,8 +237,7 @@
                 info.style.top = '5px';
                 info.style.width = '100%';
                 info.style.textAlign = 'center';
-                var hashDisplay = '<div class="hashbox"><span id="showhash"></span></div>'
-                info.innerHTML = document.getElementById("banner").innerHTML + hashDisplay;
+                info.innerHTML = document.getElementById("banner").innerHTML;
                 container.appendChild( info );
  
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -865,7 +850,6 @@ if(DEBUG) console.log("key:", event.keyCode);
                 if (!noLink) {                          // yuck. The part of my job I hate
                     gUpdateHash = data;
                 }
-                document.getElementById('showhash').innerHTML = data;
                 if (data != lasthash) {
                     if (data in hashmap) {
                         document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data] + " cycle: " + Math.abs(frame - hashmap[data]);
@@ -874,6 +858,10 @@ if(DEBUG) console.log("key:", event.keyCode);
                 document.getElementById('cellcount').innerHTML = cellCount;
                 hashmap[data] = frame;
                 lasthash = data;
+                if (data.length > 12) {
+                    data = data.substr(0,5) + ".." + data.substr(data.length-5)
+                }
+                document.getElementById('showhash').innerHTML = data;
             }
 
             function render() {
