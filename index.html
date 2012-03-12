@@ -133,6 +133,8 @@
             <button class="goHash" onclick="selectHash('UkDEoQIHETAnBgQo9IUYECBwzo6Q4AQSdAUmCBDhoQOAcCCDOjoIBAgcAUmCnB0CBAgcQ9Abg6KHATBSdAYOE4OkUUIFBejBAgcIJOgIEDgBBJ1BwnBgwcQ9AUY9ACToCBxE6QoIJwdIcI9IUKPQECBwBB0', this)">
                 Big Bang (Entropy)</button>
             <br/>
+            <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
+            <br/>
         </div>
         <div style="display:none">
             <div id="banner">
@@ -317,16 +319,21 @@
                 document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
                 document.addEventListener( 'DOMMouseScroll', onDocumentMouseWheel, false );
 
-                if ( window.location.hash ) {
+                if (window.location.hash) {
                     buildFromHash();
                 }
-
-                if (qargs.hash) {
-                    buildFromHash(qargs.hash);
-                }
                 else {
-                    selectHash('PeciXwDuTA0', document.getElementById("introHash"));
-                }                
+                    if (qargs.hash) {
+                        buildFromHash(qargs.hash);
+                    }
+                    if (qargs.sel) {
+                        lastSelectedEl = document.getElementById(qargs.sel);
+                        lastSelectedEl.style.backgroundColor = "cyan";
+                    }
+                    else {
+                        selectHash('PeciXwDuTA0', document.getElementById("introHash"));
+                    }
+                }
 
                 setInterval(mainLoopFast, 14);
                 setInterval(mainLoopSlow, 140);
@@ -885,13 +892,19 @@ if(DEBUG) console.log("key:", event.keyCode);
                 refreshUrl(hash2url(gUpdateHash));
             }
             
-            function selectHash(hash, el) {
-                if (lastSelectedEl) {
-                    lastSelectedEl.style.backgroundColor="#ddd";
+            function selectHash(hash, el, size) {
+                console.log(el)
+                if (size && size > (axisMax - axisMin + 1)) {
+                    document.location = "/?size=" + size + "&sel=" + el.id + "&hash=" + hash;
                 }
-                reset(hash);
-                el.style.backgroundColor="cyan";
-                lastSelectedEl = el;
+                else {
+                    if (lastSelectedEl) {
+                        lastSelectedEl.style.backgroundColor = "#ddd";
+                    }
+                    reset(hash);
+                    el.style.backgroundColor = "cyan";
+                    lastSelectedEl = el;
+                }
             }
 
             function clearScreen() {
