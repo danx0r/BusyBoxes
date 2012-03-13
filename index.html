@@ -339,6 +339,16 @@
                         if (qargs.sel) {
                             lastSelectedEl = document.getElementById(qargs.sel);
                             lastSelectedEl.style.backgroundColor = "cyan";
+                            if (history.replaceState) {
+                                var url = "" + window.location;
+                                var i = url.indexOf('&sel=');
+                                if (i > -1) {
+                                    var j = i + 1 + url.substr(i+1).indexOf('&');
+                                    url = url.substr(0, i) + url.substr(j);
+                                    console.log(i, j, url)
+                                    history.replaceState(url, url, url);
+                                }
+                            }
                         }
                     }
                     else {
