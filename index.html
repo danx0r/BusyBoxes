@@ -704,9 +704,9 @@
 
             function refreshUrl(url) {
                 //console.log("should refresh:", url);
-                if (history.pushState) {
+                if (history.replaceState) {
                     if(url != gLastRefreshedUrl) {
-                        history.pushState(url, url, url);
+                        history.replaceState(url, url, url);
                     }
                     gLastRefreshedUrl = url;
                 }
