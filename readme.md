@@ -7,4 +7,4 @@ A preprint is available <a href="http://arxiv.org/pdf/nlin/0501022">here</a>.
 
 It's running live (as of March, 2012) <a href="http://bbx.logqr.com/">here</a>.
 
-More info can be found in the <a href="faq.html">faq.</a>
+More info can be found in the <a href="http://bbx.logqr.com/faq.html">faq.</a>
