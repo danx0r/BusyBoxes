@@ -133,7 +133,7 @@
             <br/>
             <button class="goHash" onclick="selectHash('vwB3JyPaCCCPQCCCPQCCCPQCCD1dPHzPM0', this)">Attraction</button>
             <br/>
-            <button class="goHash" onclick="selectHash('MnCTi7uMxOftTl7px47ec4vgSHgMH4FTu5zo-AZk5eecBOvjnR8BSU5ecunSHFwcvwEh4BOm.APh4eTqSB0', this)">Order Out of Chaos</button>
+            <button class="goHash" onclick="selectHash('MnCTi7uMxOftTl7px47ec4vgSHgMH4FTu5zo-AZk5eecBOvjnR8BSU5ecunSHFwcvwEh4BOm.APh4eTqSB0', this, 24)" id="order_chaos">Order Out of Chaos</button>
             <br/>
             <button class="goHash" onclick="selectHash('UHfALungB5AgUEEegIFBBHoCBwAj0BAoII9AQKCDydXwCsA0', this)">Structure And Decay</button>
             <br/>
@@ -908,7 +908,7 @@ if(DEBUG) console.log("key:", event.keyCode);
             
             function selectHash(hash, el, size) {
                 console.log(el)
-                if (size && size > (axisMax - axisMin + 1)) {
+                if (size && size != (axisMax - axisMin + 1)) {
                     document.location = "/?size=" + size + "&sel=" + el.id + "&hash=" + hash;
                 }
                 else {
