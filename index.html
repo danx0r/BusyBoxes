@@ -174,7 +174,8 @@
             //<![CDATA[
             var DEBUG = false;
             var CELL_TRAILS = false;
-            var AVG_TRAILS = true;
+            var AVG_TRAILS = 200;
+            var trails = [];
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
             var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
             var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -437,6 +438,11 @@
                         setObjPosition(voxel, avg);
                         voxel.overdraw = true;
                         scene.addObject(voxel);
+                        trails.push(voxel);
+                        if (trails.length >= AVG_TRAILS) {
+                            scene.removeObject(trails[0]);
+                            trails = trails.splice(1);
+                        }
                     }
                     for (i in moves) {
                         var args = moves[i];
