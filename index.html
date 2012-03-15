@@ -173,7 +173,8 @@
         <script type="text/javascript">
             //<![CDATA[
             var DEBUG = false;
-            var TRAILS = true;
+            var CELL_TRAILS = false;
+            var AVG_TRAILS = true;
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
             var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
             var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -418,6 +419,25 @@
                             }
                         }
                     }
+                    if (AVG_TRAILS) {
+                        avg = [0, 0, 0];
+                        var len = 0;
+                        for (var key in grid) {
+                            len++;
+                            var cell;
+                            eval("cell=[" + key + "]");
+                            for (var j = 0; j < 3; j++) {
+                                avg[j] += cell[j];
+                            }
+                        }
+                        for (var j = 0; j < 3; j++) {
+                            avg[j] /= len;
+                        }
+                        var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[2]));
+                        setObjPosition(voxel, avg);
+                        voxel.overdraw = true;
+                        scene.addObject(voxel);
+                    }
                     for (i in moves) {
                         var args = moves[i];
                         moveCell(args[0], args[1], args[2]);
@@ -476,7 +496,7 @@
             }
 
             function moveCell(oldxyz, mesh, newxyz) {
-                if (TRAILS) {
+                if (CELL_TRAILS) {
                     var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[4]));
                     setObjPosition(voxel, oldxyz);
                     voxel.overdraw = true;
@@ -929,7 +949,6 @@
             }
             
             function selectHash(hash, el, size) {
-                console.log(el)
                 if (size && size != (axisMax - axisMin + 1)) {
                     document.location = "/?size=" + size + "&sel=" + el.id + "&hash=" + hash;
                 }
