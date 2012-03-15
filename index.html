@@ -178,6 +178,7 @@
             var DEBUG = false;
             var CELL_TRAIL = false;
             var AVG_TRAIL = false;
+            var trail = [];
             var trails = [];
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
             var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
@@ -246,6 +247,9 @@
                 }
                 if (qargs.trail) {
                     AVG_TRAIL = parseInt(qargs.trail);
+                }
+                if (qargs.trails) {
+                    CELL_TRAIL = parseInt(qargs.trails);
                 }
                 if (DEBUG) console.log("DEBUG query args:", qargs, "axisMax:", axisMax, "axisMin:", axisMin)
                 container = document.createElement( 'div' );
@@ -440,15 +444,26 @@
                         for (var j = 0; j < 3; j++) {
                             avg[j] /= len;
                         }
-                        var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[2]));
-                        setObjPosition(voxel, avg);
-                        voxel.overdraw = true;
-                        scene.addObject(voxel);
-                        trails.push(voxel);
-                        if (trails.length >= AVG_TRAIL) {
-                            scene.removeObject(trails[0]);
-                            trails = trails.splice(1);
+                        var make = true;
+                        if (trail.length) {
+                            var obj = trail[trail.length - 1];
+                            var x = avg[0] * 50 + 25;
+                            var y = avg[1] * 50 + 25;
+                            var z = avg[2] * -50 - 25;
+                            if (x == obj.position.x && y == obj.position.y && z == obj.position.z) make = false; // don't add one if nothing has changed
                         }
+                        if (make) {
+                            var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[2]));
+                            setObjPosition(voxel, avg);
+                            voxel.overdraw = true;
+                            scene.addObject(voxel);
+                            trail.push(voxel);
+                            if (trail.length > AVG_TRAIL) {
+                                scene.removeObject(trail[0]);
+                                trail = trail.splice(1);
+                            }
+                        }
+                        //console.log("trail length:", trail.length)
                     }
                     for (i in moves) {
                         var args = moves[i];
@@ -513,6 +528,12 @@
                     setObjPosition(voxel, oldxyz);
                     voxel.overdraw = true;
                     scene.addObject(voxel);
+                    trails.push(voxel);
+                    if (trails.length > CELL_TRAIL) {
+                        scene.removeObject(trails[0]);
+                        trails = trails.splice(1);
+                    }
+                    //console.log("trails:", trails.length)
                 }
                 setObjPosition(mesh, newxyz);
                 delGrid(oldxyz);
