@@ -173,6 +173,7 @@
         <script type="text/javascript">
             //<![CDATA[
             var DEBUG = false;
+            var TRAILS = true;
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
             var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
             var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -287,6 +288,7 @@
                 scene.addObject( plane );
 
                 cube = new Cube( 50, 50, 50 );
+                cubette = new Cube(10, 10, 10);
 
                 ray = new THREE.Ray( camera.position, null );
 
@@ -474,6 +476,12 @@
             }
 
             function moveCell(oldxyz, mesh, newxyz) {
+                if (TRAILS) {
+                    var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[4]));
+                    setObjPosition(voxel, oldxyz);
+                    voxel.overdraw = true;
+                    scene.addObject(voxel);
+                }
                 setObjPosition(mesh, newxyz);
                 delGrid(oldxyz);
                 putGrid(mesh, newxyz);
