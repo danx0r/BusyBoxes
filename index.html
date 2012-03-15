@@ -161,9 +161,7 @@
                     <button class="bannerButtons" onclick="playStopMusic()">MUSIC</button>
                     <button class="bannerButtons" onclick="clearGrid()">CLEAR</button>
                     <button class="bannerButtons" onclick="update()">UPDATE</button>
-                    <!--
-                    <button class="bannerButtons" onclick="toggleTrails()">TRAIL</button>
-                    -->
+                    <button class="bannerButtons" onclick="toggleTrails()">TRAILS</button>
                     <button class="bannerButtons" onclick="reset()">RESET</button>
                 </div>
                 <a href="faq.html" target="_blank" style="font-size:larger">faq</a>
@@ -1015,6 +1013,8 @@
 
                 frame = 0;
                 hashmap = {};
+                trail = [];
+                trails = [];
                 lasthash = "";
                 direction = "forward";
                 document.getElementById("generation").innerHTML = "";
@@ -1123,11 +1123,25 @@
             }
             
             function toggleTrails() {
-                if (AVG_TRAIL) {
+                if (AVG_TRAIL || CELL_TRAIL) {
                     AVG_TRAIL = false;
+                    CELL_TRAIL = false;
+                    alert("Trails disabled");
+                    var t = trails.concat(trail);
+                    for (var i=0; i<trail.length + trails.length; i++) {
+                        var obj = t[i];
+                        scene.removeObject(obj);
+                    }
+                    trail = [];
+                    trails = [];
                 }
                 else {
-                    AVG_TRAIL = parseInt(prompt("Trail length:"))
+                    if (confirm("Trail each cell separately?")) {
+                        CELL_TRAIL = parseInt(prompt("Trail length:"))
+                    }
+                    else {
+                        AVG_TRAIL = parseInt(prompt("Trail length:"))
+                    }
                 }
             }
             //]]>
