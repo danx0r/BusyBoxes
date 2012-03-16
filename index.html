@@ -659,6 +659,7 @@
                         break;
                     case 10:
                     case 13:
+                        if (isRunning) break;
                         var obj = getGrid(cursor);
                         if (obj) {
                             scene.removeObject(obj);
