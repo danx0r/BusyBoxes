@@ -889,6 +889,7 @@
             function hash2url(hash){
                 var sep = "?";
                 var url = "" + window.location;
+                if (url[url.length-1] == "/") url = url.substr(0, url.length-1)
                 var i = url.indexOf('?hash=');
                 if (i == -1) {
                     i = url.indexOf('&hash=');
@@ -1136,7 +1137,7 @@
                     trails = [];
                 }
                 else {
-                    if (confirm("Trail each cell separately?")) {
+                    if (confirm("Trail each cell separately? (cancel for average)")) {
                         CELL_TRAIL = parseInt(prompt("Trail length:"))
                     }
                     else {
