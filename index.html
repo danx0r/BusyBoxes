@@ -409,7 +409,7 @@
                     }
                     if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2])
                     for (var i in cells) {
-                        cell = cells[i];
+                        var cell = cells[i];
                         if(DEBUG) console.log(cell[0], cell[1]);
                         xyz = eval('[' + cell[0] + ']');
                         
