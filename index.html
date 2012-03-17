@@ -411,7 +411,7 @@
                     for (var i in cells) {
                         var cell = cells[i];
                         if(DEBUG) console.log(cell[0], cell[1]);
-                        xyz = eval('[' + cell[0] + ']');
+                        var xyz = eval('[' + cell[0] + ']');
                         
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
                             if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
