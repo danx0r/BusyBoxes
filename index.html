@@ -396,8 +396,9 @@
                     }
                     if(DEBUG) console.log("frame:", frame)
                     var cells = [];
-                    for(key in grid) {
-                        cells.push([key, grid[key]]);
+                    for(var key in grid) {
+                        var xyz = eval('[' + key + ']')
+                        cells.push([xyz, grid[key]]);
                     }
                     if(DEBUG) console.log("cells:", cells)
                     var moves = []
@@ -411,7 +412,7 @@
                     for (var i in cells) {
                         var cell = cells[i];
                         if(DEBUG) console.log(cell[0], cell[1]);
-                        var xyz = eval('[' + cell[0] + ']');
+                        var xyz = cell[0];
                         
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
                             if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
