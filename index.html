@@ -56,21 +56,6 @@
             .goHash:hover {
                 background-color:white;
             }
-            .moodal {
-                font-family:sans-serif;
-                font-size:large;
-                position:absolute;
-                left:50%;
-                top:50%;
-                width:400px;
-                margin-left:-200px;
-                margin-top:-100px;
-                background-color:white;
-                text-align:center;
-                padding-top:30px;
-                padding-bottom:50px;
-                border-style:solid;"                
-            }
         </style>
     </head>
     <body>
@@ -191,6 +176,7 @@
         <script type="text/javascript" src="js/Cube.js"></script>
         <script type="text/javascript" src="js/Plane.js"></script>
         <script type="text/javascript" src="js/encdec.js"></script>
+        <script type="text/javascript" src="js/moodal.js"></script>
         <script type="text/javascript">
             //<![CDATA[
             var DEBUG = false;
@@ -254,16 +240,6 @@
                 return queryArgs;
             }
 
-            function moodal_choice(v) {
-                document.getElementById(moodal_id).style.display="none";
-                moodal_cb(v);
-            }
-
-            function moodal(id, cb) {
-                moodal_id = id;
-                moodal_cb = cb;
-                document.getElementById(moodal_id).style.display="";
-            }
             function init() {
                 if (DEBUG) console.log("init start")
                 var qargs = parseQueryArgs();
