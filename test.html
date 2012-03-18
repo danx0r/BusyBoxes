@@ -38,7 +38,7 @@
         </style>
     </head>
     <body>
-        <div id="dialog1" class="moodal" style="display:none">
+        <div id="dialog1" style="display:none">
             <p></p>Please make an immediate selection</p>
             <button onclick="moodal_choice('uno')">CHOICE 1</button>
             <button onclick="moodal_choice('deux')">CHOICE 2</button>
@@ -47,31 +47,8 @@
         helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/>
         <button onclick="test()">GO MOODAL</button>
     </body>
+    <script src="js/moodal.js"></script>
     <script>
-        function moodal_choice(v) {
-            document.getElementById(moodal_id).style.display="none";
-            moodal_cb(v);
-        }
-        function moodal(id, cb) {
-            moodal_id = id;
-            moodal_cb = cb;
-            var el = document.getElementById(moodal_id)
-            el.style.position="absolute";
-            el.style.left="50%";
-            el.style.top="50%";
-            el.style.width="400px";
-            el.style.marginLeft="-200px";
-            el.style.marginTop="-100px";
-            el.style.backgroundColor="white";
-            el.style.textAlign="center";
-            el.style.paddingTop="30px";
-            el.style.paddingBottom="50px";
-            el.style.borderStyle="solid";
-            el.style.fontFamily="sans-serif";
-            el.style.fontSize="large";
-            el.style.display="";
-        }
-        
         function test() {
             moodal("dialog1", function (result) {
                 console.log("result:", result)
