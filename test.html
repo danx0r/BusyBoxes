@@ -35,21 +35,6 @@
                 margin: 0px;
                 overflow: hidden;
             }
-            .moodal {
-                font-family:sans-serif;
-                font-size:large;
-                position:absolute;
-                left:50%;
-                top:50%;
-                width:400px;
-                margin-left:-200px;
-                margin-top:-100px;
-                background-color:white;
-                text-align:center;
-                padding-top:30px;
-                padding-bottom:50px;
-                border-style:solid;"                
-            }
         </style>
     </head>
     <body>
@@ -70,7 +55,21 @@
         function moodal(id, cb) {
             moodal_id = id;
             moodal_cb = cb;
-            document.getElementById(moodal_id).style.display="";
+            var el = document.getElementById(moodal_id)
+            el.style.position="absolute";
+            el.style.left="50%";
+            el.style.top="50%";
+            el.style.width="400px";
+            el.style.marginLeft="-200px";
+            el.style.marginTop="-100px";
+            el.style.backgroundColor="white";
+            el.style.textAlign="center";
+            el.style.paddingTop="30px";
+            el.style.paddingBottom="50px";
+            el.style.borderStyle="solid";
+            el.style.fontFamily="sans-serif";
+            el.style.fontSize="large";
+            el.style.display="";
         }
         
         function test() {
