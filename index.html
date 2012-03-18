@@ -56,9 +56,29 @@
             .goHash:hover {
                 background-color:white;
             }
+            .moodal {
+                font-family:sans-serif;
+                font-size:large;
+                position:absolute;
+                left:50%;
+                top:50%;
+                width:400px;
+                margin-left:-200px;
+                margin-top:-100px;
+                background-color:white;
+                text-align:center;
+                padding-top:30px;
+                padding-bottom:50px;
+                border-style:solid;"                
+            }
         </style>
     </head>
     <body>
+        <div id="trail_type" class="moodal" style="display:none">
+            <p></p>Select trail type:</p>
+            <button onclick="moodal_choice('cell')">Trails for every cell</button>
+            <button onclick="moodal_choice('average')">Trail for average</button>
+        </div>
         <div style="position:absolute;font-size:large">
             <div style="opacity:0.7">
                 Generation:
@@ -234,6 +254,16 @@
                 return queryArgs;
             }
 
+            function moodal_choice(v) {
+                document.getElementById(moodal_id).style.display="none";
+                moodal_cb(v);
+            }
+
+            function moodal(id, cb) {
+                moodal_id = id;
+                moodal_cb = cb;
+                document.getElementById(moodal_id).style.display="";
+            }
             function init() {
                 if (DEBUG) console.log("init start")
                 var qargs = parseQueryArgs();
@@ -1139,12 +1169,14 @@
                     trails = [];
                 }
                 else {
-                    if (confirm("Trail each cell separately? (cancel for average)")) {
-                        CELL_TRAIL = parseInt(prompt("Trail length:"))
-                    }
-                    else {
-                        AVG_TRAIL = parseInt(prompt("Trail length:"))
-                    }
+                    moodal("trail_type", function (result) {
+                        if (result == 'cell') {
+                            CELL_TRAIL = parseInt(prompt("Trail length:"))
+                        }
+                        else {
+                            AVG_TRAIL = parseInt(prompt("Trail length:"))
+                        }
+                    });
                 }
             }
             //]]>
