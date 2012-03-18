@@ -43,6 +43,7 @@
             <button onclick="moodal_choice('uno')">CHOICE 1</button>
             <button onclick="moodal_choice('deux')">CHOICE 2</button>
             <button onclick="moodal_choice('drei')">CHOICE 3</button>
+            <input id="dialog1_extra" type="text" value="additonal stuff"></input>
         </div>
         helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/> helllo<br/>
         <button onclick="test()">GO MOODAL</button>
@@ -51,7 +52,7 @@
     <script>
         function test() {
             moodal("dialog1", function (result) {
-                console.log("result:", result)
+                console.log("result:", result, "extra:", document.getElementById("dialog1_extra").value);
             });
         }
     </script>
