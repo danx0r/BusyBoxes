@@ -38,30 +38,22 @@
         </style>
     </head>
     <body>
-        <audio id="music" src="prisoner_ambient003.ogg" loop="true"></audio>
-        <button onclick="play()">MUSIC!</button>
-        <button onclick="stop()">SILENCE!</button>
-        <button onclick="resume()">resume</button>
+        <div id="moodal" style="display:none">
+            <button onclick="modal('uno')">CHOICE 1</button>
+            <button onclick="modal('deux')">CHOICE 2</button>
+            <button onclick="modal('drei')">CHOICE 3</button>
+        </div>
+        helllo
+        <button onclick="test()">GO MOODAL</button>
     </body>
     <script>
-        function play() {
-            document.getElementById("music").load();            // well this fixes the chrome bug, but forces play from middle of piece
-            document.getElementById("music").play();
-//            document.getElementById("music").currentTime=0;
-            document.getElementById("music").volume=1.0;
-//            console.log(document.getElementById("music").seekable.start(1))
+        function modal(v) {
+            console.log(v);
+            document.getElementById("moodal").style.display="none";
         }
-        function stop() {
-            document.getElementById("music").currentTime=20;
-//            document.getElementById("music").pause();
-//            document.getElementById("music").volume=0;
+        function test() {
+            document.getElementById("moodal").style.display="";
         }
-        function resume() {
-//            document.getElementById("music").pause();
-            document.getElementById("music").volume=1.0;
-        }
-        setInterval(function(){
-            console.log(document.getElementById("music").currentTime);
-        }, 1000)
+    
     </script>
 </html>
