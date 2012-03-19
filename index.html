@@ -216,6 +216,8 @@
             ray, brush, objectHovered,
             mouse3D, isMouseDown = false, onMouseDownPosition,
             radious = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
+            randWidth = 5, randCount = 12;
+
             init();
             render();
 
@@ -662,6 +664,9 @@
                     case 32:
                         toggleRunning();
                         break;
+                    case 191:
+                        randomCells();
+                        break;
                     case 70:
                         processSpeed = "fast";
                         if (!isRunning) {
@@ -1038,7 +1043,7 @@
             }
             
             function randomCells(){
-                var val = prompt("specify width, count:", "5, 20");
+                var val = prompt("specify width, count:", '' + randWidth + ", " + randCount);
                 if (!val) {
                     alert ("oops! nothing");
                 } 
@@ -1059,6 +1064,8 @@
                 }
                 else {
                     width = parseInt(width);
+                    randWidth = width;
+                    randCount = count;
                     axMax = parseInt(width - .5) >> 1;
                     axMin = axMax - (width - 1);
                     axMax = [axMax, axMax, axMax];
