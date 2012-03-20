@@ -617,63 +617,73 @@
 
 //if(DEBUG) console.log("key:", event.keyCode);
                 switch( event.keyCode ) {
-                    case 37: 
+                    case 37:                           // LEFT
                         cursor[0]--;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
-                    case 40: 
+                    case 40:                           // DOWN
                         cursor[2]--;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
-                    case 39: 
+                    case 39:                           // RIGHT
                         cursor[0]++;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
-                    case 38: 
+                    case 38:                           // UP
                         cursor[2]++;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
-                    case 85: 
+                    case 85:                           // U
                         cursor[1]++;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
-                    case 68: 
+                    case 68:                           // D
                         cursor[1]--;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
-                    case 82:
+                    case 82:                           // R
                         reset();
                         break;
-                    case 83:
+                    case 83:                           // S
                         isRunning = true;
                         mainLoop();
                         isRunning = false;
                         break;
-                    case 32:
+                    case 32:                           // SPACE
                         toggleRunning();
                         break;
-                    case 191:
+                    case 191:                           // / ?
                         randomCells();
                         break;
-                    case 70:
-                        processSpeed = "fast";
+                    case 188:                           // , <
+                        if (direction=="forward") {
+                            reverseDirection();
+                        }
+                        break;
+                    case 190:                           // . >
+                        if (direction=="reverse") {
+                            reverseDirection();
+                        }
+                        break;
+                    case 70:                            // F
                         if (!isRunning) {
                             toggleRunning();
                         }
+                        fastSlow();
                         break;
-                    case 10:
+                    case 10:                           // RETURN
                     case 13:
                         if (isRunning) break;
                         var obj = getGrid(cursor);
