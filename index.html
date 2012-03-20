@@ -1101,6 +1101,7 @@
 
                 updateHash();
                 refreshUrl(hash2url(gUpdateHash));
+                if (typeof(console) != "undefined" && console.log) console.log("last random hash:", gUpdateHash);
             }
 
             // https://gist.github.com/665235
