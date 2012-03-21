@@ -33,7 +33,7 @@
                 font-size: 12px;
                 background-color: #f0f0f0;
                 margin: 0px;
-                overflow: hidden;
+                overflow-x: hidden;
             }
             .bannerButtons {
                 opacity: 0.7;
@@ -58,7 +58,7 @@
             }
         </style>
     </head>
-    <body>
+    <body style="overflow-y:hidden">
         <div id="trail_type" style="display:none">
             <p></p>Select trail type:</p>
             <button onclick="moodal_choice('cell')">Trails for every cell</button>
@@ -68,7 +68,7 @@
             <p></p>Trails are now disabled</p>
                 <button onclick="moodal_choice('OK')" style="font-size:large;padding:4px 15px 4x 15px">OK</button>
         </div>
-        <div style="position:absolute;font-size:large">
+        <div id="leftLinks" style="position:absolute;font-size:large">
             <div style="opacity:0.7">
                 Generation:
                 <span id="generation"></span>
@@ -209,6 +209,7 @@
             var processSpeed = "slow";
             var lastSelectedEl;
             var gLastRefreshedUrl;
+            var scrollBarX = false;
             var container, interval,
             camera, scene, renderer,
             projector, plane, cube, linesMaterial,
@@ -370,7 +371,6 @@
                                 if (i > -1) {
                                     var j = i + 1 + url.substr(i+1).indexOf('&');
                                     url = url.substr(0, i) + url.substr(j);
-                                    console.log(i, j, url)
                                     history.replaceState(url, url, url);
                                 }
                             }
@@ -393,6 +393,18 @@
             }
             
             function mainLoopSlow() {
+                if (document.getElementById("leftLinks").clientHeight >= window.innerHeight) {
+                    if (!scrollBarX) {
+                        scrollBarX = true;
+                        document.body.style.overflowY="scroll";
+                    }
+                }
+                else {
+                    if (scrollBarX) {
+                        scrollBarX = false;
+                        document.body.style.overflowY="hidden";
+                    }
+                }
                 if (processSpeed == "slow") {
                     mainLoop();
                 }
@@ -706,7 +718,9 @@
             }
 
             function onDocumentMouseDown( event ) {
-
+                if(scrollBarX && window.innerWidth - event.clientX < 30) {
+                    return;
+                }
                 event.preventDefault();
 
                 isMouseDown = true;
@@ -720,10 +734,13 @@
 
             function onDocumentMouseMove( event ) {
 
+                if(scrollBarX && window.innerWidth - event.clientX < 30) {
+                    return;
+                }
                 var dx = event.clientX - onMouseDownPosition.x;
                 var dy = event.clientY - onMouseDownPosition.y;
 //if(DEBUG) console.log("dx, dy:", dx, dy)
-                event.preventDefault();
+                //event.preventDefault();
 
                 if ( isMouseDown ) {
 
@@ -749,7 +766,10 @@
 
             function onDocumentMouseUp( event ) {
 
-                event.preventDefault();
+                if(scrollBarX && window.innerWidth - event.clientX < 30) {
+                    return;
+                }
+                //event.preventDefault();
 
                 isMouseDown = false;
 
@@ -759,6 +779,7 @@
             }
 
             function onDocumentMouseWheel( event ) {
+                event.preventDefault();
 				if (event.detail) {							/// ugh, dumb Firefox hack
 					if (event.detail > 0) {
 						radious += 120;
