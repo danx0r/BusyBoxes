@@ -633,45 +633,53 @@
 //if(DEBUG) console.log("key:", event.keyCode);
                 switch( event.keyCode ) {
                     case 37:                           // LEFT
+                        event.preventDefault();
                         cursor[0]--;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 40:                           // DOWN
+                        event.preventDefault();
                         cursor[2]--;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 39:                           // RIGHT
+                        event.preventDefault();
                         cursor[0]++;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 38:                           // UP
+                        event.preventDefault();
                         cursor[2]++;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 85:                           // U
+                        event.preventDefault();
                         cursor[1]++;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 68:                           // D
+                        event.preventDefault();
                         cursor[1]--;
                         clampCursor();
                         setBrushPosition(cursor);
                         render(); 
                         break;
                     case 82:                           // R
+                        event.preventDefault();
                         reset();
                         break;
                     case 83:                           // S
+                        event.preventDefault();
                         isRunning = true;
                         mainLoop();
                         isRunning = false;
@@ -681,19 +689,23 @@
                         toggleRunning();
                         break;
                     case 191:                           // / ?
+                        event.preventDefault();
                         randomCells();
                         break;
                     case 188:                           // , <
+                        event.preventDefault();
                         if (direction=="forward") {
                             reverseDirection();
                         }
                         break;
                     case 190:                           // . >
+                        event.preventDefault();
                         if (direction=="reverse") {
                             reverseDirection();
                         }
                         break;
                     case 70:                            // F
+                        event.preventDefault();
                         if (!isRunning) {
                             toggleRunning();
                         }
@@ -701,6 +713,7 @@
                         break;
                     case 10:                           // RETURN
                     case 13:
+                        event.preventDefault();
                         if (isRunning) break;
                         var obj = getGrid(cursor);
                         if (obj) {
