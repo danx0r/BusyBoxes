@@ -630,8 +630,9 @@
             }
 
             function onDocumentKeyDown( event ) {
-                //document.getElementById("debug").innerHTML = ''+event.keyCode;
+//document.getElementById("debug").innerHTML = ''+event.keyCode;
 //if(DEBUG) console.log("key:", event.keyCode);
+                if (event.shiftKey || event.ctrlKey || event.altKey || event.altGraphKey) return;
                 switch( event.keyCode ) {
                     case 37:                           // LEFT
                         event.preventDefault();
@@ -1169,7 +1170,7 @@
                 if (lastSelectedEl) lastSelectedEl.style.backgroundColor="#ddd";
                 for (i = 0; i < count; i++) {
                     var phase = -1;
-                    while ( (cursor in grid) || (phase != (i & 1)) ) {
+                    while ( (cursor in grid) ) {
                         for (var axis = 0; axis < 3; axis++) {
                             cursor[axis] = Math.floor(Math.random() * (axMax[axis] - axMin[axis] + 1) + axMin[axis]);
                         }
