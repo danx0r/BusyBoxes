@@ -431,7 +431,7 @@
                     if(DEBUG) console.log("cells:", cells)
                     var moves = []
                     var x1, x2                                          // our two axes for today
-                    switch( (frame % 3 + 3) %3 ) {                      // ach, Javascript you old goat
+                    switch( trueMod(frame, 3) ) {                      // ach, Javascript you old goat
                         case 0: x1=0; x2=1; break;
                         case 1: x1=1; x2=2; break;
                         case 2: x1=2; x2=0; break;
@@ -589,8 +589,22 @@
                 grid[xyz] = obj;
             }
 
+            function trueMod(v, base) {
+                if (v < 0) {
+                    return ((v % base) + base) % base;
+                }
+                return v % base;
+            }
+
             function getGrid(xyz) {
-                return grid[xyz];
+                if (mode == "wrap") {
+                    for (var i = 0; i < 3; i++) {
+                        if (xyz[i] < axisMin || xyz[i] > axisMax) {
+                            xyz[i] = trueMod(xyz[i] - axisMin, (axisMax - axisMin) + 1) + axisMin;
+                        }
+                    }
+                }
+                return grid[xyz]
             }
 
             function delGrid(xyz) {
