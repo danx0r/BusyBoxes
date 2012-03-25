@@ -705,6 +705,9 @@
                         toggleRunning();
                         break;
                     case 191:                           // / ?
+                        if (isRunning) {
+                            toggleRunning();
+                        }
                         event.preventDefault();
                         randomCells();
                         break;
