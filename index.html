@@ -502,7 +502,9 @@
                             avg += moveFifo[i];
                         }
                         avg /= moveFifo.length;
-                        document.getElementById("showinfo").innerHTML = "<br/>moves: " + moves.length + " avg: " + avg.toFixed(3) + " per cell: " + (avg / cellCount).toFixed(3);
+                        document.getElementById("showinfo").innerHTML = "<br/>moves: " + 
+                            htmlPadSpaces(moves.length, 3) +
+                            " avg: " + avg.toFixed(3) + " per cell: " + (avg / cellCount).toFixed(3);
                     }
                     for (i in moves) {
                         var args = moves[i];
@@ -1292,6 +1294,15 @@
                         }
                     });
                 }
+            }
+            
+            function htmlPadSpaces(n, pad) {
+                var s = '' + n;
+                var len = s.length;
+                for (var i=0; i < pad - len; i++) {
+                    s = '&nbsp;' + s;
+                }
+                return s;
             }
             //]]>
         </script>
