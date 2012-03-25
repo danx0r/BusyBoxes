@@ -90,6 +90,7 @@
                 <br/>
                 Hash:
                 <span id="showhash" style="font-size:smaller"></span>
+                <span id="showinfo"></span>
             </div>
             <span id="debug"></span>
             <br/>
@@ -211,6 +212,8 @@
             var lastSelectedEl;
             var gLastRefreshedUrl;
             var scrollBarX = false;
+            var moveFifo = [0,0,0,0,0,0];
+            var qargs = {};
             var container, interval,
             camera, scene, renderer,
             projector, plane, cube, linesMaterial,
@@ -250,7 +253,7 @@
 
             function init() {
                 if (DEBUG) console.log("init start")
-                var qargs = parseQueryArgs();
+                qargs = parseQueryArgs();
                 if (qargs.size) {
                     var size = parseInt(qargs.size);
                     axisMax = parseInt(size / 2) - 1;
@@ -491,6 +494,15 @@
                             }
                         }
                         //console.log("trail length:", trail.length)
+                    }
+                    if (qargs.info) {
+                        moveFifo = moveFifo.slice(1).concat(moves.length);
+                        var avg = 0;
+                        for (var i = 0; i < moveFifo.length; i++) {
+                            avg += moveFifo[i];
+                        }
+                        avg /= moveFifo.length;
+                        document.getElementById("showinfo").innerHTML = "<br/>moves: " + moves.length + " avg: " + avg.toFixed(3) + " per cell: " + (avg / cellCount).toFixed(3);
                     }
                     for (i in moves) {
                         var args = moves[i];
