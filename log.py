@@ -4,9 +4,22 @@ def application(env, start_response):
     content_type = 'text/html'
     response_body = ""
 
-    for s in env["wsgi.input"].readlines():
+    first = True
+    while True:
+        s = env["wsgi.input"].readline()
+        if s == "":
+            break
         s = s.rstrip()
-        print >> sys.stderr, "NACLOG: " + s + "\n"
+        if first and s == "LOG_TO_FILE":
+            fn = env["wsgi.input"].readline().rstrip()
+            data = env["wsgi.input"].read()
+            print >> sys.stderr, "NACLOG: LOG_TO_FILE:", fn, len(data), "bytes"
+            f = open("/tmp/" + fn, 'a')
+            f.write(data)
+            f.close()
+        else:
+            print >> sys.stderr, "NACLOG: " + s + "\n"
+        first = False
 
     response_body = "OK"
     response_headers = []
