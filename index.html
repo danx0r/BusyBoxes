@@ -1247,7 +1247,9 @@
                 }
             }
 
-            function playStopMusic(){
+            function playStopMusic() {
+                log("test logging A\nline 2");
+                return;
                 var el = document.getElementById("music");
                 if (!el) {
                     //console.log("loading music:", el)
@@ -1303,6 +1305,27 @@
                     s = '&nbsp;' + s;
                 }
                 return s;
+            }
+            
+            function log(s){
+                var req = new XMLHttpRequest();
+                if (req) {
+                    req.onreadystatechange = function(){
+                        if (req.readyState == 4) {
+                            if (req.status && req.status != 200) {
+                                Kata.error("Error loading Document: status " + req.status + " for url " + url);
+                            }
+                            else {
+                                if (req.responseText.indexOf("OK") < 0) {
+                                    alert("log error: " + req.responseText)
+                                }
+                            }
+                        }
+                    }
+                    req.open("POST", "log.py", true);
+                    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    req.send(s);
+                }
             }
             //]]>
         </script>
