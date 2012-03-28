@@ -1,0 +1,10 @@
+count: 67.0
+avg: [-1.4514925373134329, -1.4776119402985075, 1.4738805970149254]
+failed on -1 -1 -1 summ: -1.5 sm: -2.0
+failed on -1 -1 1 summ: -2.0 sm: -1.5
+Yay! All points sum to -1.5 with coeffs -1 1 -1
+average radius: 3.90819722633
+minimum radius: 3.67014363926
+max radius: 4.135957974
+ratio min/max: 0.887374500016
+standard deviation: 0.123969615246
