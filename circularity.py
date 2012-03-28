@@ -15,7 +15,7 @@ for r in rl:
     xyz = r.strip().split(',')
     for i in range(3):
         xyz[i] = float(xyz[i])
-##    print xyz
+    print xyz
     pts.append(xyz)
 
 avg = [0.0,0.0,0.0]
@@ -45,7 +45,7 @@ for i in (-1, 1):
                 if summ == None:
                     summ = sm
                 else:
-                    if sm != summ:
+                    if abs(sm - summ) > 1e-10:
                         print "failed on", i, j, k, "summ:", summ, "sm:", sm
                         success = False
                         break
