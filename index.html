@@ -186,6 +186,7 @@
         <script type="text/javascript">
             //<![CDATA[
             var DEBUG = false;
+            var SCIENCE = true;
             var CELL_TRAIL = false;
             var AVG_TRAIL = false;
             var trail = [];
@@ -388,9 +389,22 @@
                     }
                 }
 
-                setInterval(mainLoopFast, 14);
-                setInterval(mainLoopSlow, 140);
+                if (!SCIENCE) {
+                    setInterval(mainLoopFast, 14);
+                    setInterval(mainLoopSlow, 140);
+                }
+                else {
+                    setTimeout(mainLoopScience, 0);
+                }
                 render();
+            }
+            
+            function mainLoopScience() {
+                for (var i=0; i<100; i++) {
+                    mainLoop();
+                    render();
+                }
+                setTimeout(mainLoopScience, 0);
             }
             
             function mainLoopFast() {
@@ -511,7 +525,9 @@
                         var args = moves[i];
                         moveCell(args[0], args[1], args[2]);
                     }
-                    render();
+                    if (!SCIENCE) {
+                        render();
+                    }
                     if (direction == "forward") {
                         frame++;
                     }
