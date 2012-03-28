@@ -88,6 +88,9 @@
                 Cursor:
                 <span id="cursorpos"></span>
                 <br/>
+                Speed:
+                <span id="showspeed">slow</span>
+                <br/>
                 Hash:
                 <span id="showhash" style="font-size:smaller"></span>
                 <span id="showinfo"></span>
@@ -186,7 +189,6 @@
         <script type="text/javascript">
             //<![CDATA[
             var DEBUG = false;
-            var SCIENCE = true;
             var CELL_TRAIL = false;
             var AVG_TRAIL = false;
             var trail = [];
@@ -389,22 +391,10 @@
                     }
                 }
 
-                if (!SCIENCE) {
-                    setInterval(mainLoopFast, 14);
-                    setInterval(mainLoopSlow, 140);
-                }
-                else {
-                    setTimeout(mainLoopScience, 0);
-                }
+                setInterval(mainLoopFast, 14);
+                setInterval(mainLoopSlow, 140);
+                setTimeout(mainLoopScience, 10);
                 render();
-            }
-            
-            function mainLoopScience() {
-                for (var i=0; i<500; i++) {
-                    mainLoop();
-                }
-                render();
-                setTimeout(mainLoopScience, 0);
             }
             
             function mainLoopFast() {
@@ -431,7 +421,20 @@
                 }
             }
             
-            function mainLoop() {
+            function mainLoopScience() {
+                if (isRunning && processSpeed == "science") {
+                    for (var i=0; i<500; i++) {
+                        mainLoop(true);                     // no render during main loop for speed
+                    }
+                    render();
+                    setTimeout(mainLoopScience, 0);
+                }
+                else {
+                    setTimeout(mainLoopScience, 10);
+                }
+            }
+            
+            function mainLoop(noRender) {
                 document.getElementById("generation").innerHTML = frame;
                 document.getElementById("showphase").innerHTML = (frame % 6 + 6) %6;
                 document.getElementById("direction").innerHTML = direction;
@@ -525,7 +528,7 @@
                         var args = moves[i];
                         moveCell(args[0], args[1], args[2]);
                     }
-                    if (!SCIENCE) {
+                    if (!noRender) {
                         render();
                     }
                     if (direction == "forward") {
@@ -860,9 +863,8 @@
                     phi = Math.min( 180, Math.max( 0, phi ) );
 
                     adjustCamera();
+                    render();
                 }
-
-                render();
 
             }
 
@@ -1109,7 +1111,7 @@
             }
 
             function render() {
-
+                console.log("rendering", frame)
                 renderer.render( scene, camera );
 
             }
@@ -1257,12 +1259,18 @@
             }
 
             function fastSlow() {
-                if (processSpeed == "fast") {
-                    processSpeed = "slow";
+                switch (processSpeed) {
+                    case "slow":
+                        processSpeed = "fast";
+                        break;
+                    case "fast":
+                        processSpeed = "science";
+                        break;
+                    case "science":
+                        processSpeed = "slow";
+                        break;
                 }
-                else {
-                    processSpeed = "fast";
-                }
+                document.getElementById("showspeed").innerHTML = processSpeed;
             }
 
             function playStopMusic() {
