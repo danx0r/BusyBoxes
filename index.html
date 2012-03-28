@@ -483,6 +483,7 @@
                             if (x == obj.position.x && y == obj.position.y && z == obj.position.z) make = false; // don't add one if nothing has changed
                         }
                         if (make) {
+                            log("LOG_TO_FILE\nnacl.log\n" + avg[0] + "," + avg[1]+','+avg[2] + "\n")
                             var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[2]));
                             setObjPosition(voxel, avg);
                             voxel.overdraw = true;
