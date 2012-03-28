@@ -1,4 +1,6 @@
 f = open('log.csv')
-for r in f.readlines():
+rl = f.readlines()
+print "count:", len(rl)
+for r in rl:
     xyz = r.strip().split(',')
     print xyz
