@@ -39,11 +39,18 @@ avdist /= count
 print "average radius:", avdist
 
 sumsq = 0.0
+maxx = -1
+minn = 9999999
 for pt in pts:
     d = calcDist(avg, pt)
+    maxx = max(maxx, d)
+    minn = min(minn, d)
     dif = d - avdist
     sumsq += dif ** 2
 
 dev = (sumsq/count) ** 0.5
 
+print "minimum radius:", minn
+print "max radius:", maxx
+print "ratio min/max:", minn / maxx
 print "standard deviation:", dev
