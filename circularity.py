@@ -1,10 +1,12 @@
+import sys
+
 def calcDist(abc, xyz):
     sumsq = 0.0
     for i in range(3):
         sumsq += (abc[i] - xyz[i]) ** 2
     return sumsq ** 0.5
 
-f = open('log.csv')
+f = open(sys.argv[1])
 rl = f.readlines()
 count = float(len(rl))
 print "count:", count
