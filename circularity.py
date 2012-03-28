@@ -15,7 +15,7 @@ for r in rl:
     xyz = r.strip().split(',')
     for i in range(3):
         xyz[i] = float(xyz[i])
-    print xyz
+##    print xyz
     pts.append(xyz)
 
 avg = [0.0,0.0,0.0]
@@ -28,11 +28,37 @@ for i in range(3):
 
 print "avg:", avg
 
+#prove co-planar -- at least one of these combos will be the plane, and all
+# the sums of the 3 coordinates for the circle will be equal
+brk = False
+for i in (-1, 1):
+    if brk:
+        break
+    for j in (-1, 1):
+        if brk:
+            break
+        for k in (-1, 1):
+            summ = None
+            success = True
+            for pt in pts:
+                sm = pt[0] * i + pt[1] * j + pt[2] * k
+                if summ == None:
+                    summ = sm
+                else:
+                    if sm != summ:
+                        print "failed on", i, j, k, "summ:", summ, "sm:", sm
+                        success = False
+                        break
+            if success:
+                print "Yay! All points sum to", summ, "with coeffs", i, j, k
+                brk = True
+                break
+
 dist = []
 avdist = 0.0
 for pt in pts:
     d = calcDist(avg, pt)
-    print "radius for this pt:", d
+##    print "radius for this pt:", d
     avdist += d
     dist.append(d)
 
