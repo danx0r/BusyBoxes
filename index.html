@@ -59,6 +59,8 @@
         </style>
     </head>
     <body style="overflow-y:hidden">
+        <div id="moodal_background" style="position:absolute;width:100%;height:100%;background-color:black;z-index:100;opacity:0.2;display:none">
+        </div>
         <div id="trail_type" style="display:none">
             <p></p>Select trail type:</p>
             <button onclick="moodal_choice('cell')">Trails for every cell</button>
@@ -69,11 +71,11 @@
                 <button onclick="moodal_choice('OK')" style="font-size:large;padding:4px 15px 4x 15px">OK</button>
         </div>
         <div id="random_prompt" style="display:none">
-            Volume width:<input id="random_prompt_width"  tabindex=2 type="text" value="4"></input><br/>
+            Volume width:<input id="random_prompt_width" class="moodal_default" tabindex=2 type="text" value="4"></input><br/>
             Cell count:<input id="random_prompt_count"  tabindex=3 type="text" value="16"></input><br/>
             <br/>
             <button  tabindex=4 onclick="moodal_choice('CANCEL')">CANCEL</button>
-            <button class="moodal_default" tabindex=1 onclick="moodal_choice('OK')">OK</button>
+            <button tabindex=5 onclick="moodal_choice('OK')">OK</button>
         </div>
         <div id="leftLinks" style="position:absolute;font-size:large">
             <div style="opacity:0.7">

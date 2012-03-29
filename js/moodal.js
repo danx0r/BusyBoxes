@@ -30,11 +30,13 @@ var gMoodalInEffect = false;
 function moodal_choice(v){
     moodal_el.style.display = "none";
     moodal_cb(v);
+    document.getElementById("moodal_background").style.display = "none";
     gMoodalInEffect = false;
 }
 
 function moodal(id, cb){
     gMoodalInEffect = true;
+    document.getElementById("moodal_background").style.display = "";
     moodal_cb = cb;
     moodal_el = document.getElementById(id)
     moodal_el.style.position = "absolute";
@@ -50,6 +52,7 @@ function moodal(id, cb){
     moodal_el.style.borderStyle = "solid";
     moodal_el.style.fontFamily = "sans-serif";
     moodal_el.style.fontSize = "large";
+    moodal_el.style.zIndex = "101";
     moodal_el.style.display = "";
     var def = moodal_el.getElementsByClassName("moodal_default");
     if (def.length) {
