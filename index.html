@@ -206,6 +206,8 @@
             var hashmaplen = 0;
             var lasthash = "";
             var gUpdateHash = "";
+            var gStartHash = "";
+            var gStartHashFrame;
             var encodeString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
             var frame = 0;
             var cellCount = 0;
@@ -391,7 +393,8 @@
                         selectHash('PeciXwDuTA0', document.getElementById("introHash"));
                     }
                 }
-
+                gStartHash = gUpdateHash;
+                gStartHashFrame = frame;
                 setInterval(mainLoopFast, 14);
                 setInterval(mainLoopSlow, 140);
                 setTimeout(mainLoopScience, 10);
@@ -919,6 +922,8 @@
             function refreshUrl(hash) {
                 //console.log("should refresh:", url);
                 var url = hash2url(hash);
+                gStartHash = hash;
+                gStartHashFrame = frame;
                 if (history.replaceState) {
                     if(url != gLastRefreshedUrl) {
                         history.replaceState(url, url, url);
@@ -1099,14 +1104,9 @@
                     gUpdateHash = data;
                 }
                 if (data != lasthash) {
-                    if (data in hashmap) {
-                        document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data] + " cycle: " + Math.abs(frame - hashmap[data]);
-                    }
-                    else {
-                        if (hashmaplen < 100000) {
-                            hashmap[data] = frame;
-                            hashmaplen++;
-                        }
+                    if (data == gStartHash) {
+                        document.getElementById("duplicates").innerHTML = frame + "=" + gStartHashFrame + " cycle: " + Math.abs(frame - gStartHashFrame);
+                        gStartHashFrame = frame;
                     }
                 }
                 document.getElementById('cellcount').innerHTML = cellCount;
@@ -1140,6 +1140,7 @@
                 clearScreen();
                 buildFromHash(hash);
                 refreshUrl(gUpdateHash);
+                document.getElementById("duplicates").innerHTML = ""; 
             }
             
             function update(){
