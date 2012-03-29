@@ -89,8 +89,8 @@
                 Direction:
                 <span id="direction"></span>
                 <br/>
-                Duplicate:
-                <span id="duplicates"></span>
+                Speed:
+                <span id="showspeed">slow</span>
                 <br/>
                 Cells:
                 <span id="cellcount"></span>
@@ -98,12 +98,11 @@
                 Cursor:
                 <span id="cursorpos"></span>
                 <br/>
-                Speed:
-                <span id="showspeed">slow</span>
-                <br/>
                 Hash:
                 <span id="showhash" style="font-size:smaller"></span>
+                <br/>
                 <span id="showinfo"></span>
+                <span id="duplicates"></span>
             </div>
             <span id="debug"></span>
             <br/>
@@ -512,7 +511,9 @@
                             if (x == obj.position.x && y == obj.position.y && z == obj.position.z) make = false; // don't add one if nothing has changed
                         }
                         if (make) {
-                            log("LOG_TO_FILE\nnacl.log\n" + avg[0] + "," + avg[1]+','+avg[2] + "\n")
+                            if (qargs.logtrail) {
+                                log("LOG_TO_FILE\ntrail.log\n" + avg[0] + "," + avg[1]+','+avg[2] + "\n")
+                            }
                             var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[2]));
                             setObjPosition(voxel, avg);
                             voxel.overdraw = true;
@@ -1122,7 +1123,7 @@
                 }
                 if (data != lasthash) {
                     if (data == gInitialHash) {
-                        document.getElementById("duplicates").innerHTML = frame + "=" + gInitialFrame + " cycle: " + Math.abs(frame - gInitialFrame);
+                        document.getElementById("duplicates").innerHTML = "cycle: " + Math.abs(frame - gInitialFrame) + " match: frame " + frame + "=" + gInitialFrame;
                         gInitialFrame = frame;
                     }
                 }
@@ -1299,7 +1300,7 @@
                         processSpeed = "fast";
                         break;
                     case "fast":
-                        processSpeed = "science";
+                        processSpeed = qargs.science?"science":"slow";
                         break;
                     case "science":
                         processSpeed = "slow";
