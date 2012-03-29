@@ -916,8 +916,9 @@
 
             }
 
-            function refreshUrl(url) {
+            function refreshUrl(hash) {
                 //console.log("should refresh:", url);
+                var url = hash2url(hash);
                 if (history.replaceState) {
                     if(url != gLastRefreshedUrl) {
                         history.replaceState(url, url, url);
@@ -1129,7 +1130,7 @@
                 if (lastSelectedEl) lastSelectedEl.style.backgroundColor="#ddd";
                 processSpeed = "slow";
                 updateHash();
-                refreshUrl(hash2url(gUpdateHash));
+                refreshUrl(gUpdateHash);
             }
 
             function reset(hash) {
@@ -1138,7 +1139,7 @@
                 setBrushPosition(cursor);
                 clearScreen();
                 buildFromHash(hash);
-                refreshUrl(hash2url(gUpdateHash));
+                refreshUrl(gUpdateHash);
             }
             
             function update(){
@@ -1146,7 +1147,7 @@
                     lastSelectedEl.style.backgroundColor="#ddd";
                 }
                 updateHash();
-                refreshUrl(hash2url(gUpdateHash));
+                refreshUrl(gUpdateHash);
             }
             
             function selectHash(hash, el, size) {
@@ -1243,7 +1244,7 @@
                 }
 
                 updateHash();
-                refreshUrl(hash2url(gUpdateHash));
+                refreshUrl(gUpdateHash);
                 if (typeof(console) != "undefined" && console.log) console.log("last random hash:", gUpdateHash);
             }
 
