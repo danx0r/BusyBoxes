@@ -51,4 +51,8 @@ function moodal(id, cb){
     moodal_el.style.fontFamily = "sans-serif";
     moodal_el.style.fontSize = "large";
     moodal_el.style.display = "";
+    var def = moodal_el.getElementsByClassName("moodal_default");
+    if (def.length) {
+        def[0].focus();
+    }
 }

@@ -69,11 +69,11 @@
                 <button onclick="moodal_choice('OK')" style="font-size:large;padding:4px 15px 4x 15px">OK</button>
         </div>
         <div id="random_prompt" style="display:none">
-            <p></p>Select trail type:</p>
-            <input id="random_prompt_width" type="text">box width</input>
-            <input id="random_prompt_count" type="text"># of cells</input>
+            Volume width:<input id="random_prompt_width" type="text" value="4"></input><br/>
+            Cell count:<input id="random_prompt_count" type="text" value="16"></input><br/>
+            <br/>
             <button onclick="moodal_choice('CANCEL')">CANCEL</button>
-            <button onclick="moodal_choice('OK')">OK</button>
+            <button class="moodal_default" onclick="moodal_choice('OK')">OK</button>
         </div>
         <div id="leftLinks" style="position:absolute;font-size:large">
             <div style="opacity:0.7">
@@ -665,6 +665,7 @@
             }
 
             function onDocumentKeyDown( event ) {
+                if (gMoodalInEffect) return;
 //document.getElementById("debug").innerHTML = ''+event.keyCode;
 //if(DEBUG) console.log("key:", event.keyCode);
                 if (event.shiftKey || event.ctrlKey || event.altKey || event.altGraphKey) return;
@@ -817,23 +818,24 @@
                 camera.updateMatrix();
             }
 
-            function onDocumentMouseDown( event ) {
-                if(scrollBarX && window.innerWidth - event.clientX < 30) {
+            function onDocumentMouseDown(event){
+                if (gMoodalInEffect) return;
+                if (scrollBarX && window.innerWidth - event.clientX < 30) {
                     return;
                 }
                 event.preventDefault();
-
+                
                 isMouseDown = true;
-
+                
                 onMouseDownTheta = theta;
                 onMouseDownPhi = phi;
                 onMouseDownPosition.x = event.clientX;
                 onMouseDownPosition.y = event.clientY;
-
+                
             }
 
             function onDocumentMouseMove( event ) {
-
+                if (gMoodalInEffect) return;
                 if(scrollBarX && window.innerWidth - event.clientX < 30) {
                     return;
                 }
@@ -857,7 +859,7 @@
             }
 
             function onDocumentMouseUp( event ) {
-
+                if (gMoodalInEffect) return;
                 if(scrollBarX && window.innerWidth - event.clientX < 30) {
                     return;
                 }
@@ -871,6 +873,7 @@
             }
 
             function onDocumentMouseWheel( event ) {
+                if (gMoodalInEffect) return;
                 event.preventDefault();
 				if (event.detail) {							/// ugh, dumb Firefox hack
 					if (event.detail > 0) {
@@ -1194,8 +1197,8 @@
                 moodal("random_prompt", function(result){
                     console.log("result:", result)
                     if (result != "OK") return;
-                    var width = parseInt(document.getElementById("random_prompt_width"));
-                    var count = parseInt(document.getElementById("random_prompt_count"));
+                    var width = parseInt(document.getElementById("random_prompt_width").value);
+                    var count = parseInt(document.getElementById("random_prompt_count").value);
                     var axMax, axMin;
                     if (width != parseInt(width)) {
                         var tot = axisMax - axisMin;
