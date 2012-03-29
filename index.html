@@ -533,9 +533,10 @@
                             avg += moveFifo[i];
                         }
                         avg /= moveFifo.length;
-                        document.getElementById("showinfo").innerHTML = "<br/>moves: " + 
+                        document.getElementById("showinfo").innerHTML = "moves: " + 
                             htmlPadSpaces(moves.length, 3) +
-                            " avg: " + avg.toFixed(3) + " per cell: " + (avg / cellCount).toFixed(3);
+                            " avg: " + avg.toFixed(3) + " per cell: " + (avg / cellCount).toFixed(3)
+                            + "<br/>";
                     }
                     for (i in moves) {
                         var args = moves[i];
