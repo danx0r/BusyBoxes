@@ -890,7 +890,7 @@
             }
 
             function onDocumentMouseUp( event ) {
-
+                if (gMoodalInEffect) return;
                 if(scrollBarX && window.innerWidth - event.clientX < 30) {
                     return;
                 }
