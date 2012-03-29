@@ -425,7 +425,7 @@
             
             function mainLoopScience() {
                 if (isRunning && processSpeed == "science") {
-                    for (var i=0; i<500; i++) {
+                    for (var i=0; i<1000; i++) {
                         mainLoop(true);                     // no render during main loop for speed
                     }
                     render();
@@ -676,6 +676,7 @@
                     direction = "forward";
                 }
                 updateHash(true);
+                document.getElementById("direction").innerHTML = direction;
             }
 
             function onDocumentKeyDown( event ) {
@@ -1109,7 +1110,7 @@
                 }
                 document.getElementById('cellcount').innerHTML = cellCount;
                 lasthash = data;
-                //log("LOG_TO_FILE\nnacl.log\nframe: " + frame + " hash: " + data + "\n");
+                if (!isRunning && typeof(console) != "undefined" && console.log) console.log("last hash:", data);
                 if (data.length > 12) {
                     data = data.substr(0,5) + ".." + data.substr(data.length-5)
                 }
@@ -1186,6 +1187,7 @@
                 trails = [];
                 lasthash = "";
                 direction = "forward";
+                document.getElementById("direction").innerHTML = direction;
                 document.getElementById("generation").innerHTML = "";
                 document.getElementById("showphase").innerHTML = "";
                 document.getElementById("duplicates").innerHTML = "";
@@ -1242,7 +1244,6 @@
 
                 updateHash();
                 refreshUrl(gUpdateHash);
-                if (typeof(console) != "undefined" && console.log) console.log("last random hash:", gUpdateHash);
             }
 
             // https://gist.github.com/665235
