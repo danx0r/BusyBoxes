@@ -203,6 +203,7 @@
             var isRunning = false;
             var direction = "forward";
             var hashmap = {};
+            var hashmaplen = 0;
             var lasthash = "";
             var gUpdateHash = "";
             var encodeString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
@@ -667,6 +668,7 @@
 
             function reverseDirection(){
                 hashmap = {}
+                hashmaplen = 0;
                 document.getElementById("duplicates").innerHTML = "";
                 if (direction == "forward") {
                     direction = "reverse";
@@ -1099,9 +1101,14 @@
                     if (data in hashmap) {
                         document.getElementById("duplicates").innerHTML = frame + "=" + hashmap[data] + " cycle: " + Math.abs(frame - hashmap[data]);
                     }
+                    else {
+                        if (hashmaplen < 100000) {
+                            hashmap[data] = frame;
+                            hashmaplen++;
+                        }
+                    }
                 }
                 document.getElementById('cellcount').innerHTML = cellCount;
-                hashmap[data] = frame;
                 lasthash = data;
                 //log("LOG_TO_FILE\nnacl.log\nframe: " + frame + " hash: " + data + "\n");
                 if (data.length > 12) {
@@ -1176,6 +1183,7 @@
 
                 frame = 0;
                 hashmap = {};
+                hashmaplen = 0;
                 trail = [];
                 trails = [];
                 lasthash = "";
