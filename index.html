@@ -62,9 +62,10 @@
         <div id="moodal_background" style="position:absolute;width:100%;height:100%;background-color:black;z-index:100;opacity:0.2;display:none">
         </div>
         <div id="trail_type" style="display:none">
+            Trail length:<input class="moodal_default" id="trail_length" tabindex=1 type="text" value="100"></input><br/>
             <p></p>Select trail type:</p>
-            <button onclick="moodal_choice('cell')">Trails for every cell</button>
-            <button onclick="moodal_choice('average')">Trail for average</button>
+            <button tabindex=2 onclick="moodal_choice('cell')">Trails for every cell</button>
+            <button tabindex=3 onclick="moodal_choice('average')">Trail for average</button>
         </div>
         <div id="trails_disabled" style="display:none">
             <p></p>Trails are now disabled</p>
@@ -1316,11 +1317,12 @@
                 }
                 else {
                     moodal("trail_type", function (result) {
+                        var len = parseInt(document.getElementById("trail_length").value);
                         if (result == 'cell') {
-                            CELL_TRAIL = parseInt(prompt("Trail length:"))
+                            CELL_TRAIL = len;
                         }
                         else {
-                            AVG_TRAIL = parseInt(prompt("Trail length:"))
+                            AVG_TRAIL = len;
                         }
                     });
                 }
