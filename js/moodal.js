@@ -25,12 +25,16 @@
 /*
  * The simplest possible library for modal solutions
  */
+var gMoodalInEffect = false;
+
 function moodal_choice(v){
     moodal_el.style.display = "none";
     moodal_cb(v);
+    gMoodalInEffect = false;
 }
 
 function moodal(id, cb){
+    gMoodalInEffect = true;
     moodal_cb = cb;
     moodal_el = document.getElementById(id)
     moodal_el.style.position = "absolute";
