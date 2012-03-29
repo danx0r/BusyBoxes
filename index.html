@@ -1263,9 +1263,11 @@
                     clearScreen();
                     if (lastSelectedEl) 
                         lastSelectedEl.style.backgroundColor = "#ddd";
+                    cursor = [0, 2000, 0];
                     for (i = 0; i < count; i++) {
                         var phase = -1;
-                        while ((cursor in grid)) {
+                        var targPhase = i < (count * ratio - 0.5)?0:1;
+                        while ((cursor in grid) || (phase != targPhase)) {
                             for (var axis = 0; axis < 3; axis++) {
                                 cursor[axis] = Math.floor(Math.random() * (axMax[axis] - axMin[axis] + 1) + axMin[axis]);
                             }
