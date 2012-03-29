@@ -202,12 +202,10 @@
             var grid = {};
             var isRunning = false;
             var direction = "forward";
-            var hashmap = {};
-            var hashmaplen = 0;
             var lasthash = "";
             var gUpdateHash = "";
-            var gStartHash = "";
-            var gStartHashFrame;
+            var gInitialHash = "";
+            var gInitialFrame;
             var encodeString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
             var frame = 0;
             var cellCount = 0;
@@ -393,8 +391,8 @@
                         selectHash('PeciXwDuTA0', document.getElementById("introHash"));
                     }
                 }
-                gStartHash = gUpdateHash;
-                gStartHashFrame = frame;
+                gInitialHash = gUpdateHash;
+                gInitialFrame = frame;
                 setInterval(mainLoopFast, 14);
                 setInterval(mainLoopSlow, 140);
                 setTimeout(mainLoopScience, 10);
@@ -670,8 +668,6 @@
             }
 
             function reverseDirection(){
-                hashmap = {}
-                hashmaplen = 0;
                 document.getElementById("duplicates").innerHTML = "";
                 if (direction == "forward") {
                     direction = "reverse";
@@ -822,6 +818,8 @@
                             scene.addObject( voxel );
                         }
                         updateHash();
+                        gInitialHash = lasthash;
+                        gInitialFrame = frame;
                         render(); 
                         break;
                 }
@@ -922,8 +920,8 @@
             function refreshUrl(hash) {
                 //console.log("should refresh:", url);
                 var url = hash2url(hash);
-                gStartHash = hash;
-                gStartHashFrame = frame;
+                gInitialHash = hash;
+                gInitialFrame = frame;
                 if (history.replaceState) {
                     if(url != gLastRefreshedUrl) {
                         history.replaceState(url, url, url);
@@ -1104,9 +1102,9 @@
                     gUpdateHash = data;
                 }
                 if (data != lasthash) {
-                    if (data == gStartHash) {
-                        document.getElementById("duplicates").innerHTML = frame + "=" + gStartHashFrame + " cycle: " + Math.abs(frame - gStartHashFrame);
-                        gStartHashFrame = frame;
+                    if (data == gInitialHash) {
+                        document.getElementById("duplicates").innerHTML = frame + "=" + gInitialFrame + " cycle: " + Math.abs(frame - gInitialFrame);
+                        gInitialFrame = frame;
                     }
                 }
                 document.getElementById('cellcount').innerHTML = cellCount;
@@ -1184,8 +1182,6 @@
                 }
 
                 frame = 0;
-                hashmap = {};
-                hashmaplen = 0;
                 trail = [];
                 trails = [];
                 lasthash = "";
