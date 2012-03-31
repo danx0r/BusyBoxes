@@ -1098,6 +1098,7 @@
                     keys.push(key);
                 }
                 keys.sort();
+                var oldCount = cellCount;
                 cellCount = 0;
                 var data = [];
                 var cur = [0, 0, 0];
@@ -1133,6 +1134,10 @@
                     }
                 }
                 document.getElementById('cellcount').innerHTML = cellCount;
+                if (cellCount != oldCount) {
+                    gInitialHash = data;
+                    gInitialFrame = frame;
+                }
                 lasthash = data;
                 if (!isRunning && typeof(console) != "undefined" && console.log) console.log("last hash:", data);
                 if (data.length > 12) {
@@ -1210,7 +1215,7 @@
                 trail = [];
                 trails = [];
                 lasthash = "";
-                direction = "forward";
+                if (!qargs.science) direction = "forward";
                 document.getElementById("direction").innerHTML = direction;
                 document.getElementById("generation").innerHTML = "";
                 document.getElementById("showphase").innerHTML = "";
@@ -1220,27 +1225,13 @@
             }
             
             function randomCells(){
-                /*
-                var val = prompt("specify width, count:", '' + randWidth + ", " + randCount);
-                if (!val) {
-                    alert ("oops! nothing");
-                } 
-                var i = val.indexOf(",");
-                if (i < 0) {
-                    alert("missing comma!");
-                    return;
-                }
-                var width, count;
-                width = parseFloat(val.substr(0,i));
-                count = parseInt(val.substr(i+1));
-                */
                 document.getElementById("random_prompt_width").value = '' + randWidth;
                 document.getElementById("random_prompt_count").value = '' + randCount;
                 document.getElementById("random_prompt_ratio").value = '' + randRatio;
                 moodal("random_prompt", function(result){
                     console.log("result:", result)
                     if (result != "OK") return;
-                    var width = parseInt(document.getElementById("random_prompt_width").value);
+                    var width = parseFloat(document.getElementById("random_prompt_width").value);
                     var count = parseInt(document.getElementById("random_prompt_count").value);
                     var ratio = parseFloat(document.getElementById("random_prompt_ratio").value);
                     var axMax, axMin;
@@ -1282,7 +1273,7 @@
                     }
                     
                     updateHash();
-                    refreshUrl(hash2url(gUpdateHash));
+                    refreshUrl(gUpdateHash);
                 });
             }
 
