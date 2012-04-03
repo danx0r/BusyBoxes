@@ -254,7 +254,7 @@
                     i = searchString.length;
                 }
                 searchString = searchString.substr(0, i);
-                var queryArgList = searchString.substr(searchString).split("&");
+                var queryArgList = searchString.split("&");
                 for (var i = 0; i < queryArgList.length; i++) {
                     var query = queryArgList[i];
                     var keyval = query.split("=");
@@ -398,7 +398,23 @@
                         }
                     }
                     else {
-                        selectHash('PeciXwDuTA0', document.getElementById("introHash"));
+                        if (qargs.coords) {
+                            var coords = [];
+                            var s = qargs.coords.split(",(");
+                            for (var i=0; i<s.length; i++) {
+                                var coord = s[i].replace("(", "")
+                                coord = coord.split(",");
+                                for (var j=0; j<3; j++) {
+                                    coord[j] = parseInt(coord[j]);
+                                }
+                                coords.push(coord);
+                            }
+                            buildFromCoords(coords);
+                            console.log("coords:", coords);
+                        }
+                        else {
+                            selectHash('PeciXwDuTA0', document.getElementById("introHash"));
+                        }
                     }
                 }
                 gInitialHash = gUpdateHash;
@@ -1067,6 +1083,19 @@
                 }
                 updateHash();
 
+            }
+
+            function buildFromCoords(coords){
+                for(var i=0; i<coords.length; i++) {
+                    var cur = coords[i];
+                    var parity = (cur[0] + cur[1] + cur[2]) & 1;
+                    var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
+                    setObjPosition(voxel, cur);
+                    voxel.overdraw = true;
+                    scene.addObject(voxel);
+                    putGrid(voxel, cur);
+                }
+                updateHash();
             }
             
             function hash2url(hash){
