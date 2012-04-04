@@ -426,7 +426,11 @@
                 setTimeout(mainLoopScience, 10);
                 render();
                 if (qargs.play) {
-                    setTimeout(toggleRunning, 2500);
+                    setTimeout(function() {
+                        if (!isRunning) {
+                            toggleRunning();
+                        }
+                    }, 2500);
                 }
             }
             
