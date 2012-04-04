@@ -364,6 +364,9 @@
                 scene.addLight( directionalLight );
 
                 renderer = new THREE.CanvasRenderer();
+                if (renderer.invalid) {
+                    alert ("CANVAS element not supported")
+                }
                 renderer.setSize( window.innerWidth, window.innerHeight );
 
                 container.appendChild(renderer.domElement);

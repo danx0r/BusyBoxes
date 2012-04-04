@@ -1567,7 +1567,12 @@ THREE.Projector = function(){
     }
 };
 THREE.CanvasRenderer = function(){
-    var A = null, v = new THREE.Projector(), s = document.createElement("canvas"), n, r, k, p, t = s.getContext("2d"), D = new THREE.Rectangle(), q = new THREE.Rectangle(), z = new THREE.Rectangle(), l = false, o = new THREE.Color(4294967295), x = new THREE.Color(4294967295), f = new THREE.Color(4294967295), y = Math.PI * 2, j = new THREE.Vector2(), h = new THREE.Vector3(), G = new THREE.UV(), F = new THREE.UV(), E = new THREE.UV(), C = new THREE.UV(), d = new THREE.Vector2(), b = new THREE.Vector2();
+    var s = document.createElement("canvas");
+    if ((s == null) || (s.getContext == null)) {
+        this.invalid = true;
+        return;
+    }
+    var A = null, v = new THREE.Projector(), n, r, k, p, t = s.getContext("2d"), D = new THREE.Rectangle(), q = new THREE.Rectangle(), z = new THREE.Rectangle(), l = false, o = new THREE.Color(4294967295), x = new THREE.Color(4294967295), f = new THREE.Color(4294967295), y = Math.PI * 2, j = new THREE.Vector2(), h = new THREE.Vector3(), G = new THREE.UV(), F = new THREE.UV(), E = new THREE.UV(), C = new THREE.UV(), d = new THREE.Vector2(), b = new THREE.Vector2();
     this.domElement = s;
     this.autoClear = true;
     this.setSize = function(I, H){
