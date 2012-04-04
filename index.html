@@ -91,7 +91,7 @@
                 <span id="direction"></span>
                 <br/>
                 Speed:
-                <span id="showspeed">slow</span>
+                <span id="showspeed">fast</span>
                 <br/>
                 Cells:
                 <span id="cellcount"></span>
@@ -222,7 +222,7 @@
             var mode = "mirror";
             var axisMin = -12;
             var axisMax = 11;
-            var processSpeed = "slow";
+            var processSpeed = "fast";
             var lastSelectedEl;
             var gLastRefreshedUrl;
             var scrollBarX = false;
@@ -425,6 +425,9 @@
                 setInterval(mainLoopSlow, 140);
                 setTimeout(mainLoopScience, 10);
                 render();
+                if (qargs.play) {
+                    setTimeout(toggleRunning, 2500);
+                }
             }
             
             function mainLoopFast() {
