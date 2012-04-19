@@ -330,8 +330,15 @@
                 plane = new THREE.Mesh( new Plane( 1000, 1000 ) );
                 plane.rotation.x = - 90 * Math.PI / 180;
                 scene.addObject( plane );
-
-                cube = new Cube( 50, 50, 50 );
+                
+                if (qargs.dim == 2) {
+                    cube = new Square( 50, 50, 50 );
+                    phi = 180;
+                    adjustCamera();
+                }
+                else {
+                    cube = new Cube( 50, 50, 50 );
+                }
                 cubette = new Cube(10, 10, 10);
 
                 ray = new THREE.Ray( camera.position, null );
