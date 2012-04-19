@@ -55,20 +55,11 @@ var Square = function (width, height, depth) {
     depth_half = depth / 2;
 
     v(  width_half, -height_half, -depth_half );
-    v(  width_half, -height_half, -depth_half );
     v( -width_half, -height_half, -depth_half );
-    v( -width_half, -height_half, -depth_half );
-    v(  width_half, -height_half,  depth_half );
-    v(  width_half, -height_half,  depth_half );
     v( -width_half, -height_half,  depth_half );
-    v( -width_half, -height_half,  depth_half );
+    v(  width_half, -height_half,  depth_half );
 
     f4( 0, 1, 2, 3 );
-    f4( 4, 7, 6, 5 );
-    f4( 0, 4, 5, 1 );
-    f4( 1, 5, 6, 2 );
-    f4( 2, 6, 7, 3 );
-    f4( 4, 0, 3, 7 );
 
     function v(x, y, z) {
 
