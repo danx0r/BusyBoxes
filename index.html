@@ -1147,9 +1147,11 @@
                 cellCount = 0;
                 var data = [];
                 var cur = [0, 0, 0];
+                if (qargs.science == true) var coords = [];
                 for (var k in keys) {
                     key = keys[k];
                     xyz = eval("[" + key + "]");
+                    if (qargs.science == true) coords.push('(' + xyz + ')');
                     var skip = false;
                     for (var j = 0; j < 3; j++) {
                         if (xyz[j] < axisMin || xyz[j] > axisMax) {
@@ -1189,6 +1191,7 @@
                     data = data.substr(0,5) + ".." + data.substr(data.length-5)
                 }
                 document.getElementById('showhash').innerHTML = data;
+                if (qargs.science == true && typeof(console) != "undefined" && console.log) console.log(''+coords)
             }
 
             function render() {
