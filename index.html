@@ -226,7 +226,8 @@
             var lastSelectedEl;
             var gLastRefreshedUrl;
             var scrollBarX = false;
-            var moveFifo = [0,0,0,0,0,0];
+            var moveFifo = [];
+            for (var i=0; i<60; i++) moveFifo.push(0);
             var qargs = {};
             var container, interval,
             camera, scene, renderer,
@@ -268,6 +269,9 @@
             function init() {
                 if (DEBUG) console.log("init start")
                 qargs = parseQueryArgs();
+                if (qargs.dir) {
+                    direction = qargs.dir;
+                }
                 if (qargs.size) {
                     var size = parseInt(qargs.size);
                     axisMax = parseInt(size / 2) - 1;
