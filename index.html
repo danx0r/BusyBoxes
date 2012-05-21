@@ -316,17 +316,19 @@
 
                 linesMaterial = new THREE.LineColorMaterial( 0x000000, 0.2 );
 
-                for ( var i = 0; i <= axisMax - axisMin + 1; i ++ ) {
-
-                    var line = new THREE.Line( geometry, linesMaterial );
-                    line.position.z = ( i * 50 ) + axisMin * 50;
-                    scene.addObject( line );
-
-                    var line = new THREE.Line( geometry, linesMaterial );
-                    line.position.x = ( i * 50 ) + axisMin * 50;
-                    line.rotation.y = 90 * Math.PI / 180;
-                    scene.addObject( line );
-
+                if (!qargs.nogrid) {
+                    for (var i = 0; i <= axisMax - axisMin + 1; i++) {
+                    
+                        var line = new THREE.Line(geometry, linesMaterial);
+                        line.position.z = (i * 50) + axisMin * 50;
+                        scene.addObject(line);
+                        
+                        var line = new THREE.Line(geometry, linesMaterial);
+                        line.position.x = (i * 50) + axisMin * 50;
+                        line.rotation.y = 90 * Math.PI / 180;
+                        scene.addObject(line);
+                        
+                    }
                 }
 
                 projector = new THREE.Projector();
