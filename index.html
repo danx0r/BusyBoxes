@@ -445,6 +445,9 @@
                         }
                     }, 2500);
                 }
+                if (qargs.science == "test") {
+                    scienceTest();
+                }
             }
             
             function mainLoopFast() {
@@ -1444,6 +1447,69 @@
                     req.open("POST", "log.py", true);
                     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     req.send(s);
+                }
+            }
+
+
+            function scienceTest(){
+                console.log("SCIENCE!");
+                gScienceCounterInit = 100000;
+                gScienceTrials = 1000;
+                gScienceBatch = 1000;
+                gScienceTrial = 0;
+                scienceTestInit();
+            }
+
+            function scienceTestInit() {
+                document.getElementById("debug").innerHTML = "" + gScienceTrial + " out of " + gScienceTrials;
+                gScienceCounter = gScienceCounterInit;
+                randomCells_(5, 12, 0.25);
+                console.log("DEBUG frame at beginning:", frame);
+                gStartHash = lasthash;
+                processSpeed = "test";
+                //console.log("DEBUG lasthash:", lasthash)
+                isRunning = true;
+                setTimeout(scienceTestLoop, 10);
+            }   
+        
+            function scienceTestLoop(){
+                var startCellCount = cellCount;
+                var count = Math.min(gScienceCounter, gScienceBatch);
+                for (var i = 0; i < count; i++) {
+                    mainLoop(true);
+                    //console.log("DEBUG trial:", gScienceTrial, "frame:", frame, "counter:", gScienceCounter)
+                    gScienceCounter--;
+                    if ((lasthash == gInitialHash) || (startCellCount != cellCount)) {
+                        gScienceCounter = 0;
+                        break;
+                    }
+                }
+                render();
+                if (gScienceCounter) {
+                    setTimeout(scienceTestLoop, 1);
+                }
+                else {
+                    console.log("DEBUG trial over. gScienceCounter: ", gScienceCounter, "trial:", gScienceTrial, "hash:", gStartHash)
+                    isRunning = false;
+                    processSpeed = "slow";
+                    var result;
+                    if (startCellCount != cellCount) {
+                        result = "death";
+                    }
+                    else if (lasthash == gInitialHash) {
+                        result = "cycle,";
+                    }
+                    else {
+                        result = "timeout,,";
+                    }
+                    log("LOG_TO_FILE\nscience.log\ntrial," + gScienceTrial + ",hash," + gStartHash + "," + result + "," + frame + "\n");
+                    gScienceTrial++;
+                    if (gScienceTrial < gScienceTrials) {
+                        scienceTestInit();
+                    }
+                    else {
+                        alert("Science as we know it is over");
+                    }
                 }
             }
             //]]>
