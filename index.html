@@ -378,7 +378,8 @@
 
                 renderer = new THREE.CanvasRenderer();
                 if (renderer.invalid) {
-                    alert ("CANVAS element not supported")
+                    //alert ("CANVAS element not supported")
+                    document.location = "nocanvas.html"; 
                 }
                 renderer.setSize( window.innerWidth, window.innerHeight );
 
