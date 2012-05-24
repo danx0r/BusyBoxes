@@ -966,7 +966,15 @@
 					}
 				}
 				else {
-	                radious -= event.wheelDeltaY;
+                    if (event.wheelDeltayY) {
+                        radious -= event.wheelDeltaY;       /// chrome?
+                    }
+                    else {
+                        if (event.wheelDelta) {             /// IE! & opera I hear
+                            radious -= event.wheelDelta;
+                        }
+                        // else fuggedaboudit
+                    }
 				}
             	if (DEBUG) console.log("mw ev:", radious)
 
