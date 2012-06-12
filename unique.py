@@ -1,10 +1,6 @@
 # calculate unique visitors & faq readers
 
-import sys, os, time
-
-print "----------------------------------------------------------------"
-print "Date:", time.ctime()
-print
+import sys, os
 
 f = sys.argv[1]
 f = open(f)
@@ -13,6 +9,7 @@ f.close()
 
 ips = {}
 faqs = {}
+last = {}
 hits = 0
 dates = set()
 
@@ -31,13 +28,14 @@ for line in r:
         if ip not in ips:
             ips[ip] = 0
             faqs[ip] = 0
+        last[ip] = date + " " + w[3]
         ips[ip] += 1
         if "tracking_faq" in line:
             faqs[ip] += 1
         hits += 1
 
 for ip in ips:
-    print ips[ip], "page hits for", ip, "faq hits:", faqs[ip]
+    print ips[ip], "page hits for", ip, "faq hits:", faqs[ip], "recent:", last[ip]
 
 print
 print "dates:"
