@@ -1,6 +1,10 @@
 # calculate unique visitors & faq readers
 
-import sys, os
+import sys, os, time
+
+print "----------------------------------------------------------------"
+print "Date:", time.ctime()
+print
 
 f = sys.argv[1]
 f = open(f)
