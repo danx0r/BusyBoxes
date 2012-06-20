@@ -2,10 +2,12 @@
 
 import sys, os
 
-f = sys.argv[1]
-f = open(f)
-r = f.readlines()
-f.close()
+r = []
+for i in range(1, len(sys.argv)):
+    f = sys.argv[i]
+    f = open(f)
+    r += f.readlines()
+    f.close()
 
 ips = {}
 faqs = {}
