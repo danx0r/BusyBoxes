@@ -11,14 +11,16 @@ ips = {}
 faqs = {}
 last = {}
 hits = 0
-dates = set()
+dates = {}
 
 for line in r:
     line = line.strip()
     if "tracking" in line:
         w = line.split()
         date = w[1] + " " + w[2] + " " + w[4][:-1]
-        dates.add(date)
+        if date not in dates:
+            dates[date] = 0
+        dates[date] += 1
 ##        print line
         i = line.find('[client ') + 8
         j = line[i:].find(']')
@@ -39,10 +41,10 @@ for ip in ips:
 
 print
 print "dates:"
-dates = list(dates)
-dates.sort()
-for date in dates:
-    print date
+keys = list(dates)
+keys.sort()
+for date in keys:
+    print date, dates[date]
 print
 print "total page hits:", hits
 print "total unique visitors:", len(ips)
