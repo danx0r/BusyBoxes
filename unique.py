@@ -14,6 +14,7 @@ faqs = {}
 last = {}
 hits = 0
 dates = {}
+dateIPs = {}
 
 for line in r:
     line = line.strip()
@@ -34,6 +35,11 @@ for line in r:
             faqs[ip] = 0
         last[ip] = date + " " + w[3]
         ips[ip] += 1
+        if date not in dateIPs:
+            dateIPs[date] = {}
+        if ip not in dateIPs[date]:
+            dateIPs[date][ip] = 0
+        dateIPs[date][ip] += 1
         if "tracking_faq" in line:
             faqs[ip] += 1
         hits += 1
@@ -46,7 +52,7 @@ print "dates:"
 keys = list(dates)
 keys.sort()
 for date in keys:
-    print date, dates[date]
+    print date, dates[date], "page views", len(dateIPs[date]), "uniques"
 print
 print "total page hits:", hits
 print "total unique visitors:", len(ips)
