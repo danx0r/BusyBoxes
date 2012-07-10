@@ -170,6 +170,8 @@
             <br/>
             <button class="goHash" onclick="selectHash('cDvPgDiQ0NiYngHPAN8CD4EeAc8AweA2Gh8DMSGhuc8APMcyWjRSpaPwGPgOlS0aB0', this, 40)" id="strung_out">Harmonic Chaos</button>
             <br/>
+            <button class="goHash" onclick="selectHash('RZejhMkpklOTtLA0', this, 40, 250)" id="circular">Circular Motion</button>
+            <br/>
         </div>
         <div style="display:none">
             <div id="banner">
@@ -1250,9 +1252,17 @@
                 refreshUrl(gUpdateHash);
             }
             
-            function selectHash(hash, el, size) {
-                if (size && size != (axisMax - axisMin + 1)) {
-                    document.location = "/?size=" + size + "&sel=" + el.id + "&hash=" + hash;
+            function selectHash(hash, el, size, trail) {
+                if (!trail) {
+                    AVG_TRAIL = false;
+                    CELL_TRAIL = false;
+                }
+                if (trail || (size && size != (axisMax - axisMin + 1))) {
+                    var trailopt = "";
+                    if (trail) {
+                        trailopt = "&trail=" + trail;
+                    }
+                    document.location = "/?size=" + size + trailopt + "&sel=" + el.id + "&hash=" + hash;
                 }
                 else {
                     if (lastSelectedEl) {
