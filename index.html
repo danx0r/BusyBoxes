@@ -241,10 +241,12 @@
             isMouseDown = false, onMouseDownPosition,
             radious = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
             randWidth = 4, randCount = 12, randRatio = 0.5;
-
             init();
             render();
-
+            
+            
+            //breaks up the hash string and returns different elements of the query
+            
             function parseQueryArgs() {
                 var queryArgs = {};
                 var searchString = document.URL;
@@ -269,10 +271,12 @@
                 }
                 return queryArgs;
             }
-
             function init() {
                 if (DEBUG) console.log("init start")
                 qargs = parseQueryArgs();
+                
+                //parses our url query (after "?") and turns them into arguments
+                
                 if (qargs.dir) {
                     direction = qargs.dir;
                 }
@@ -286,15 +290,19 @@
                     AVG_TRAIL = parseInt(qargs.trail);
                 }
                 if (qargs.trails) {
+                    // that's the green trail thing they used to show path
                     CELL_TRAIL = parseInt(qargs.trails);
                 }
+                
                 if (qargs.mode) {
                     mode = qargs.mode;
                 }
                 if (DEBUG) console.log("DEBUG query args:", qargs, "axisMax:", axisMax, "axisMin:", axisMin)
+                
+                
+                //Create a scene
                 container = document.createElement( 'div' );
                 document.body.appendChild( container );
-
                 var info = document.createElement( 'div' );
                 info.style.position = 'absolute';
                 info.style.top = '5px';
@@ -302,24 +310,30 @@
                 info.style.textAlign = 'center';
                 info.innerHTML = document.getElementById("banner").innerHTML;
                 container.appendChild( info );
- 
+                
+                
+                //THREE.js camera
                 camera = new THREE.Camera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+                
+                
                 if(DEBUG) console.log("camera:", camera);
                 camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                 camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
                 camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+
+
 //                camera.position.y = 200;
-
                 scene = new THREE.Scene();
-
+                
+                
                 // Grid
-
                 var geometry = new THREE.Geometry();
                 geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( axisMin * 50, 0, 0 ) ) );
                 geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( (axisMax+1) * 50, 0, 0 ) ) );
-
                 linesMaterial = new THREE.LineColorMaterial( 0x000000, 0.2 );
-
+                
+                
+                
                 if (!qargs.nogrid) {
                     for (var i = 0; i <= axisMax - axisMin + 1; i++) {
                     
@@ -334,14 +348,20 @@
                         
                     }
                 }
-
+                
+                
                 projector = new THREE.Projector();
-
+                
+                
                 plane = new THREE.Mesh( new Plane( 1000, 1000 ) );
                 plane.rotation.x = - 90 * Math.PI / 180;
                 scene.addObject( plane );
                 
+                
+                //a way to see just 2 dimensionals if there is only one plane of interest
                 if (qargs.dim == 2) {
+                  
+                    //So we use Squares instead of cubes!
                     cube = new Square( 50, 50, 50 );
                     phi = 180;
                     adjustCamera();
@@ -349,56 +369,61 @@
                 else {
                     cube = new Cube( 50, 50, 50 );
                 }
+                
                 cubette = new Cube(10, 10, 10);
-
+                
+                
+                //might be to figure out what is in front of the camera
                 ray = new THREE.Ray( camera.position, null );
-
+                
+                // this is the cursor that shows where you are going to create a cube
                 brush = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ], 0.4 ) );
                 //brush.position.y = brushY;
                 setObjPosition(brush, cursor);
                 brush.overdraw = true;
                 scene.addObject( brush );
-
                 onMouseDownPosition = new THREE.Vector2();
-
                 // Lights
-
                 var ambientLight = new THREE.AmbientLight( 0x404040 );
                 scene.addLight( ambientLight );
-
                 var directionalLight = new THREE.DirectionalLight( 0xffffff );
                 directionalLight.position.x = 1;
                 directionalLight.position.y = 1;
                 directionalLight.position.z = 0.75;
                 directionalLight.position.normalize();
                 scene.addLight( directionalLight );
-
                 var directionalLight = new THREE.DirectionalLight( 0x808080 );
                 directionalLight.position.x = - 1;
                 directionalLight.position.y = 1;
                 directionalLight.position.z = - 0.75;
                 directionalLight.position.normalize();
                 scene.addLight( directionalLight );
-
+                
+                //THREE: create the renderer
                 renderer = new THREE.CanvasRenderer();
+                
                 if (renderer.invalid) {
                     //alert ("CANVAS element not supported")
                     document.location = "nocanvas.html"; 
                 }
                 renderer.setSize( window.innerWidth, window.innerHeight );
-
+                
+                //this is the container div we created in the beginning
                 container.appendChild(renderer.domElement);
-
+                
+                //standard dom stuff--so that our keyboard controls work
                 document.addEventListener( 'keydown', onDocumentKeyDown, false );
-
                 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
                 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
                 document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-
                 document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
                 document.addEventListener( 'DOMMouseScroll', onDocumentMouseWheel, false );
+                
 
                 if (window.location.hash) {
+                    //an old way with hashes instead of question marks
+                    //defunct!!
+                    //included for backwards compatibility
                     buildFromHash();
                 }
                 else {
@@ -433,16 +458,24 @@
                             buildFromCoords(coords);
                         }
                         else {
+                          
+                            // this is the inital state to get you interested when you hit the site and have never done anything
+                            //it is just two gliders
+                            //automatically puts the gliders thing in
+                            
                             selectHash('PeciXwDuTA0', document.getElementById("introHash"));
                         }
                     }
                 }
+                
+                //g means Global
                 gInitialHash = gUpdateHash;
                 gInitialFrame = frame;
                 setInterval(mainLoopFast, 14);
                 setInterval(mainLoopSlow, 140);
                 setTimeout(mainLoopScience, 10);
                 render();
+                
                 if (qargs.play) {
                     setTimeout(function() {
                         if (!isRunning) {
@@ -454,6 +487,9 @@
                     scienceTest();
                 }
             }
+            //end of init function
+            
+            
             
             function mainLoopFast() {
                 if (processSpeed == "fast") {
@@ -492,10 +528,15 @@
                 }
             }
             
+            
+            //most important
+            
             function mainLoop(noRender) {
+                //these are updating those little numbers that are keeping tack of the generation, etc.
                 document.getElementById("generation").innerHTML = frame;
                 document.getElementById("showphase").innerHTML = (frame % 6 + 6) %6;
                 document.getElementById("direction").innerHTML = direction;
+                
                 if (isRunning) {
                     if (direction == "reverse") {
                         frame--;
@@ -508,8 +549,18 @@
                     }
                     if(DEBUG) console.log("cells:", cells)
                     var moves = []
+                    
+                    
+                    //THIS is BusyBoxes specific
+                    //these are the only two axes we use
                     var x1, x2                                          // our two axes for today
+                    
+                    //trueMode might be something to make modulus work with negative
                     switch( trueMod(frame, 3) ) {                      // ach, Javascript you old goat
+                        
+                        //depending on odd/even number, makes boxes blue or red or whatever
+                        //WE MUST CHANGE THIS FOR 3 STATES
+                        //also make this more modular
                         case 0: x1=0; x2=1; break;
                         case 1: x1=1; x2=2; break;
                         case 2: x1=2; x2=0; break;
@@ -525,10 +576,20 @@
                             var move = getMove(xyz, x1, x2);
                             if (move) {
                                 var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
+                                //if there isn't a cell in the move to location
+                                // AND the move isn't conflicted (swap rule below)
+                                //then push the move to the "moves" array
                                 if(!getGrid(mvto)) {
                                     var mv = getMove(mvto, x1, x2);                             // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
+                                    //I think this is the SWAP rule
+                                    //why does each condition sum to zero?
+                                    //this is because the coordinates are negative... ???
+                                    //one is -1, -1, 0 and the other is
+                                    //3 dimensional, 8 possibilities
+                                    
                                     if (mv && mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
                                         if(DEBUG) console.log("  mvto:", mvto);
+                                        
                                         moves.push([xyz, cell[1], mvto]);
                                     }
                                 }
@@ -590,6 +651,8 @@
                     }
                     for (i in moves) {
                         var args = moves[i];
+                        
+                        //moveCell(oldxyz, mesh, newxyz)
                         moveCell(args[0], args[1], args[2]);
                     }
                     if (!noRender) {
@@ -601,15 +664,32 @@
                     updateHash(true);
                 }
             }
+            //END of MainLoop
             
+            
+            
+            //This is the hairy function that gets the next move
+            //deals with whether or not the axes wrap around
+              // how will we handle this???
+              // we need different modes--support different ways
+                // --wrap around axes, not wrap around, no boundaries, etc.
+              // e.g. experiment like a gas--certain number
+              // of gliders in space, you might want a closed space
             function getMove(xyz, x1, x2) {
                 if(x1 == null) x1 = 0;
                 if(x2 == null) x2 = 2;
                 var move = null;
                 var d = [0, 0, 0]
                 for (i = 0; i < 8; i++) {
+                    // on any given planes there are 8 things you need to check--BECAUSE OF THE KNIGHT MOVE
+                    
+                    // offs1 and offs2 are all the knight moves from any one position
+                    //there are two becaues there are 2 planes--can go side to side, or up/down
+                    //the two axes
                     d[x1] = offs1[i];
                     d[x2] = offs2[i];
+                    
+                    
                     if (getGrid([xyz[0] + d[0], xyz[1] + d[1], xyz[2] + d[2]])) {
                         var mv = [0, 0, 0];
                         mv[x1] = move1[i];
@@ -643,13 +723,20 @@
                 return move
             }
             
+            
             function v3eq(v1, v2){
                 return (v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2]);
             }
-
+            
+            
             function moveCell(oldxyz, mesh, newxyz) {
+              
+              
                 if (CELL_TRAIL) {
+                    // one of the cubes
+                    //cubettes are the trail
                     var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[4]));
+                    
                     setObjPosition(voxel, oldxyz);
                     voxel.overdraw = true;
                     scene.addObject(voxel);
@@ -660,12 +747,16 @@
                     }
                     //console.log("trails:", trails.length)
                 }
+                
+                //if there are no cell trails (cubettes) then you just set obj positoin to newxyz
                 setObjPosition(mesh, newxyz);
                 delGrid(oldxyz);
                 putGrid(mesh, newxyz);
             }
-
+            
+            //conceptual representation of Grid is an object with a bunch of coordinates 
             // convert grid coord to 3D coord and set obj.position accordingly given vector [x,y,z]
+            //all of this code is for creating a visual representation of the conceptual grid, which might be a sparse array
             function setObjPosition(obj, xyz) {
                 obj.position.x = xyz[0] * 50 + 25;
                 obj.position.y = xyz[1] * 50 + 25;
@@ -682,18 +773,20 @@
                 }
                 document.getElementById("cursorpos").innerHTML = xyz[0] + "," + xyz[1] + "," + xyz[2]
             }
-
+            
+            //this is the visual grid
             function putGrid(obj, xyz) {
                 grid[xyz] = obj;
             }
-
+            
+            
             function trueMod(v, base) {
                 if (v < 0) {
                     return ((v % base) + base) % base;
                 }
                 return v % base;
             }
-
+            
             function getGrid(xyz) {
                 if (mode == "wrap") {
                     for (var i = 0; i < 3; i++) {
@@ -704,7 +797,6 @@
                 }
                 return grid[xyz]
             }
-
             function delGrid(xyz) {
                 delete grid[xyz];
             }
@@ -728,7 +820,6 @@
                     if (cursor[x] > axisMax) cursor[x] = axisMax;
                 }
             }
-
             function reverseDirection(){
                 document.getElementById("duplicates").innerHTML = "";
                 if (direction == "forward") {
@@ -740,7 +831,6 @@
                 updateHash(true);
                 document.getElementById("direction").innerHTML = direction;
             }
-
             function onDocumentKeyDown( event ) {
                 if (gMoodalInEffect) {
                     if (event.keyCode == 27) {
@@ -754,6 +844,9 @@
 //document.getElementById("debug").innerHTML = ''+event.keyCode;
 //if(DEBUG) console.log("key:", event.keyCode);
                 if (event.shiftKey || event.ctrlKey || event.altKey || event.altGraphKey) return;
+                
+                // THIS is the navigation interface
+                // We should think about redesigning
                 switch( event.keyCode ) {
                     case 37:                           // LEFT
                         event.preventDefault();
@@ -896,7 +989,6 @@
                         break;
                 }
             }
-
             function adjustCamera(){
                 camera.position.x = radious * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
                 camera.position.y = radious * Math.sin(phi * Math.PI / 360);
@@ -904,7 +996,6 @@
                 if (DEBUG) console.log("camera:", camera.position)
                 camera.updateMatrix();
             }
-
             function onDocumentMouseDown(event){
                 if (gMoodalInEffect) return;
                 if (scrollBarX && window.innerWidth - event.clientX < 30) {
@@ -920,7 +1011,6 @@
                 onMouseDownPosition.y = event.clientY;
                 
             }
-
             function onDocumentMouseMove( event ) {
                 if (gMoodalInEffect) return;
                 if(scrollBarX && window.innerWidth - event.clientX < 30) {
@@ -930,34 +1020,24 @@
                 var dy = event.clientY - onMouseDownPosition.y;
 //if(DEBUG) console.log("dx, dy:", dx, dy)
                 event.preventDefault();
-
                 if ( isMouseDown ) {
-
                     theta = - ( ( event.clientX - onMouseDownPosition.x ) * 0.5 ) + onMouseDownTheta;
                     phi = ( ( event.clientY - onMouseDownPosition.y ) * 0.5 ) + onMouseDownPhi;
-
                     phi = Math.min( 180, Math.max( 0, phi ) );
-
                     adjustCamera();
                     render();
                 }
-
             }
-
             function onDocumentMouseUp( event ) {
                 if (gMoodalInEffect) return;
                 if(scrollBarX && window.innerWidth - event.clientX < 30) {
                     return;
                 }
                 //event.preventDefault();
-
                 isMouseDown = false;
-
                 onMouseDownPosition.x = event.clientX - onMouseDownPosition.x;
                 onMouseDownPosition.y = event.clientY - onMouseDownPosition.y;
-
             }
-
             function onDocumentMouseWheel( event ) {
                 if (gMoodalInEffect) return;
                 event.preventDefault();
@@ -981,24 +1061,17 @@
                     }
 				}
             	if (DEBUG) console.log("mw ev:", radious)
-
                 camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                 camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
                 camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                 camera.updateMatrix();
-
                 render();
-
             }
-
             function setBrushColor( value ) {
                 color = value;
                 brush.material[ 0 ].color.setHex( colors[ color ] ^ 0x4C000000 );
-
                 render();
-
             }
-
             function refreshUrl(hash) {
                 //console.log("should refresh:", url);
                 var url = hash2url(hash);
@@ -1014,7 +1087,6 @@
                     document.location = url;
                 }
             }
-
             function buildFromHash(hash) {
                 var version = false;
                 if (hash) {
@@ -1032,17 +1104,12 @@
                 else {
                     hash = hash.substr( 0, hash.length - 1 );
                 }
-
                 if ( version == "A" ) {
-
                     var current = { x: 0, y: 0, z: 0, c: 0 }
                     var data = decode( hash );
                     var i = 0, l = data.length;
-
                     while ( i < l ) {
-
                         var code = data[ i ++ ].toString( 2 );
-
                         if ( code.charAt( 1 ) == "1" ) current.x += data[ i ++ ] - 32;
                         if ( code.charAt( 2 ) == "1" ) current.y += data[ i ++ ] - 32;
                         if ( code.charAt( 3 ) == "1" ) current.z += data[ i ++ ] - 32;
@@ -1058,7 +1125,6 @@
                             putGrid(voxel, [current.x, current.y, current.z])
                         }
                     }
-
                 } else {
                     if (version == "X") {
                         var data = hash;
@@ -1123,9 +1189,9 @@
                     }
                 }
                 updateHash();
-
             }
-
+            
+            //sometimes you actualy want to put the coordinates in to build
             function buildFromCoords(coords){
                 for(var i=0; i<coords.length; i++) {
                     var cur = coords[i];
@@ -1139,6 +1205,8 @@
                 updateHash();
             }
             
+            
+            //creates a url that you would go to that uses the hash as a query
             function hash2url(hash){
                 var sep = "?";
                 var url = "" + window.location;
@@ -1161,7 +1229,11 @@
                 url = url.substr(0, i) + sep + "hash=" + hash;
                 return url;
             }
-
+            
+            
+            // This actually creates the hash URL
+            // We need to think about how we want to share configurations
+            // Dan is using a hash but it is a quick and dirty solution. Might be something better
             function updateHash(noLink) {
                 var key, keys = [];
                 for (key in grid) {
@@ -1192,10 +1264,8 @@
                     cur = xyz;
                     cellCount++;
                 }
-
                 data = encdec_encode(data);
                 data +=     (frame % 6 + 6) % 6
-
                 if (!noLink) {                          // yuck. The part of my job I hate
                     gUpdateHash = data;
                 }
@@ -1218,12 +1288,11 @@
                 document.getElementById('showhash').innerHTML = data;
                 if (qargs.science == true && typeof(console) != "undefined" && console.log) console.log(''+coords)
             }
-
+            
             function render() {
                 renderer.render( scene, camera );
-
             }
-
+            
             function clearGrid() {
                 cursor = [0, 0, 0]
                 setBrushPosition(cursor);
@@ -1233,7 +1302,7 @@
                 updateHash();
                 refreshUrl(gUpdateHash);
             }
-
+            
             function reset(hash) {
                 if (!hash) hash = gUpdateHash;
                 cursor = gLastCursor;
@@ -1273,25 +1342,18 @@
                     lastSelectedEl = el;
                 }
             }
-
             function clearScreen() {
                 isRunning = false;
                 grid = {};
                 var i = 0;
-
                 while ( i < scene.objects.length ) {
-
                     object = scene.objects[ i ];
-
                     if ( object instanceof THREE.Mesh && object !== plane && object !== brush ) {
-
                         scene.removeObject( object );
                         continue;
                     }
-
                     i ++;
                 }
-
                 frame = 0;
                 trail = [];
                 trails = [];
@@ -1357,25 +1419,17 @@
                     refreshUrl(gUpdateHash);
                 });
             }
-
             // https://gist.github.com/665235
-
             function decode( string ) {
-
                 var output = [];
                 string.split('').forEach( function ( v ) { output.push( "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".indexOf( v ) ); } );
                 return output;
-
             }
-
             function encode( array ) {
-
                 var output = "";
                 array.forEach( function ( v ) { output += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt( v ); } );
                 return output;
-
             }
-
             function fastSlow() {
                 switch (processSpeed) {
                     case "slow":
@@ -1390,7 +1444,6 @@
                 }
                 document.getElementById("showspeed").innerHTML = processSpeed;
             }
-
             function playStopMusic() {
                 var el = document.getElementById("music");
                 if (!el) {
@@ -1470,8 +1523,6 @@
                     req.send(s);
                 }
             }
-
-
             function scienceTest(){
                 console.log("SCIENCE!");
                 gScienceCounterInit = 100000;
@@ -1480,7 +1531,6 @@
                 gScienceTrial = 0;
                 scienceTestInit();
             }
-
             function scienceTestInit() {
                 document.getElementById("debug").innerHTML = "" + gScienceTrial + " out of " + gScienceTrials;
                 gScienceCounter = gScienceCounterInit;
@@ -1540,3 +1590,5 @@
         </div>
     </body>
 </html>
+Status API Training Shop Blog About
+© 2014 GitHub, Inc. Terms Privacy Security Contact
