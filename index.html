@@ -239,7 +239,7 @@
             color = 0,colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50, 0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF, 0xEFEFEF, 0x303030 ],
             ray, brush, objectHovered,
             isMouseDown = false, onMouseDownPosition,
-            radious = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
+            radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
             randWidth = 4, randCount = 12, randRatio = 0.5;
             init();
             render();
@@ -250,18 +250,30 @@
             function parseQueryArgs() {
                 var queryArgs = {};
                 var searchString = document.URL;
-                var i = searchString.indexOf("?");
-                if (i < 0) return queryArgs;
-                searchString = searchString.substr(i + 1);
-                i = searchString.indexOf("/");
-                if (i < 0) {
-                    i = searchString.indexOf("#");
+                
+                var index = searchString.indexOf("?");
+                
+                if (index < 0) return queryArgs;
+                // return substring after index + 1
+                // js method substr 0 index is before string begins
+                // so "index + 1" gets string after the special character
+                searchString = searchString.substr(index + 1);
+                
+                index = searchString.indexOf("/");
+                
+                // for indexOf(), if it does not find a match for parameter, it will return -1
+                if (index < 0) {
+                    //no match for "/"
+                    index = searchString.indexOf("#");
+                    if (index < 0) {
+                        // no match for "#"
+                        index = searchString.length;
+                    }
                 }
-                if (i < 0) {
-                    i = searchString.length;
-                }
-                searchString = searchString.substr(0, i);
+                
+                searchString = searchString.substr(0, index);
                 var queryArgList = searchString.split("&");
+                
                 for (var i = 0; i < queryArgList.length; i++) {
                     var query = queryArgList[i];
                     var keyval = query.split("=");
@@ -269,10 +281,13 @@
                     if (keyval.length <= 1) keyval.push(true);
                     queryArgs[key] = keyval[1];
                 }
+                  
                 return queryArgs;
             }
+            
+            
             function init() {
-                if (DEBUG) console.log("init start")
+                if (DEBUG) console.log("init start");
                 qargs = parseQueryArgs();
                 
                 //parses our url query (after "?") and turns them into arguments
@@ -284,7 +299,7 @@
                     var size = parseInt(qargs.size);
                     axisMax = parseInt(size / 2) - 1;
                     axisMin = axisMax - (size - 1);
-                    radious *= size/24.0;
+                    radius *= size/24.0;
                 }
                 if (qargs.trail) {
                     AVG_TRAIL = parseInt(qargs.trail);
@@ -317,9 +332,9 @@
                 
                 
                 if(DEBUG) console.log("camera:", camera);
-                camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
-                camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
-                camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+                camera.position.x = radius * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+                camera.position.y = radius * Math.sin( phi * Math.PI / 360 );
+                camera.position.z = radius * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
 
 
 //                camera.position.y = 200;
@@ -1027,13 +1042,13 @@
                         break;
                     case 73:                            // I
                         event.preventDefault();
-                        radious -= 50.0;
+                        radius -= 50.0;
                         adjustCamera();
                         render();
                         break;
                     case 79:                            // J
                         event.preventDefault();
-                        radious += 50.0;
+                        radius += 50.0;
                         adjustCamera();
                         render();
                         break;
@@ -1064,9 +1079,9 @@
                 }
             }
             function adjustCamera(){
-                camera.position.x = radious * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
-                camera.position.y = radious * Math.sin(phi * Math.PI / 360);
-                camera.position.z = radious * Math.cos(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
+                camera.position.x = radius * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
+                camera.position.y = radius * Math.sin(phi * Math.PI / 360);
+                camera.position.z = radius * Math.cos(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
                 if (DEBUG) console.log("camera:", camera.position)
                 camera.updateMatrix();
             }
@@ -1117,27 +1132,27 @@
                 event.preventDefault();
 				if (event.detail) {							/// ugh, dumb Firefox hack
 					if (event.detail > 0) {
-						radious += 120;
+						radius += 120;
 					}
 					else {
-						radious -= 120;
+						radius -= 120;
 					}
 				}
 				else {
                     if (event.wheelDeltayY) {
-                        radious -= event.wheelDeltaY;       /// chrome?
+                        radius -= event.wheelDeltaY;       /// chrome?
                     }
                     else {
                         if (event.wheelDelta) {             /// IE! & opera I hear
-                            radious -= event.wheelDelta;
+                            radius -= event.wheelDelta;
                         }
                         // else fuggedaboudit
                     }
 				}
-            	if (DEBUG) console.log("mw ev:", radious)
-                camera.position.x = radious * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
-                camera.position.y = radious * Math.sin( phi * Math.PI / 360 );
-                camera.position.z = radious * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+            	if (DEBUG) console.log("mw ev:", radius)
+                camera.position.x = radius * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+                camera.position.y = radius * Math.sin( phi * Math.PI / 360 );
+                camera.position.z = radius * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
                 camera.updateMatrix();
                 render();
             }
