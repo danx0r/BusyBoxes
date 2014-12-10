@@ -221,7 +221,7 @@
             var gInitialHash = "";
             var gInitialFrame;
             var encodeString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-";
-            var frame = 0;
+            var frame = 0; //
             var cellCount = 0;
             var mode = "mirror";
             var axisMin = -12;
@@ -541,13 +541,40 @@
                     if (direction == "reverse") {
                         frame--;
                     }
+
+
+                    ///////////////
                     if(DEBUG) console.log("frame:", frame)
+                    ///////////////
+                    
+                    
                     var cells = [];
+                    
+                    //what is "grid"
                     for(var key in grid) {
                         var xyz = eval('[' + key + ']')
                         cells.push([xyz, grid[key]]);
                     }
+                    
+                    
+                    
+                    // grid
+                    // |
+                    // v
+                    // key / xyz ()
+                    // |
+                    // v
+                    // cells[]
+                    // |
+                    // v
+                    // cell = cells[xyz, grid[key]]
+                    
+                    
+                    ///////////////
                     if(DEBUG) console.log("cells:", cells)
+                    ///////////////
+                    
+                    
                     var moves = []
                     
                     
@@ -555,7 +582,7 @@
                     //these are the only two axes we use
                     var x1, x2                                          // our two axes for today
                     
-                    //trueMode might be something to make modulus work with negative
+                    //trueMod seems to be something to make modulus work with negative
                     switch( trueMod(frame, 3) ) {                      // ach, Javascript you old goat
                         
                         //depending on odd/even number, makes boxes blue or red or whatever
@@ -565,7 +592,13 @@
                         case 1: x1=1; x2=2; break;
                         case 2: x1=2; x2=0; break;
                     }
+                    
+                    
+                    ///////////////
                     if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2])
+                    ///////////////
+                    
+                                        
                     for (var i in cells) {
                         var cell = cells[i];
                         if(DEBUG) console.log(cell[0], cell[1]);
@@ -580,7 +613,9 @@
                                 // AND the move isn't conflicted (swap rule below)
                                 //then push the move to the "moves" array
                                 if(!getGrid(mvto)) {
-                                    var mv = getMove(mvto, x1, x2);                             // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
+                                    // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
+                                    var mv = getMove(mvto, x1, x2);
+                                                                 
                                     //I think this is the SWAP rule
                                     //why does each condition sum to zero?
                                     //this is because the coordinates are negative... ???
@@ -596,6 +631,8 @@
                             }
                         }
                     }
+                    
+                    
                     if (AVG_TRAIL) {
                         avg = [0, 0, 0];
                         var len = 0;
