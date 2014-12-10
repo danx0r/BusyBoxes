@@ -213,7 +213,7 @@
             var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
             var cursor = [0, 0, 0];
             var gLastCursor = cursor;
-            var grid = {};
+            var visual_and_numerical_grid = {};
             var isRunning = false;
             var direction = "forward";
             var lasthash = "";
@@ -530,12 +530,12 @@
             
             
             //most important
-            
             function mainLoop(noRender) {
                 //these are updating those little numbers that are keeping tack of the generation, etc.
                 document.getElementById("generation").innerHTML = frame;
                 document.getElementById("showphase").innerHTML = (frame % 6 + 6) %6;
                 document.getElementById("direction").innerHTML = direction;
+                
                 
                 if (isRunning) {
                     if (direction == "reverse") {
@@ -551,9 +551,11 @@
                     var cells = [];
                     
                     //what is "grid"
-                    for(var key in grid) {
+                    for(var key in visual_and_numerical_grid) {
                         var xyz = eval('[' + key + ']')
-                        cells.push([xyz, grid[key]]);
+                        
+                        // this is how the cells array works--has a bunch of arrays with 2 objects [location, grid]
+                        cells.push([xyz, visual_and_numerical_grid[key]]);
                     }
                     
                     
@@ -588,9 +590,28 @@
                         //depending on odd/even number, makes boxes blue or red or whatever
                         //WE MUST CHANGE THIS FOR 3 STATES
                         //also make this more modular
+                        
+                        // these are the 3 different planes
                         case 0: x1=0; x2=1; break;
                         case 1: x1=1; x2=2; break;
                         case 2: x1=2; x2=0; break;
+                        
+                        
+                        // 2 states are on/off
+                        // 3 states are positive/negative/no box
+                        
+                        // how do the cells interact?
+                        // we come up with a way that the positive and negative cells work
+                        // e.g., one might be clockwise and other counterclockwise
+                        
+                        // positive and negative cells do the same thing that the cells in the 2 state would do
+                        
+                        // it will still conserve those states
+                        
+                        
+                        // how would you set a cell to an on state
+                        //
+                        
                     }
                     
                     
@@ -602,6 +623,8 @@
                     for (var i in cells) {
                         var cell = cells[i];
                         if(DEBUG) console.log(cell[0], cell[1]);
+                        
+                        //set the location of the cell in the grid
                         var xyz = cell[0];
                         
                         if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
@@ -636,7 +659,7 @@
                     if (AVG_TRAIL) {
                         avg = [0, 0, 0];
                         var len = 0;
-                        for (var key in grid) {
+                        for (var key in visual_and_numerical_grid) {
                             len++;
                             var cell;
                             eval("cell=[" + key + "]");
@@ -692,6 +715,11 @@
                         //moveCell(oldxyz, mesh, newxyz)
                         moveCell(args[0], args[1], args[2]);
                     }
+                    
+                    
+                    
+                    /// this is where the cells are rendered!!!
+                    
                     if (!noRender) {
                         render();
                     }
@@ -712,6 +740,10 @@
                 // --wrap around axes, not wrap around, no boundaries, etc.
               // e.g. experiment like a gas--certain number
               // of gliders in space, you might want a closed space
+              
+              
+            // checks whether the cell at xyz needs to move
+            // thinking of it as those cells move you            
             function getMove(xyz, x1, x2) {
                 if(x1 == null) x1 = 0;
                 if(x2 == null) x2 = 2;
@@ -811,9 +843,11 @@
                 document.getElementById("cursorpos").innerHTML = xyz[0] + "," + xyz[1] + "," + xyz[2]
             }
             
-            //this is the visual grid
+            // this is the visual grid
+            // grid actually has visual things
+            // we could get rid of it 
             function putGrid(obj, xyz) {
-                grid[xyz] = obj;
+                visual_and_numerical_grid[xyz] = obj;
             }
             
             
@@ -832,10 +866,10 @@
                         }
                     }
                 }
-                return grid[xyz]
+                return visual_and_numerical_grid[xyz]
             }
             function delGrid(xyz) {
-                delete grid[xyz];
+                delete visual_and_numerical_grid[xyz];
             }
             
             function toggleRunning(){
@@ -1014,6 +1048,9 @@
                         }
                         else {
                             var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
+                            
+                            //add third parameter--negative
+                            //contstruct object: mesh(THREE.js), state()
                             putGrid(voxel, cursor);
                             setObjPosition(voxel, cursor);
                             voxel.overdraw = true;
@@ -1187,10 +1224,14 @@
                                 cur[i] += delta;
                             }
                             var parity = (cur[0] + cur[1] + cur[2]) & 1;
+                            
+                            //when we instantiate this voxel, we have to give it a state (+ or -)
+                            //on the other side, when someone gets it out of a dictionary, ask if it is + or -
+                            // package the voxel in a dictionary object with an int                             
                             var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
-//                            voxel.position.x = cur[0] * 50 + 25;
-  //                          voxel.position.y = cur[1] * 50 + 25;
-    //                        voxel.position.z = cur[2] * 50 + 25;
+                            //voxel.position.x = cur[0] * 50 + 25;
+                            //voxel.position.y = cur[1] * 50 + 25;
+                            //voxel.position.z = cur[2] * 50 + 25;
                             setObjPosition(voxel, cur);
                             voxel.overdraw = true;
                             scene.addObject(voxel);
@@ -1273,7 +1314,7 @@
             // Dan is using a hash but it is a quick and dirty solution. Might be something better
             function updateHash(noLink) {
                 var key, keys = [];
-                for (key in grid) {
+                for (key in visual_and_numerical_grid) {
                     keys.push(key);
                 }
                 keys.sort();
@@ -1381,7 +1422,7 @@
             }
             function clearScreen() {
                 isRunning = false;
-                grid = {};
+                visual_and_numerical_grid = {};
                 var i = 0;
                 while ( i < scene.objects.length ) {
                     object = scene.objects[ i ];
@@ -1438,7 +1479,7 @@
                     for (i = 0; i < count; i++) {
                         var phase = -1;
                         var targPhase = i < (count * ratio - 0.5)?0:1;
-                        while ((cursor in grid) || (phase != targPhase)) {
+                        while ((cursor in visual_and_numerical_grid) || (phase != targPhase)) {
                             for (var axis = 0; axis < 3; axis++) {
                                 cursor[axis] = Math.floor(Math.random() * (axMax[axis] - axMin[axis] + 1) + axMin[axis]);
                             }
