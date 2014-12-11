@@ -205,8 +205,8 @@
             var DEBUG = false;
             var CELL_TRAIL = false;
             var AVG_TRAIL = false;
-            var trail = [];
-            var trails = [];
+            var avg_trail_a = [];
+            var cell_trail_a = [];
             var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
             var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
             var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -290,7 +290,7 @@
                 if (DEBUG) console.log("init start");
                 qargs = parseQueryArgs();
                 
-                //parses our url query (after "?") and turns them into arguments
+                //parses out url query (after "?") and turns them into arguments
                 
                 if (qargs.dir) {
                     direction = qargs.dir;
@@ -301,12 +301,12 @@
                     axisMin = axisMax - (size - 1);
                     radius *= size/24.0;
                 }
-                if (qargs.trail) {
-                    AVG_TRAIL = parseInt(qargs.trail);
+                if (qargs.avg_trail_a) {
+                    AVG_TRAIL = parseInt(qargs.avg_trail_a);
                 }
-                if (qargs.trails) {
+                if (qargs.cell_trail_a) {
                     // that's the green trail thing they used to show path
-                    CELL_TRAIL = parseInt(qargs.trails);
+                    CELL_TRAIL = parseInt(qargs.cell_trail_a);
                 }
                 
                 if (qargs.mode) {
@@ -686,8 +686,8 @@
                             avg[j] /= len;
                         }
                         var make = true;
-                        if (trail.length) {
-                            var obj = trail[trail.length - 1];
+                        if (avg_trail_a.length) {
+                            var obj = avg_trail_a[avg_trail_a.length - 1];
                             var x = avg[0] * 50 + 25;
                             var y = avg[1] * 50 + 25;
                             var z = avg[2] * -50 - 25;
@@ -701,10 +701,10 @@
                             setObjPosition(voxel, avg);
                             voxel.overdraw = true;
                             scene.addObject(voxel);
-                            trail.push(voxel);
-                            if (trail.length > AVG_TRAIL) {
-                                scene.removeObject(trail[0]);
-                                trail = trail.splice(1);
+                            avg_trail_a.push(voxel);
+                            if (avg_trail_a.length > AVG_TRAIL) {
+                                scene.removeObject(avg_trail_a[0]);
+                                avg_trail_a = avg_trail_a.splice(1);
                             }
                         }
                         //console.log("trail length:", trail.length)
@@ -824,10 +824,10 @@
                     setObjPosition(voxel, oldxyz);
                     voxel.overdraw = true;
                     scene.addObject(voxel);
-                    trails.push(voxel);
-                    if (trails.length > CELL_TRAIL) {
-                        scene.removeObject(trails[0]);
-                        trails = trails.splice(1);
+                    cell_trail_a.push(voxel);
+                    if (cell_trail_a.length > CELL_TRAIL) {
+                        scene.removeObject(cell_trail_a[0]);
+                        cell_trail_a = cell_trail_a.splice(1);
                     }
                     //console.log("trails:", trails.length)
                 }
@@ -1448,8 +1448,8 @@
                     i ++;
                 }
                 frame = 0;
-                trail = [];
-                trails = [];
+                avg_trail_a = [];
+                cell_trail_a = [];
                 lasthash = "";
                 if (!qargs.science) direction = "forward";
                 document.getElementById("direction").innerHTML = direction;
@@ -1566,13 +1566,13 @@
 //                    alert("Trails disabled");
                     moodal('trails_disabled', function () {
                     })
-                    var t = trails.concat(trail);
-                    for (var i=0; i<trail.length + trails.length; i++) {
+                    var t = cell_trail_a.concat(avg_trail_a);
+                    for (var i=0; i<avg_trail_a.length + cell_trail_a.length; i++) {
                         var obj = t[i];
                         scene.removeObject(obj);
                     }
-                    trail = [];
-                    trails = [];
+                    avg_trail_a = [];
+                    cell_trail_a = [];
                 }
                 else {
                     moodal("trail_type", function (result) {
