@@ -1074,6 +1074,7 @@
                             voxel.overdraw = true;
                             scene.addObject( voxel );
                         }
+                        
                         updateHash();
                         gInitialHash = lasthash;
                         gInitialFrame = frame;
@@ -1208,9 +1209,9 @@
                         if ( code.charAt( 4 ) == "1" ) current.c += data[ i ++ ] - 32;
                         if ( code.charAt( 0 ) == "1" ) {
                             var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ current.c ] ) );
-//                            voxel.position.x = current.x * 50 + 25;
-  //                          voxel.position.y = current.y * 50 + 25;
-    //                        voxel.position.z = current.z * 50 + 25;
+                            //voxel.position.x = current.x * 50 + 25;
+                            //voxel.position.y = current.y * 50 + 25;
+                            //voxel.position.z = current.z * 50 + 25;
                             setObjPosition(voxel, [current.x, current.y, current.z]);
                             voxel.overdraw = true;
                             scene.addObject( voxel );
@@ -1270,9 +1271,9 @@
                                 }
                                 var parity = (cur[0] + cur[1] + cur[2]) & 1;
                                 var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
-     //                           voxel.position.x = cur[0] * 50 + 25;
-       //                         voxel.position.y = cur[1] * 50 + 25;
-         //                       voxel.position.z = cur[2] * 50 + 25;
+                                //voxel.position.x = cur[0] * 50 + 25;
+                                //voxel.position.y = cur[1] * 50 + 25;
+                                //voxel.position.z = cur[2] * 50 + 25;
                                 setObjPosition(voxel, cur);
                                 voxel.overdraw = true;
                                 scene.addObject(voxel);
