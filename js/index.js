@@ -557,7 +557,11 @@ function mainLoop(noRender) {
   
   
 // checks whether the cell at xyz needs to move
-// thinking of it as those cells move you            
+// thinking of it as those cells move you   
+
+//if the condition holds, you return true, if the end of the function gets to the end then you return false
+//accepts location and the two planes that we are operating in
+//whenever you have a variable that only transitions in one direction, then you can return true if it switches, or go through and then return false         
 function getMove(xyz, x1, x2) {
     if(x1 == null) x1 = 0;
     if(x2 == null) x2 = 2;
