@@ -695,7 +695,9 @@ function getGrid(xyz) {
     return visual_and_numerical_grid[xyz]
 }
 function delGrid(xyz) {
+    console.log("delete: ", visual_and_numerical_grid[xyz]);
     delete visual_and_numerical_grid[xyz];
+    console.log("deleted: ", visual_and_numerical_grid[xyz]);
 }
 
 function toggleRunning(){
@@ -876,7 +878,7 @@ function onDocumentKeyDown( event ) {
             var obj = getGrid(cursor);
             console.log("OBJ: "+ obj);
             if(obj){
-              console.log("State: "+obj.state)
+              console.log("State!: "+obj.state)
             }
             
             if (!obj){
@@ -889,18 +891,18 @@ function onDocumentKeyDown( event ) {
               cell_obj.threejs.overdraw = true;
               scene.addObject( cell_obj.threejs );
               
-              console.log(cell_obj)
-              console.log(visual_and_numerical_grid)
+              console.log("cell_obj: ", cell_obj)
+              console.log("grid: ", visual_and_numerical_grid)
             }
-            else if (obj.state == -1) {
-                scene.removeObject(obj);
+            else if (obj.state === -1) {
+                scene.removeObject(obj.threejs);
                 delGrid(cursor);
             }
-            else if (obj.state == 1) {
+            else if (obj.state === 1) {
                 // alert("yes I'm here");
                 var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( minusColors[ minusColor ] ) );
                 var cell_obj = new CellObj(threejs, -1 )
-                scene.removeObject(obj);
+                scene.removeObject(obj.threejs);
                 delGrid(cursor);
                 //add third parameter--negative
                 //contstruct object: mesh(THREE.js), state()
