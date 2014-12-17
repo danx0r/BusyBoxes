@@ -34,6 +34,7 @@ var container, interval,
 camera, scene, renderer,
 projector, plane, cube, linesMaterial,
 color = 0,colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50, 0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF, 0xEFEFEF, 0x303030 ],
+minusColor = 0, minusColors = [0x4e9258,0xffff00 ],
 ray, brush, objectHovered,
 isMouseDown = false, onMouseDownPosition,
 radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
@@ -373,6 +374,7 @@ function mainLoop(noRender) {
             
             // this is how the cells array works--has a bunch of arrays with 2 objects [location, grid]
             cells.push([xyz, visual_and_numerical_grid[key]]);
+            console.log(visual_and_numerical_grid[key]);
         }
         
         
@@ -433,20 +435,22 @@ function mainLoop(noRender) {
         
         
         ///////////////
-        if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2])
+        if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
+        console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
         ///////////////
         
                             
         for (var i in cells) {
             var cell = cells[i];
             if(DEBUG) console.log(cell[0], cell[1]);
-            
+            //console.log("cell: "+cell[0]+"---"+cell[1]);
             //set the location of the cell in the grid
             var xyz = cell[0];
             
-            if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
+            if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {  // only operate on cells appropriate for this phase
                 if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
                 var move = getMove(xyz, x1, x2);
+                //alert("xyz: "+xyz + "...." + "move[] "+move);
                 if (move) {
                     var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
                     //if there isn't a cell in the move to location
@@ -531,6 +535,7 @@ function mainLoop(noRender) {
             
             //moveCell(oldxyz, mesh, newxyz)
             moveCell(args[0], args[1], args[2]);
+            console.log("args: "+args[0]+"---"+args[1]+"---"+args[2]);
         }
         
         
@@ -668,7 +673,9 @@ function setBrushPosition(xyz) {
 function putGrid(obj, xyz) {
     visual_and_numerical_grid[xyz] = obj;
 }
-
+function putGrid2(obj, xyz){
+  visual_and_numerical_grid[xyz] = [obj.threejs, obj.state];
+}
 
 function trueMod(v, base) {
     if (v < 0) {
@@ -721,6 +728,12 @@ function reverseDirection(){
     updateHash(true);
     document.getElementById("direction").innerHTML = direction;
 }
+
+var CellObj = function (threejs, state){
+  this.threejs = threejs;
+  this.state = state;
+};
+
 function onDocumentKeyDown( event ) {
     if (gMoodalInEffect) {
         if (event.keyCode == 27) {
@@ -861,19 +874,40 @@ function onDocumentKeyDown( event ) {
             event.preventDefault();
             if (isRunning) break;
             var obj = getGrid(cursor);
-            if (obj) {
+            console.log("OBJ: "+ obj);
+            if(obj){
+              console.log("State: "+obj.state)
+            }
+            
+            if (!obj){
+              var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
+              var cell_obj = new CellObj(threejs, 1 );
+              //add third parameter--negative
+              //contstruct object: mesh(THREE.js), state()
+              putGrid(cell_obj, cursor);
+              setObjPosition(cell_obj.threejs, cursor);
+              cell_obj.threejs.overdraw = true;
+              scene.addObject( cell_obj.threejs );
+              
+              console.log(cell_obj)
+              console.log(visual_and_numerical_grid)
+            }
+            else if (obj.state == -1) {
                 scene.removeObject(obj);
                 delGrid(cursor);
             }
-            else {
-                var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
-                
+            else if (obj.state == 1) {
+                // alert("yes I'm here");
+                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( minusColors[ minusColor ] ) );
+                var cell_obj = new CellObj(threejs, -1 )
+                scene.removeObject(obj);
+                delGrid(cursor);
                 //add third parameter--negative
                 //contstruct object: mesh(THREE.js), state()
-                putGrid(voxel, cursor);
-                setObjPosition(voxel, cursor);
-                voxel.overdraw = true;
-                scene.addObject( voxel );
+                putGrid(cell_obj, cursor);
+                setObjPosition(cell_obj.threejs, cursor);
+                cell_obj.threejs.overdraw = true;
+                scene.addObject( cell_obj.threejs );
             }
             
             updateHash();
@@ -883,6 +917,9 @@ function onDocumentKeyDown( event ) {
             break;
     }
 }
+
+
+
 function adjustCamera(){
     camera.position.x = radius * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
     camera.position.y = radius * Math.sin(phi * Math.PI / 360);
@@ -1482,3 +1519,14 @@ function scienceTestLoop(){
     }
 }
 //]]>
+
+
+
+
+
+
+
+
+
+
+
