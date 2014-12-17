@@ -373,7 +373,13 @@ function mainLoop(noRender) {
             var xyz = eval('[' + key + ']')
             
             // this is how the cells array works--has a bunch of arrays with 2 objects [location, grid]
-            cells.push([xyz, visual_and_numerical_grid[key]]);
+            if (visual_and_numerical_grid[key].state){
+              cells.push([xyz, visual_and_numerical_grid[key].threejs]);
+            }
+            else{
+              cells.push([xyz, visual_and_numerical_grid[key]]);
+            }
+            
             console.log(visual_and_numerical_grid[key]);
         }
         
