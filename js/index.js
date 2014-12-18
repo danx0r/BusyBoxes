@@ -46,7 +46,7 @@ var CellObj = function (threejs, state, xyz){
   this.threejs = threejs;
   this.state = state;
   this.xyz = xyz;
-};
+}
 
 //breaks up the hash string and returns different elements of the query
 
@@ -1060,6 +1060,7 @@ function buildFromHash(hash) {
         hash = hash.substr( 0, hash.length - 1 );
     }
     if ( version == "A" ) {
+        console.log("glider: Version A");
         var current = { x: 0, y: 0, z: 0, c: 0 }
         var data = decode( hash );
         var i = 0, l = data.length;
@@ -1092,6 +1093,7 @@ function buildFromHash(hash) {
         }
     } else {
         if (version == "X") {
+            console.log("glider: Version X");
             var data = hash;
             var cur = [0, 0, 0];
             var x = 0;
@@ -1131,6 +1133,7 @@ function buildFromHash(hash) {
         }
         else {
             if (version == "Y") {
+                console.log("glider: Version Y");
                 var data = hash;
                 data = encdec_decode(data);
                 var cur = [0, 0, 0];
@@ -1156,7 +1159,7 @@ function buildFromHash(hash) {
                     //voxel.position.x = cur[0] * 50 + 25;
                     //voxel.position.y = cur[1] * 50 + 25;
                     //voxel.position.z = cur[2] * 50 + 25;
-                    console.log("bloody cell: ", cell_obj)
+                    console.log("bloody cell: ", cell_obj);
                     var overdraw_bool = true;
                     putTheCellInTheGridAndRedraw(cell_obj, cur, overdraw_bool);
                     
@@ -1185,10 +1188,11 @@ function buildFromCoords(coords){
 }
 
 function putTheCellInTheGridAndRedraw(cell_obj, cursor, overdraw_bool){
-  setObjPosition(cell_obj, cursor);
-  voxel.overdraw = true;
+  setObjPosition(cell_obj.threejs, cursor);
+  cell_obj.threejs.overdraw = true;
   scene.addObject(cell_obj.threejs);
-  putGrid(cell_obj.threejs, cursor);
+  putGrid(cell_obj, cursor);
+
 }
 
 //creates a url that you would go to that uses the hash as a query
@@ -1393,11 +1397,12 @@ function randomCells(){
                 phase = (cursor[0] + cursor[1] + cursor[2]) & 1;
             }
             setBrushPosition(cursor);
-            var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[color]));
-            putGrid(voxel, cursor);
-            setObjPosition(voxel, cursor);
-            voxel.overdraw = true;
-            scene.addObject(voxel);
+            
+            var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[color] ) );
+            var cell_obj = new CellObj(threejs, 1 );
+            var overdraw_bool = true;
+            putTheCellInTheGridAndRedraw(cell_obj, cursor, overdraw_bool);
+            
         }
         
         updateHash();
