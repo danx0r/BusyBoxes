@@ -373,12 +373,15 @@ function mainLoop(noRender) {
             var xyz = eval('[' + key + ']')
             
             // this is how the cells array works--has a bunch of arrays with 2 objects [location, grid]
-            if (visual_and_numerical_grid[key].state){
+            if (visual_and_numerical_grid[key].state !== "undefined"){
               cells.push([xyz, visual_and_numerical_grid[key].threejs]);
             }
             else{
+              // visual_and_numerical_grid[key] == the mesh!
               cells.push([xyz, visual_and_numerical_grid[key]]);
             }
+            
+            cells.push([xyz, CellObj()])
             
             console.log(visual_and_numerical_grid[key]);
         }
@@ -475,6 +478,8 @@ function mainLoop(noRender) {
                         if (mv && mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
                             if(DEBUG) console.log("  mvto:", mvto);
                             
+                            
+                            //need to put a CellObj in here in stead of cell[1]                            
                             moves.push([xyz, cell[1], mvto]);
                         }
                     }
@@ -628,7 +633,7 @@ function v3eq(v1, v2){
 }
 
 
-function moveCell(oldxyz, mesh, newxyz) {
+function moveCell(oldxyz, cell_obj, newxyz) {
   
   
     if (CELL_TRAIL) {
@@ -648,9 +653,9 @@ function moveCell(oldxyz, mesh, newxyz) {
     }
     
     //if there are no cell trails (cubettes) then you just set obj positoin to newxyz
-    setObjPosition(mesh, newxyz);
+    setObjPosition(cell_obj.threejs, newxyz);
     delGrid(oldxyz);
-    putGrid(mesh, newxyz);
+    putGrid(cell_obj, newxyz);
 }
 
 //conceptual representation of Grid is an object with a bunch of coordinates 
@@ -882,9 +887,9 @@ function onDocumentKeyDown( event ) {
             event.preventDefault();
             if (isRunning) break;
             var obj = getGrid(cursor);
-            console.log("OBJ: "+ obj);
+            console.log("OBJ: ", obj);
             if(obj){
-              console.log("State!: "+obj.state)
+              console.log("State!: ", obj.state)
             }
             
             if (!obj){
@@ -897,8 +902,8 @@ function onDocumentKeyDown( event ) {
               cell_obj.threejs.overdraw = true;
               scene.addObject( cell_obj.threejs );
               
-              console.log("cell_obj: ", cell_obj)
-              console.log("grid: ", visual_and_numerical_grid)
+              //console.log("cell_obj: ", cell_obj)
+              //console.log("grid: ", visual_and_numerical_grid)
             }
             else if (obj.state === -1) {
                 scene.removeObject(obj.threejs);
@@ -916,6 +921,10 @@ function onDocumentKeyDown( event ) {
                 setObjPosition(cell_obj.threejs, cursor);
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
+            }
+            else{
+              scene.removeObject(obj.threejs);
+              delGrid(cursor);
             }
             
             updateHash();
