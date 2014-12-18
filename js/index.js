@@ -907,6 +907,12 @@ function onDocumentKeyDown( event ) {
             }
             else if (obj.state === 1) {
                 // alert("yes I'm here");
+                if((cursor[0] + cursor[1] + cursor[2]) % 2 == 0){
+                  minusColor = 0
+                }
+                else{
+                  minusColor = 1
+                }
                 var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( minusColors[ minusColor ] ) );
                 var cell_obj = new CellObj(threejs, -1 )
                 scene.removeObject(obj.threejs);
