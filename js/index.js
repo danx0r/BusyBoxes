@@ -373,31 +373,19 @@ function mainLoop(noRender) {
             var xyz = eval('[' + key + ']')
             
             // this is how the cells array works--has a bunch of arrays with 2 objects [location, grid]
-            if (visual_and_numerical_grid[key].state !== "undefined"){
-              cells.push([xyz, visual_and_numerical_grid[key].threejs]);
-            }
-            else{
-              // visual_and_numerical_grid[key] == the mesh!
-              cells.push([xyz, visual_and_numerical_grid[key]]);
-            }
+            // if (visual_and_numerical_grid[key].state !== "undefined"){
+            //   cells.push([xyz, visual_and_numerical_grid[key].threejs]);
+            // }
+            // else{
+            //   // visual_and_numerical_grid[key] == the mesh!
+            //   cells.push([xyz, visual_and_numerical_grid[key]]);
+            // }
             
-            cells.push([xyz, CellObj()])
+            cells.push([xyz, visual_and_numerical_grid[key]]);
             
             console.log(visual_and_numerical_grid[key]);
         }
-        
-        
-        
-        // grid
-        // |
-        // v
-        // key / xyz ()
-        // |
-        // v
-        // cells[]
-        // |
-        // v
-        // cell = cells[xyz, grid[key]]
+
         
         
         ///////////////
@@ -450,8 +438,12 @@ function mainLoop(noRender) {
         
                             
         for (var i in cells) {
+            //cell[0] == xyz
+            //cell[1] == CellObj
             var cell = cells[i];
+            
             if(DEBUG) console.log(cell[0], cell[1]);
+            
             //console.log("cell: "+cell[0]+"---"+cell[1]);
             //set the location of the cell in the grid
             var xyz = cell[0];
@@ -542,9 +534,12 @@ function mainLoop(noRender) {
             }
         }
         for (i in moves) {
+            //moves[0] == xyz
+            //moves[1] == CellObj
+            //moves[2] == mvto
             var args = moves[i];
             
-            //moveCell(oldxyz, mesh, newxyz)
+            //moveCell(oldxyz, cell_obj, newxyz)
             moveCell(args[0], args[1], args[2]);
             console.log("args: "+args[0]+"---"+args[1]+"---"+args[2]);
         }
@@ -742,9 +737,10 @@ function reverseDirection(){
     document.getElementById("direction").innerHTML = direction;
 }
 
-var CellObj = function (threejs, state){
+var CellObj = function (threejs, state, xyz){
   this.threejs = threejs;
   this.state = state;
+  this.xyz = xyz;
 };
 
 function onDocumentKeyDown( event ) {
