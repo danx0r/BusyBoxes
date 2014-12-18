@@ -42,6 +42,11 @@ randWidth = 4, randCount = 12, randRatio = 0.5;
 init();
 render();
 
+var CellObj = function (threejs, state, xyz){
+  this.threejs = threejs;
+  this.state = state;
+  this.xyz = xyz;
+};
 
 //breaks up the hash string and returns different elements of the query
 
@@ -737,11 +742,7 @@ function reverseDirection(){
     document.getElementById("direction").innerHTML = direction;
 }
 
-var CellObj = function (threejs, state, xyz){
-  this.threejs = threejs;
-  this.state = state;
-  this.xyz = xyz;
-};
+
 
 function onDocumentKeyDown( event ) {
     if (gMoodalInEffect) {
@@ -923,6 +924,10 @@ function onDocumentKeyDown( event ) {
                 setObjPosition(cell_obj.threejs, cursor);
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
+                
+                
+
+                
             }
             else{
               scene.removeObject(obj.threejs);
@@ -1065,14 +1070,24 @@ function buildFromHash(hash) {
             if ( code.charAt( 3 ) == "1" ) current.z += data[ i ++ ] - 32;
             if ( code.charAt( 4 ) == "1" ) current.c += data[ i ++ ] - 32;
             if ( code.charAt( 0 ) == "1" ) {
-                var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ current.c ] ) );
-                //voxel.position.x = current.x * 50 + 25;
-                //voxel.position.y = current.y * 50 + 25;
-                //voxel.position.z = current.z * 50 + 25;
-                setObjPosition(voxel, [current.x, current.y, current.z]);
-                voxel.overdraw = true;
-                scene.addObject( voxel );
-                putGrid(voxel, [current.x, current.y, current.z])
+                // var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ current.c ] ) );
+                //   //voxel.position.x = current.x * 50 + 25;
+                //   //voxel.position.y = current.y * 50 + 25;
+                //   //voxel.position.z = current.z * 50 + 25;
+                //   setObjPosition(voxel, [current.x, current.y, current.z]);
+                //   voxel.overdraw = true;
+                //   scene.addObject( voxel );
+                //   putGrid(voxel, [current.x, current.y, current.z])
+                //   
+                var special_xyz = [current.x, current.y, current.z];
+                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                var cell_obj = new CellObj(threejs, 1 );
+                //voxel.position.x = cur[0] * 50 + 25;
+                //voxel.position.y = cur[1] * 50 + 25;
+                //voxel.position.z = cur[2] * 50 + 25;
+                var overdraw_bool = true;
+                putTheCellInTheGridAndRedraw(cell_obj,special_xyz , overdraw_bool);
+                
             }
         }
     } else {
@@ -1104,14 +1119,14 @@ function buildFromHash(hash) {
                 //when we instantiate this voxel, we have to give it a state (+ or -)
                 //on the other side, when someone gets it out of a dictionary, ask if it is + or -
                 // package the voxel in a dictionary object with an int                             
-                var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
+                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                var cell_obj = new CellObj(threejs, 1 );
                 //voxel.position.x = cur[0] * 50 + 25;
                 //voxel.position.y = cur[1] * 50 + 25;
                 //voxel.position.z = cur[2] * 50 + 25;
-                setObjPosition(voxel, cur);
-                voxel.overdraw = true;
-                scene.addObject(voxel);
-                putGrid(voxel, cur);
+                var overdraw_bool = true;
+                putTheCellInTheGridAndRedraw(cell_obj, cur, overdraw_bool);
+              
             }
         }
         else {
@@ -1127,14 +1142,24 @@ function buildFromHash(hash) {
                         cur[i] += delta;
                     }
                     var parity = (cur[0] + cur[1] + cur[2]) & 1;
-                    var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
+                    // var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
+                    // //voxel.position.x = cur[0] * 50 + 25;
+                    // //voxel.position.y = cur[1] * 50 + 25;
+                    // //voxel.position.z = cur[2] * 50 + 25;
+                    // setObjPosition(voxel, cur);
+                    // voxel.overdraw = true;
+                    // scene.addObject(voxel);
+                    // putGrid(voxel, cur);
+                                       
+                    var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                    var cell_obj = new CellObj(threejs, 1 );
                     //voxel.position.x = cur[0] * 50 + 25;
                     //voxel.position.y = cur[1] * 50 + 25;
                     //voxel.position.z = cur[2] * 50 + 25;
-                    setObjPosition(voxel, cur);
-                    voxel.overdraw = true;
-                    scene.addObject(voxel);
-                    putGrid(voxel, cur);
+                    console.log("bloody cell: ", cell_obj)
+                    var overdraw_bool = true;
+                    putTheCellInTheGridAndRedraw(cell_obj, cur, overdraw_bool);
+                    
                 }
             }
             else {
@@ -1159,6 +1184,12 @@ function buildFromCoords(coords){
     updateHash();
 }
 
+function putTheCellInTheGridAndRedraw(cell_obj, cursor, overdraw_bool){
+  setObjPosition(cell_obj, cursor);
+  voxel.overdraw = true;
+  scene.addObject(cell_obj.threejs);
+  putGrid(cell_obj.threejs, cursor);
+}
 
 //creates a url that you would go to that uses the hash as a query
 function hash2url(hash){
