@@ -42,7 +42,7 @@ randWidth = 4, randCount = 12, randRatio = 0.5;
 init();
 render();
 
-var CellObj = function (threejs, state, xyz){
+function CellObj(threejs, state, xyz){
   this.threejs = threejs;
   this.state = state;
   this.xyz = xyz;
