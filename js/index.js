@@ -4,8 +4,12 @@ var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
 var cell_trail_a = [];
+
+//adding these to a cell's coords gives you its knight-move bretheren
 var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
 var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
+
+//adding these to 
 var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
 var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
 var cursor = [0, 0, 0];
@@ -592,7 +596,7 @@ function getMove(xyz, x1, x2) {
         d[x1] = offs1[i];
         d[x2] = offs2[i];
         
-        
+        //if ther is a cell a knight's move away from cell we are getting move for, then return move
         if (getGrid([xyz[0] + d[0], xyz[1] + d[1], xyz[2] + d[2]])) {
             var mv = [0, 0, 0];
             mv[x1] = move1[i];
