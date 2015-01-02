@@ -1,0 +1,28 @@
+body {
+    font-family: Monospace;
+    font-size: 12px;
+    background-color: #f0f0f0;
+    margin: 0px;
+    overflow-x: hidden;
+}
+.bannerButtons {
+    opacity: 0.7;
+}
+.bannerButtons:hover {
+    opacity: 1.0;
+    border-color:black;
+}
+.goHash {
+    font-family:monospace;
+    font-size:large;
+    #color:blue;
+    #background:none;
+    border:none;
+    padding:0;
+    #border-bottom:1px solid;
+    background-color:#ddd;
+    opacity:0.7;
+}
+.goHash:hover {
+    background-color:white;
+}
