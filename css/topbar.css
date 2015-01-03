@@ -1,0 +1,46 @@
+.topbar{
+	/*background-color: red;
+	border: .5px solid #000000;
+	height: 30px;
+	border-radius: 30px;*/
+}
+
+#topbarcontent{
+
+	margin-bottom: 10px;
+	margin-left: 450px;
+
+}
+
+.FastSlow{
+
+
+
+font:normal 13px Century Gothic, sans-serif;
+font-style:normal;
+color:#ffffff;
+background:#000000;
+border:2px solid #ffffff;
+text-shadow:0px -1px 1px #084d0c;
+box-shadow:0px 0px 0px #252b01;
+-moz-box-shadow:0px 0px 0px #252b01;
+-webkit-box-shadow:0px 0px 0px #252b01;
+border-radius:20px 20px 20px 0px;
+-moz-border-radius:20px 20px 20px 0px;
+-webkit-border-radius:20px 20px 20px 0px;
+width:157px;
+padding:12px 41px;
+cursor:pointer;
+margin:0 auto;
+
+}
+
+
+.FastSlow:active{
+cursor:pointer;
+position:relative;
+top:2px;
+}
+
+
+
