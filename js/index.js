@@ -5,6 +5,7 @@ var AVG_TRAIL = false;
 var avg_trail_a = [];
 var cell_trail_a = [];
 
+
 //adding these to a cell's coords gives you its knight-move bretheren
 var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
 var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
@@ -45,6 +46,7 @@ var rules = [];
 //   this.y = 0;
 //   this.z = z;
 // }
+
 
 
 
@@ -620,6 +622,7 @@ function mainLoop(noRender) {
 //accepts location and the two planes that we are operating in
 //whenever you have a variable that only transitions in one direction, then you can return true if it switches, or go through and then return false         
 function getMove(xyz, x1, x2) {
+
     if(x1 === null) x1 = 0;
     if(x2 === null) x2 = 2;
     var move = null;
@@ -667,6 +670,7 @@ function getMove(xyz, x1, x2) {
             // mv[x1] = move1[i];
             // mv[x2] = move2[i];
 
+
             if (DEBUG) console.log("  mv:", mv);
             
             if (move == null) {
@@ -694,7 +698,9 @@ function getMove(xyz, x1, x2) {
             }
         }
     }
+
     console.log("THE DAMN MOVE: ", move);
+
     return move
 }
 

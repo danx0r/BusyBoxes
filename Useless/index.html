@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <!--
+        The MIT License
+        
+        Copyright (c) 2010-2012 danx0r (Daniel B. Miller), Authors of three.js. 
+        All rights reserved.
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
+        -->
+        <title>BUSY BOXES</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="css/application.css"></link>
+    </head>
+    <body style="overflow-y:hidden">
+        <div id="moodal_background" style="position:absolute;width:100%;height:100%;background-color:black;z-index:100;opacity:0.2;display:none">
+        </div>
+        <div id="trail_type" style="display:none">
+            Trail length:<input class="moodal_default" id="trail_length" tabindex=1 type="text" value="100"></input><br/>
+            <p></p>Select trail type:</p>
+            <button tabindex=2 onclick="moodal_choice('cell')">Trails for every cell</button>
+            <button tabindex=3 onclick="moodal_choice('average')">Trail for average</button>
+        </div>
+        <div id="trails_disabled" style="display:none">
+            <p></p>Trails are now disabled</p>
+                <button onclick="moodal_choice('OK')" style="font-size:large;padding:4px 15px 4x 15px">OK</button>
+        </div>
+        <div id="random_prompt" style="display:none">
+            Volume width:<input id="random_prompt_width" class="moodal_default" tabindex=2 type="text" value="4"></input><br/>
+            Cell count:<input id="random_prompt_count"  tabindex=3 type="text" value="16"></input><br/>
+            Red/Blue ratio:<input id="random_prompt_ratio"  tabindex=4 type="text" value="0.5"></input><br/>
+            <br/>
+            <button  tabindex=5 onclick="moodal_choice('CANCEL')">CANCEL</button>
+            <button tabindex=6 onclick="moodal_choice('OK')" style="border:ridge;border-color:black;border-style:double;">OK</button>
+        </div>
+        <div id="leftLinks" style="position:absolute;font-size:large">
+            <div style="opacity:0.7">
+                Generation:
+                <span id="generation"></span>
+                <br/>
+                phase:
+                <span id="showphase"></span>
+                <br/>
+                Direction:
+                <span id="direction"></span>
+                <br/>
+                Speed:
+                <span id="showspeed">fast</span>
+                <br/>
+                Cells:
+                <span id="cellcount"></span>
+                <br/>
+                Cursor:
+                <span id="cursorpos"></span>
+                <br/>
+                Hash:
+                <span id="showhash" style="font-size:smaller"></span>
+                <br/>
+                <span id="showinfo"></span>
+                <span id="duplicates"></span>
+            </div>
+            <span id="debug"></span>
+            <br/>
+            <button class="goHash" id="introHash" onclick="selectHash('PeciXwDuTA0', this)">Intro</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('GJR0', this)">Glider 1</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('UMlSpB0', this)">Glider 2</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('IYKmDcRzB0', this)">Glider 3</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('IYKmDIA0', this)">Glider 4</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('PB0jwU0vAB0', this)">Glider 5</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('PR0cME0nAA0', this)">Glider 6</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('IFIWA0', this)">Cycle 1 (12)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('csmKB0', this)">Cycle 2 (12)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('AQGk0', this)">Cycle 3 (24)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('BwF6Ao40', this)">Cycle 4 (36)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('UMXTUukA0', this)">Cycle 5 (42)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('ACRAs0', this)">Cycle 6 (60)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('sIECiMgQKE0', this)">Cycle 7 (84)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('IDYCyj0B5', this)">Cycle 8 (144)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('cICOg2CB0', this)">Cycle 9 (582)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('sICMBZBAULIB0', this)">Cycle 10 (3966)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('Tc9FLA0', this)">Boomerang (60)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('HS8UNxTp0', this)">Deflect (Routing)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('XUcUN4Ab3pB0', this)">Logic (Interaction Gate)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('cs6dxwG0', this)">Move</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('MLDQ3S82JzTA0', this)">Fast and Slow</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('EAHuexNzTmB0', this)">Capture and emit</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('QAgIjoICCzCBB0', this)">Delayed release</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('vwB3JyPaCCCPQCCCPQCCCPQCCD1dPHzPM0', this)">Attraction</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('MnCTi7uMxOftTl7px47ec4vgSHgMH4FTu5zo-AZk5eecBOvjnR8BSU5ecunSHFwcvwEh4BOm.APh4eTqSB0', this, 24)" id="order_chaos">Order Out of Chaos</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('UHfALungB5AgUEEegIFBBHoCBwAj0BAoII9AQKCDydXwCsA0', this, 24)" id="struct_decay">Structure And Decay</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('UkDEoQIHETAnBgQo9IUYECBwzo6Q4AQSdAUmCBDhoQOAcCCDOjoIBAgcAUmCnB0CBAgcQ9Abg6KHATBSdAYOE4OkUUIFBejBAgcIJOgIEDgBBJ1BwnBgwcQ9AUY9ACToCBxE6QoIJwdIcI9IUKPQECBwBB0', this)">
+                Big Bang (Entropy)</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('EOjuPgFiYmJieAY8AnwIPgL4BzwBw0NDYnKeANLzngEo0aNH4DnwGSpUqVLR0', this, 40)" id="octave">Octave</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('cDvPgDiQ0NiYngHPAN8CD4EeAc8AweA2Gh8DMSGhuc8APMcyWjRSpaPwGPgOlS0aB0', this, 40)" id="strung_out">Harmonic Chaos</button>
+            <br/>
+            <button class="goHash" onclick="selectHash('RZejhMkpklOTtLA0', this, 40, 250)" id="circular">Circular Motion</button>
+            <br/>
+        </div>
+        <div style="display:none">
+            <div id="banner">
+                <span style="background-color: #fff; opacity:0.5; border-bottom: 1px solid #ddd; padding: 8px 10px; font-size:medium">
+                    <b>click & drag to rotate view | scroll to zoom | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step</b>
+                </span>
+                <div>
+                    </p><button class="bannerButtons" onclick="toggleRunning()">RUN/STOP</button>
+                    <button class="bannerButtons" onclick="fastSlow()">FAST/SLOW</button>
+                    <button class="bannerButtons" onclick="isRunning = true; mainLoop(); isRunning = false;">STEP</button>
+                    <button class="bannerButtons" onclick="reverseDirection()">DIRECTION</button>
+                    <button class="bannerButtons" onclick="randomCells(12, -2, 1)">RANDOM</button>
+                    <button class="bannerButtons" onclick="playStopMusic()">MUSIC</button>
+                    <button class="bannerButtons" onclick="toggleTrails()">TRAILS</button>
+                    <button class="bannerButtons" onclick="clearGrid()">CLEAR</button>
+                    <button class="bannerButtons" onclick="update()">UPDATE</button>
+                    <button class="bannerButtons" onclick="reset()">RESET</button>
+                </div>
+                <a href="faq.html" target="_blank" style="font-size:larger">faq</a>
+                |
+                <a href="https://github.com/danx0r/BusyBoxes" target="_blank" style="font-size:larger">source</a>
+            </div>
+        </div>
+        
+        <script type="text/javascript" src="js/ThreeCanvas.js"></script>
+        <script type="text/javascript" src="js/Cube.js"></script>
+        <script type="text/javascript" src="js/Plane.js"></script>
+        <script type="text/javascript" src="js/encdec.js"></script>
+        <script type="text/javascript" src="js/moodal.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        
+        <div style="display:hidden">
+            <img src="tracking.jpg"></img>
+        </div>
+    </body>
+</html>
