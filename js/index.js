@@ -4,10 +4,51 @@ var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
 var cell_trail_a = [];
+
+//adding these to a cell's coords gives you its knight-move bretheren
 var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
 var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
+
+//adding these to 
 var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
 var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+
+
+var knightsMoveRules = [
+                            {xOffset: 2, yOffset: 1, xMove: 1, yMove: -1},
+                            {xOffset: 1, yOffset: 2, xMove: -1, yMove: 1},
+                            {xOffset: -1, yOffset: 2, xMove: 1, yMove: 1},
+                            {xOffset: -2, yOffset: 1, xMove: -1, yMove: -1},
+                            {xOffset: 2, yOffset: -1, xMove: 1, yMove: 1},
+                            {xOffset: 1, yOffset: -2, xMove: -1, yMove: -1},
+                            {xOffset: -1, yOffset: -2, xMove: 1, yMove: -1},
+                            {xOffset: -2, yOffset: -1, xMove: -1, yMove: +1},
+                        ];
+
+var rules = [];
+
+// recompute grid with below code at start of each generation
+// for (var i = 0, i < rules.length; i++) {
+//   ruleOfInterest = rules[i];
+//   if (cellExists(ruleOfInterest.xOffset, ruleOfInterest.yOffset)) {
+//     doMove(ruleOfInterest.xMove, ruleOfInterest.yMove);
+//   }
+// }
+
+// function offsets(x, y, z){
+//   this.x = x;
+//   this.y = 0;
+//   this.z = z;
+// }
+// function moves(x, y, z){
+//   this.x = x;
+//   this.y = 0;
+//   this.z = z;
+// }
+
+
+
+
 var cursor = [0, 0, 0];
 var gLastCursor = cursor;
 var visual_and_numerical_grid = {};
@@ -34,6 +75,7 @@ var container, interval,
 camera, scene, renderer,
 projector, plane, cube, linesMaterial,
 color = 0,colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50, 0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF, 0xEFEFEF, 0x303030 ],
+minusColor = 0, minusColors = [0x4e9258,0xffff00 ],
 ray, brush, objectHovered,
 isMouseDown = false, onMouseDownPosition,
 radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
@@ -41,6 +83,11 @@ randWidth = 4, randCount = 12, randRatio = 0.5;
 init();
 render();
 
+function CellObj(threejs, state, xyz){
+  this.threejs = threejs;
+  this.state = state;
+  this.xyz = xyz;
+}
 
 //breaks up the hash string and returns different elements of the query
 
@@ -372,21 +419,19 @@ function mainLoop(noRender) {
             var xyz = eval('[' + key + ']')
             
             // this is how the cells array works--has a bunch of arrays with 2 objects [location, grid]
+            // if (visual_and_numerical_grid[key].state !== "undefined"){
+            //   cells.push([xyz, visual_and_numerical_grid[key].threejs]);
+            // }
+            // else{
+            //   // visual_and_numerical_grid[key] == the mesh!
+            //   cells.push([xyz, visual_and_numerical_grid[key]]);
+            // }
+            
             cells.push([xyz, visual_and_numerical_grid[key]]);
+            
+            console.log(visual_and_numerical_grid[key]);
         }
-        
-        
-        
-        // grid
-        // |
-        // v
-        // key / xyz ()
-        // |
-        // v
-        // cells[]
-        // |
-        // v
-        // cell = cells[xyz, grid[key]]
+
         
         
         ///////////////
@@ -433,20 +478,26 @@ function mainLoop(noRender) {
         
         
         ///////////////
-        if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2])
+        if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
+        console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
         ///////////////
         
                             
         for (var i in cells) {
+            //cell[0] == xyz
+            //cell[1] == CellObj
             var cell = cells[i];
+            
             if(DEBUG) console.log(cell[0], cell[1]);
             
+            //console.log("cell: "+cell[0]+"---"+cell[1]);
             //set the location of the cell in the grid
             var xyz = cell[0];
             
-            if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {                  // only operate on cells appropriate for this phase
+            if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {  // only operate on cells appropriate for this phase
                 if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
                 var move = getMove(xyz, x1, x2);
+                //alert("xyz: "+xyz + "...." + "move[] "+move);
                 if (move) {
                     var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
                     //if there isn't a cell in the move to location
@@ -465,6 +516,8 @@ function mainLoop(noRender) {
                         if (mv && mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
                             if(DEBUG) console.log("  mvto:", mvto);
                             
+                            
+                            //need to put a CellObj in here in stead of cell[1]                            
                             moves.push([xyz, cell[1], mvto]);
                         }
                     }
@@ -527,10 +580,14 @@ function mainLoop(noRender) {
             }
         }
         for (i in moves) {
+            //moves[0] == xyz
+            //moves[1] == CellObj
+            //moves[2] == mvto
             var args = moves[i];
             
-            //moveCell(oldxyz, mesh, newxyz)
+            //moveCell(oldxyz, cell_obj, newxyz)
             moveCell(args[0], args[1], args[2]);
+            console.log("args: "+args[0]+"---"+args[1]+"---"+args[2]);
         }
         
         
@@ -563,24 +620,53 @@ function mainLoop(noRender) {
 //accepts location and the two planes that we are operating in
 //whenever you have a variable that only transitions in one direction, then you can return true if it switches, or go through and then return false         
 function getMove(xyz, x1, x2) {
-    if(x1 == null) x1 = 0;
-    if(x2 == null) x2 = 2;
+    if(x1 === null) x1 = 0;
+    if(x2 === null) x2 = 2;
     var move = null;
-    var d = [0, 0, 0]
-    for (i = 0; i < 8; i++) {
+    
+    
+
+    
+    // if rules.length > 0{
+
+    // }
+    // else{
+
+    // };
+    console.log("length: ", knightsMoveRules.xOffset);
+    for (i = 0; i < knightsMoveRules.length; i++) {
         // on any given planes there are 8 things you need to check--BECAUSE OF THE KNIGHT MOVE
-        
+
         // offs1 and offs2 are all the knight moves from any one position
         //there are two becaues there are 2 planes--can go side to side, or up/down
         //the two axes
-        d[x1] = offs1[i];
-        d[x2] = offs2[i];
+        // var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
+        // var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
+        // offsetPosition[x, y, z]
+        var COI = knightsMoveRules[i];
         
+        var offsetPosition = [0,0,0];
+
+        offsetPosition[x1] = COI.xOffset;
+        offsetPosition[x2] = COI.yOffset;
         
-        if (getGrid([xyz[0] + d[0], xyz[1] + d[1], xyz[2] + d[2]])) {
-            var mv = [0, 0, 0];
-            mv[x1] = move1[i];
-            mv[x2] = move2[i];
+        //d represents the cells the are a knight's move away from the reference cell 0, 0, 0
+        //if ther is a cell a knight's move away from cell we are getting move for, then return move
+        if (getGrid([ xyz[0] + offsetPosition[0], xyz[1] + offsetPosition[1], xyz[2] + offsetPosition[2] ])) {
+            //var mv = [0, 0, 0];
+            
+            //change mv to moveTo to make more readable
+            var mv = [0,0,0];
+            mv[x1] = COI.xMove;
+            mv[x2] = COI.yMove;
+            
+
+            //move1 and move2 are all the "swaps" that can occur
+            // var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
+            // var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+            // mv[x1] = move1[i];
+            // mv[x2] = move2[i];
+
             if (DEBUG) console.log("  mv:", mv);
             
             if (move == null) {
@@ -608,6 +694,7 @@ function getMove(xyz, x1, x2) {
             }
         }
     }
+    console.log("THE DAMN MOVE: ", move);
     return move
 }
 
@@ -617,7 +704,7 @@ function v3eq(v1, v2){
 }
 
 
-function moveCell(oldxyz, mesh, newxyz) {
+function moveCell(oldxyz, cell_obj, newxyz) {
   
   
     if (CELL_TRAIL) {
@@ -637,9 +724,9 @@ function moveCell(oldxyz, mesh, newxyz) {
     }
     
     //if there are no cell trails (cubettes) then you just set obj positoin to newxyz
-    setObjPosition(mesh, newxyz);
+    setObjPosition(cell_obj.threejs, newxyz);
     delGrid(oldxyz);
-    putGrid(mesh, newxyz);
+    putGrid(cell_obj, newxyz);
 }
 
 //conceptual representation of Grid is an object with a bunch of coordinates 
@@ -668,7 +755,9 @@ function setBrushPosition(xyz) {
 function putGrid(obj, xyz) {
     visual_and_numerical_grid[xyz] = obj;
 }
-
+function putGrid2(obj, xyz){
+  visual_and_numerical_grid[xyz] = [obj.threejs, obj.state];
+}
 
 function trueMod(v, base) {
     if (v < 0) {
@@ -688,7 +777,9 @@ function getGrid(xyz) {
     return visual_and_numerical_grid[xyz]
 }
 function delGrid(xyz) {
+    console.log("delete: ", visual_and_numerical_grid[xyz]);
     delete visual_and_numerical_grid[xyz];
+    console.log("deleted: ", visual_and_numerical_grid[xyz]);
 }
 
 function toggleRunning(){
@@ -721,6 +812,9 @@ function reverseDirection(){
     updateHash(true);
     document.getElementById("direction").innerHTML = direction;
 }
+
+
+
 function onDocumentKeyDown( event ) {
     if (gMoodalInEffect) {
         if (event.keyCode == 27) {
@@ -861,19 +955,54 @@ function onDocumentKeyDown( event ) {
             event.preventDefault();
             if (isRunning) break;
             var obj = getGrid(cursor);
-            if (obj) {
-                scene.removeObject(obj);
+            console.log("OBJ: ", obj);
+            if(obj){
+              console.log("State!: ", obj.state)
+            }
+            
+            if (!obj){
+              var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
+              var cell_obj = new CellObj(threejs, 1 );
+              //add third parameter--negative
+              //contstruct object: mesh(THREE.js), state()
+              putGrid(cell_obj, cursor);
+              setObjPosition(cell_obj.threejs, cursor);
+              cell_obj.threejs.overdraw = true;
+              scene.addObject( cell_obj.threejs );
+              
+              //console.log("cell_obj: ", cell_obj)
+              //console.log("grid: ", visual_and_numerical_grid)
+            }
+            else if (obj.state === -1) {
+                scene.removeObject(obj.threejs);
                 delGrid(cursor);
             }
-            else {
-                var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
-                
+            else if (obj.state === 1) {
+                // alert("yes I'm here");
+                if((cursor[0] + cursor[1] + cursor[2]) % 2 == 0){
+                  minusColor = 0
+                }
+                else{
+                  minusColor = 1
+                }
+                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( minusColors[ minusColor ] ) );
+                var cell_obj = new CellObj(threejs, -1 )
+                scene.removeObject(obj.threejs);
+                delGrid(cursor);
                 //add third parameter--negative
                 //contstruct object: mesh(THREE.js), state()
-                putGrid(voxel, cursor);
-                setObjPosition(voxel, cursor);
-                voxel.overdraw = true;
-                scene.addObject( voxel );
+                putGrid(cell_obj, cursor);
+                setObjPosition(cell_obj.threejs, cursor);
+                cell_obj.threejs.overdraw = true;
+                scene.addObject( cell_obj.threejs );
+                
+                
+
+                
+            }
+            else{
+              scene.removeObject(obj.threejs);
+              delGrid(cursor);
             }
             
             updateHash();
@@ -883,6 +1012,9 @@ function onDocumentKeyDown( event ) {
             break;
     }
 }
+
+
+
 function adjustCamera(){
     camera.position.x = radius * Math.sin(theta * Math.PI / 360) * Math.cos(phi * Math.PI / 360);
     camera.position.y = radius * Math.sin(phi * Math.PI / 360);
@@ -999,6 +1131,7 @@ function buildFromHash(hash) {
         hash = hash.substr( 0, hash.length - 1 );
     }
     if ( version == "A" ) {
+        console.log("glider: Version A");
         var current = { x: 0, y: 0, z: 0, c: 0 }
         var data = decode( hash );
         var i = 0, l = data.length;
@@ -1009,18 +1142,29 @@ function buildFromHash(hash) {
             if ( code.charAt( 3 ) == "1" ) current.z += data[ i ++ ] - 32;
             if ( code.charAt( 4 ) == "1" ) current.c += data[ i ++ ] - 32;
             if ( code.charAt( 0 ) == "1" ) {
-                var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ current.c ] ) );
-                //voxel.position.x = current.x * 50 + 25;
-                //voxel.position.y = current.y * 50 + 25;
-                //voxel.position.z = current.z * 50 + 25;
-                setObjPosition(voxel, [current.x, current.y, current.z]);
-                voxel.overdraw = true;
-                scene.addObject( voxel );
-                putGrid(voxel, [current.x, current.y, current.z])
+                // var voxel = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ current.c ] ) );
+                //   //voxel.position.x = current.x * 50 + 25;
+                //   //voxel.position.y = current.y * 50 + 25;
+                //   //voxel.position.z = current.z * 50 + 25;
+                //   setObjPosition(voxel, [current.x, current.y, current.z]);
+                //   voxel.overdraw = true;
+                //   scene.addObject( voxel );
+                //   putGrid(voxel, [current.x, current.y, current.z])
+                //   
+                var special_xyz = [current.x, current.y, current.z];
+                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                var cell_obj = new CellObj(threejs, 1 );
+                //voxel.position.x = cur[0] * 50 + 25;
+                //voxel.position.y = cur[1] * 50 + 25;
+                //voxel.position.z = cur[2] * 50 + 25;
+                var overdraw_bool = true;
+                putTheCellInTheGridAndRedraw(cell_obj,special_xyz , overdraw_bool);
+                
             }
         }
     } else {
         if (version == "X") {
+            console.log("glider: Version X");
             var data = hash;
             var cur = [0, 0, 0];
             var x = 0;
@@ -1048,18 +1192,19 @@ function buildFromHash(hash) {
                 //when we instantiate this voxel, we have to give it a state (+ or -)
                 //on the other side, when someone gets it out of a dictionary, ask if it is + or -
                 // package the voxel in a dictionary object with an int                             
-                var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
+                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                var cell_obj = new CellObj(threejs, 1 );
                 //voxel.position.x = cur[0] * 50 + 25;
                 //voxel.position.y = cur[1] * 50 + 25;
                 //voxel.position.z = cur[2] * 50 + 25;
-                setObjPosition(voxel, cur);
-                voxel.overdraw = true;
-                scene.addObject(voxel);
-                putGrid(voxel, cur);
+                var overdraw_bool = true;
+                putTheCellInTheGridAndRedraw(cell_obj, cur, overdraw_bool);
+              
             }
         }
         else {
             if (version == "Y") {
+                console.log("glider: Version Y");
                 var data = hash;
                 data = encdec_decode(data);
                 var cur = [0, 0, 0];
@@ -1071,14 +1216,24 @@ function buildFromHash(hash) {
                         cur[i] += delta;
                     }
                     var parity = (cur[0] + cur[1] + cur[2]) & 1;
-                    var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
+                    // var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[parity * 5]));
+                    // //voxel.position.x = cur[0] * 50 + 25;
+                    // //voxel.position.y = cur[1] * 50 + 25;
+                    // //voxel.position.z = cur[2] * 50 + 25;
+                    // setObjPosition(voxel, cur);
+                    // voxel.overdraw = true;
+                    // scene.addObject(voxel);
+                    // putGrid(voxel, cur);
+                                       
+                    var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                    var cell_obj = new CellObj(threejs, 1 );
                     //voxel.position.x = cur[0] * 50 + 25;
                     //voxel.position.y = cur[1] * 50 + 25;
                     //voxel.position.z = cur[2] * 50 + 25;
-                    setObjPosition(voxel, cur);
-                    voxel.overdraw = true;
-                    scene.addObject(voxel);
-                    putGrid(voxel, cur);
+                    console.log("bloody cell: ", cell_obj);
+                    var overdraw_bool = true;
+                    putTheCellInTheGridAndRedraw(cell_obj, cur, overdraw_bool);
+                    
                 }
             }
             else {
@@ -1103,6 +1258,13 @@ function buildFromCoords(coords){
     updateHash();
 }
 
+function putTheCellInTheGridAndRedraw(cell_obj, cursor, overdraw_bool){
+  setObjPosition(cell_obj.threejs, cursor);
+  cell_obj.threejs.overdraw = true;
+  scene.addObject(cell_obj.threejs);
+  putGrid(cell_obj, cursor);
+
+}
 
 //creates a url that you would go to that uses the hash as a query
 function hash2url(hash){
@@ -1306,11 +1468,12 @@ function randomCells(){
                 phase = (cursor[0] + cursor[1] + cursor[2]) & 1;
             }
             setBrushPosition(cursor);
-            var voxel = new THREE.Mesh(cube, new THREE.MeshColorFillMaterial(colors[color]));
-            putGrid(voxel, cursor);
-            setObjPosition(voxel, cursor);
-            voxel.overdraw = true;
-            scene.addObject(voxel);
+            
+            var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[color] ) );
+            var cell_obj = new CellObj(threejs, 1 );
+            var overdraw_bool = true;
+            putTheCellInTheGridAndRedraw(cell_obj, cursor, overdraw_bool);
+            
         }
         
         updateHash();
@@ -1482,3 +1645,14 @@ function scienceTestLoop(){
     }
 }
 //]]>
+
+
+
+
+
+
+
+
+
+
+
