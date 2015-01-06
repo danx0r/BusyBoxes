@@ -4,10 +4,53 @@ var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
 var cell_trail_a = [];
+
+
+//adding these to a cell's coords gives you its knight-move bretheren
 var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
 var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
+
+//adding these to 
 var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
 var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+
+
+var knightsMoveRules = [
+                            {xOffset: 2, yOffset: 1, xMove: 1, yMove: -1},
+                            {xOffset: 1, yOffset: 2, xMove: -1, yMove: 1},
+                            {xOffset: -1, yOffset: 2, xMove: 1, yMove: 1},
+                            {xOffset: -2, yOffset: 1, xMove: -1, yMove: -1},
+                            {xOffset: 2, yOffset: -1, xMove: 1, yMove: 1},
+                            {xOffset: 1, yOffset: -2, xMove: -1, yMove: -1},
+                            {xOffset: -1, yOffset: -2, xMove: 1, yMove: -1},
+                            {xOffset: -2, yOffset: -1, xMove: -1, yMove: +1},
+                        ];
+
+var rules = [];
+
+// recompute grid with below code at start of each generation
+// for (var i = 0, i < rules.length; i++) {
+//   ruleOfInterest = rules[i];
+//   if (cellExists(ruleOfInterest.xOffset, ruleOfInterest.yOffset)) {
+//     doMove(ruleOfInterest.xMove, ruleOfInterest.yMove);
+//   }
+// }
+
+// function offsets(x, y, z){
+//   this.x = x;
+//   this.y = 0;
+//   this.z = z;
+// }
+// function moves(x, y, z){
+//   this.x = x;
+//   this.y = 0;
+//   this.z = z;
+// }
+
+
+
+
+
 var cursor = [0, 0, 0];
 var gLastCursor = cursor;
 var visual_and_numerical_grid = {};
@@ -579,24 +622,55 @@ function mainLoop(noRender) {
 //accepts location and the two planes that we are operating in
 //whenever you have a variable that only transitions in one direction, then you can return true if it switches, or go through and then return false         
 function getMove(xyz, x1, x2) {
-    if(x1 == null) x1 = 0;
-    if(x2 == null) x2 = 2;
+
+    if(x1 === null) x1 = 0;
+    if(x2 === null) x2 = 2;
     var move = null;
-    var d = [0, 0, 0]
-    for (i = 0; i < 8; i++) {
+    
+    
+
+    
+    // if rules.length > 0{
+
+    // }
+    // else{
+
+    // };
+    console.log("length: ", knightsMoveRules.xOffset);
+    for (i = 0; i < knightsMoveRules.length; i++) {
         // on any given planes there are 8 things you need to check--BECAUSE OF THE KNIGHT MOVE
-        
+
         // offs1 and offs2 are all the knight moves from any one position
         //there are two becaues there are 2 planes--can go side to side, or up/down
         //the two axes
-        d[x1] = offs1[i];
-        d[x2] = offs2[i];
+        // var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
+        // var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
+        // offsetPosition[x, y, z]
+        var COI = knightsMoveRules[i];
         
+        var offsetPosition = [0,0,0];
+
+        offsetPosition[x1] = COI.xOffset;
+        offsetPosition[x2] = COI.yOffset;
         
-        if (getGrid([xyz[0] + d[0], xyz[1] + d[1], xyz[2] + d[2]])) {
-            var mv = [0, 0, 0];
-            mv[x1] = move1[i];
-            mv[x2] = move2[i];
+        //d represents the cells the are a knight's move away from the reference cell 0, 0, 0
+        //if ther is a cell a knight's move away from cell we are getting move for, then return move
+        if (getGrid([ xyz[0] + offsetPosition[0], xyz[1] + offsetPosition[1], xyz[2] + offsetPosition[2] ])) {
+            //var mv = [0, 0, 0];
+            
+            //change mv to moveTo to make more readable
+            var mv = [0,0,0];
+            mv[x1] = COI.xMove;
+            mv[x2] = COI.yMove;
+            
+
+            //move1 and move2 are all the "swaps" that can occur
+            // var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
+            // var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+            // mv[x1] = move1[i];
+            // mv[x2] = move2[i];
+
+
             if (DEBUG) console.log("  mv:", mv);
             
             if (move == null) {
@@ -624,6 +698,9 @@ function getMove(xyz, x1, x2) {
             }
         }
     }
+
+    console.log("THE DAMN MOVE: ", move);
+
     return move
 }
 
