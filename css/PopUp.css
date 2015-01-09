@@ -1,19 +1,120 @@
 #my_popup {
 
-	border: 1px solid #00000f; 
+	border: 1px solid #dbdbdb; 
 	border-radius: 9px;
+	;
+	color: black;
 
 }
-button {
-	background-color: #eeebd9;
-  -moz-border-radius: 15px;
-  -webkit-border-radius: 15px;
-  border: 5px solid #eeebd9;
-  padding: 5px;
-  width: 67px;
-  height: 40px;
+
+h1{
+
+	color: black;
+	
 }
 
-button:hover {
-box-shadow: 10px 10px 5px #000000;
-	opacity: 0.6;}
+
+
+.popUpText{
+
+	text-align: center;
+}
+
+
+#fadeandscale {
+  transform: scale(0.8);
+  
+
+}
+.popup_visible #fadeandscale {
+  transform: scale(1.7);
+  border: 1px solid #616161;
+
+}
+
+#ekey{
+
+	max-width: 56%;
+	float: right;
+}
+
+#directionu {
+	max-width: 34%;
+	float: right;
+}
+
+#clickdrag{
+
+	max-width: 25%;
+	margin-left: 66%;
+}
+
+#scrolltozoom{
+	margin-left: 66%;
+	max-width: 27%;
+
+}
+
+table {
+	width: 300px;
+}
+
+th, td{
+
+	padding: 7px 7px 7px 7px;
+}
+
+th {
+	text-transform: uppercase;
+	letter-spacing: 0.4em;
+	font-size: 90%;
+	border-bottom: 2px solid #111111
+	border-top:1px solid #999;
+	text-align: left;
+}
+
+.icons:hover{
+	/*background-color: #e3e3e3;*/
+	background: linear-gradient(to top right, #e3e3e3 , #dbdbdb);
+	border-radius: 19px;
+
+}
+
+.icons{
+	border-top: 1px solid #dbdbdb;
+	border-bottom: 1px solid #dbdbdb;
+	border-spacing: 2px 10px;
+	
+}
+
+}
+
+.howtoplay{
+
+		width: 81%;
+}
+
+.whattopress{
+	float: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

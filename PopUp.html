@@ -3,24 +3,31 @@
 <head>
 
 <link rel="stylesheet" type="text/css" href="css/PopUp.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+
+
   <meta charset="utf-8">
   <title>Site Title</title>
+
+
+<style type="text/css">
+  
+ 
+
+
+    .slider{
+        margin-top: 30px;
+    }
+
+
+
+
+</style>
+
+
+
 </head>
 <body>
-  <style type="text/css">
-
-
-
-#fadeandscale {
-  transform: scale(0.8);
-}
-.popup_visible #fadeandscale {
-  transform: scale(1);
-}
-
-
-  </style>
-
   <!-- Add an optional button to open the popup -->
   <button class="my_popup_open">Open popup</button>
 
@@ -35,28 +42,31 @@
   <div id="fadeandscale" class="my_popup_close well popup_content" data-popup-initialized="true" aria-hidden="false" role="dialog" aria-labelledby="open_10981174" style="opacity: 1; visibility: visible; display: inline-block; outline: none; transition: all 0.3s; -webkit-transition: all 0.3s; text-align: left; position: relative; vertical-align: middle;" tabindex="-1"
 
     <div class="InfoBox">
+    <h1><b>Game Controls</b></h1>
+    <h1> <b>For LyfeCraft</b> </h1>
+
+            <hr />
     <!-- List of controls -->
       <ul class="HowTo">
-        
-        <li> click & drag to rotate view </li>
-        <li> scroll to zoom </li>
-        <li> arrows move cursor </li>
-        <li>  U & D for up/down </li>
-        <li> ENTER to create/delete </li>
-        <li> S to step </li>
+          
+
+        <li><b> Click & drag to rotate view</b> </li>
+        <li> <b>Scroll to zoom</b> </li>
+        <li> <b>Arrows move cursor</b> </li>
+        <li>  <b>U & D for up/down</b> </li>
+        <li> <b>ENTER to create/delete</b> </li>
+        <li> <b>S to step</b> </li>
 
       </ul>
       
+        <hr />
 
-
+    <button class="my_popup_close fadeandscale_close btn btn_default ">Close</button>
     </div>
 
 
 
-    <button class="my_popup_close fadeandscale_close btn btn-default">Close</button>
 </div>
-
-  </div>
 
   <!-- Include jQuery -->
   <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
