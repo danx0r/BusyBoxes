@@ -45,6 +45,12 @@ function Grid(x, y, z, mod_range, mode){
   	this.cells = this.new_cells;
   	this.new_cells = {};
   }
+  
+  // copy new_cells to cells for setup and tests
+  this.set_cells = function() {
+    this.cells = this.new_cells;
+    this.new_cells = {};
+  }
 }
 
 //TESTS
@@ -63,6 +69,7 @@ test_rule = function(grid, x,y,z){
 	//var cell = this.get(x,y,z);
 	var neighbor = grid.get(x-1,y,z);
 	if(neighbor){
+		console.log("nabe @", x, y, z);
 		return 1;
 	}else{
 		return 0;
@@ -71,6 +78,8 @@ test_rule = function(grid, x,y,z){
 }
 
 grid.put(5, 5, 5, 1);
+grid.set_cells();
+console.log("grid cells: ", grid.new_cells);
 grid.iterate(test_rule);
 console.log("grid cells: ", grid.cells);
 
