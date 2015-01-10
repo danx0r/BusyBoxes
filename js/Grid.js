@@ -30,7 +30,7 @@ function Grid(x, y, z, mod_range, mode){
 	}
 
   this.iterate = function(cb){
-  	var this.new_cells = {};
+  	var new_cells = {};
 
   	for(var x = 0, x < this.dimx, x++){
   		for(var y = 0, y < this.dimy, y++){
