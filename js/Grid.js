@@ -6,7 +6,7 @@ function Grid(x, y, z, mod_range, mode){
 
   this.cells = {}; //all existing cells object
   
-  this.get(x, y, z){
+  this.get = function(x, y, z){
   	//turn xyz into key
   	var key = ""+x+","+y+","+z;
   	var cell_state = this.cells[key]
@@ -16,7 +16,7 @@ function Grid(x, y, z, mod_range, mode){
   	return 0;
   }
 
-	this.put(x, y, z, cell_state){
+	this.put= function(x, y, z, cell_state){
 		var key = ""+x+","+y+","+z;
 		if(cell_state){
 			this.cells[key] = cell_state;
