@@ -304,7 +304,7 @@ function init() {
             buildFromHash(qargs.hash);
             if (qargs.sel) {
                 lastSelectedEl = document.getElementById(qargs.sel);
-                lastSelectedEl.style.backgroundColor = "cyan";
+                lastSelectedEl.style.backgroundColor = 0x00f0ff;
                 if (history.replaceState) {
                     var url = "" + window.location;
                     var i = url.indexOf('&sel=');
@@ -402,6 +402,16 @@ function mainLoopScience() {
     }
 }
 
+function birthCell(xyz) {
+	if (!visual_and_numerical_grid[xyz]) {
+		var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( 0x00FFFF ) );
+	  	var cell_obj = new CellObj(threejs, 1 );
+		setObjPosition(cell_obj.threejs, xyz);
+		cell_obj.threejs.overdraw = true;
+		scene.addObject( cell_obj.threejs );
+		putGrid(cell_obj, xyz);
+	}
+}
 
 //most important
 function mainLoop(noRender) {
@@ -420,7 +430,8 @@ function mainLoop(noRender) {
         ///////////////
         if(DEBUG) console.log("frame:", frame, "grid:", visual_and_numerical_grid)
         ///////////////
-        
+
+		birthCell([1,1,1]);
         
         // var cells = [];
 //         
