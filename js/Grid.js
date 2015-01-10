@@ -32,9 +32,9 @@ function Grid(x, y, z, mod_range, mode){
   this.iterate = function(cb){
   	var new_cells = {};
 
-  	for(var x = 0, x < this.dimx, x++){
-  		for(var y = 0, y < this.dimy, y++){
-  			for(var z = 0, z < this.dimz, z++){
+  	for(var x = 0; x < this.dimx; x++){
+  		for(var y = 0; y < this.dimy; y++){
+  			for(var z = 0; z < this.dimz; z++){
   				var new_state = cb(x,y,z);
   				this.put(x,y,z,new_state);
 
