@@ -35,8 +35,8 @@ function Grid(x, y, z, mod_range, mode){
 
 var grid = new Grid(10, 10, 10);
 grid.put(5, 5, 5, 1);
-console.log("Should be 0: ", grid[3,3,3]);
-console.log("Should be 1: ", grid[5,5,5]);
+console.log("Should be 0: ", grid.get(3,3,3);
+console.log("Should be 1: ", grid.get(5,5,5);
 grid.put(5, 5, 5, 0);
-console.log("We deleted. Should be 0: ", grid[5,5,5]);
+console.log("We deleted. Should be 0: ", grid.get(5,5,5);
 console.log("Should be empty: ", grid.cells);
