@@ -35,7 +35,7 @@ function Grid(x, y, z, mod_range, mode){
   	for(var x = 0; x < this.dimx; x++){
   		for(var y = 0; y < this.dimy; y++){
   			for(var z = 0; z < this.dimz; z++){
-  				var new_state = cb(x,y,z);
+  				var new_state = cb(this, x,y,z);
   				this.put(x,y,z,new_state);
 
   			}
@@ -58,10 +58,10 @@ console.log("Should be empty: ", grid.cells);
 
 
 //C2
-test_rule = function(x,y,z){
+test_rule = function(grid, x,y,z){
 	//if cell is alive--kill it
 	//var cell = this.get(x,y,z);
-	var neighbor = this.get(x-1,y,z);
+	var neighbor = grid.get(x-1,y,z);
 	if(neighbor){
 		return 1;
 	}else{
