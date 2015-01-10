@@ -402,14 +402,40 @@ function mainLoopScience() {
     }
 }
 
-function birthCell(xyz) {
+var gThreeInUse = [];
+var gThreeUnused = [];
+
+function liveCell(xyz, color) {
 	if (!visual_and_numerical_grid[xyz]) {
-		var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( 0x00FFFF ) );
+		if (!gThreeUnused.length) {
+			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+		}
+		else {
+			var threejs = gThreeUnused.pop(0);
+			// deal with color somehow
+		}
+		gThreeInUse.push(threejs);
 	  	var cell_obj = new CellObj(threejs, 1 );
 		setObjPosition(cell_obj.threejs, xyz);
 		cell_obj.threejs.overdraw = true;
 		scene.addObject( cell_obj.threejs );
 		putGrid(cell_obj, xyz);
+	}
+}
+
+function killCell(xyz) {
+	var obj = visual_and_numerical_grid[xyz];
+	if (obj) {
+		var i = gThreeInUse.indexOf(obj);
+		if (i < 0) {
+			console.log("FIXME: cell not in gThreeInUse");
+		}
+		else {
+			gThreeInUse.pop(i);
+			gThreeUnused.push(obj);
+		}
+		delGrid(xyz);
+	    setObjPosition(obj.threejs, [-1111,-1111,-1111]);
 	}
 }
 
@@ -431,7 +457,8 @@ function mainLoop(noRender) {
         if(DEBUG) console.log("frame:", frame, "grid:", visual_and_numerical_grid)
         ///////////////
 
-		birthCell([1,1,1]);
+		killCell([0, 0, 0]);
+		liveCell([1, 1, 1], 0x00ffff);
         
         // var cells = [];
 //         
