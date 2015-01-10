@@ -6,13 +6,20 @@ var avg_trail_a = [];
 var cell_trail_a = [];
 
 
-//adding these to a cell's coords gives you its knight-move bretheren
-var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
-var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
+// adding these to a cell's coords gives you its knight-move bretheren
+// var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
+// var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
 
-//adding these to 
-var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
-var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+// adding these to 
+// var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
+// var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+
+var thirdStateRules = [
+                        {xOffset: 2, yOffset: 1, xMove: 1, yMove: -1},
+                        {xOffset: 2, yOffset: 1, xMove: 1, yMove: -1}
+                        ];
+
+
 
 
 var knightsMoveRules = [
@@ -23,7 +30,7 @@ var knightsMoveRules = [
                             {xOffset: 2, yOffset: -1, xMove: 1, yMove: 1},
                             {xOffset: 1, yOffset: -2, xMove: -1, yMove: -1},
                             {xOffset: -1, yOffset: -2, xMove: 1, yMove: -1},
-                            {xOffset: -2, yOffset: -1, xMove: -1, yMove: +1},
+                            {xOffset: -2, yOffset: -1, xMove: -1, yMove: +3},
                         ];
 
 var rules = [];
@@ -90,6 +97,7 @@ function CellObj(threejs, state, xyz){
   this.state = state;
   this.xyz = xyz;
 }
+
 
 //breaks up the hash string and returns different elements of the query
 
@@ -401,7 +409,7 @@ function mainLoop(noRender) {
     document.getElementById("generation").innerHTML = frame;
     document.getElementById("showphase").innerHTML = (frame % 6 + 6) %6;
     document.getElementById("direction").innerHTML = direction;
-    
+    var phase = (frame % 6 + 6) %6;
     
     if (isRunning) {
         if (direction == "reverse") {
@@ -430,19 +438,16 @@ function mainLoop(noRender) {
             // }
             
             cells.push([xyz, visual_and_numerical_grid[key]]);
-            
-            console.log(visual_and_numerical_grid[key]);
+            var bob = [xyz, visual_and_numerical_grid[key]];
+            console.log("cell put into cells array: ", bob );
+            //console.log(visual_and_numerical_grid[key]);
         }
 
-        
-        
         ///////////////
         if(DEBUG) console.log("cells:", cells)
-        ///////////////
-        
+        ///////////////        
         
         var moves = []
-        
         
         //THIS is BusyBoxes specific
         //these are the only two axes we use
@@ -456,11 +461,10 @@ function mainLoop(noRender) {
             //also make this more modular
             
             // these are the 3 different planes
-            case 0: x1=0; x2=1; break;
-            case 1: x1=1; x2=2; break;
-            case 2: x1=2; x2=0; break;
-            
-            
+            case 0: x1=0; x2=1; break; //XY [x, y, constant]
+            case 1: x1=1; x2=2; break; //YZ [constant, y, z]
+            case 2: x1=2; x2=0; break; //ZX
+        
             // 2 states are on/off
             // 3 states are positive/negative/no box
             
@@ -474,16 +478,13 @@ function mainLoop(noRender) {
             
             
             // how would you set a cell to an on state
-            //
-            
-        }
-        
+            //   
+        }     
         
         ///////////////
         if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
         console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
-        ///////////////
-        
+        ///////////////   
                             
         for (var i in cells) {
             //cell[0] == xyz
@@ -495,20 +496,30 @@ function mainLoop(noRender) {
             //console.log("cell: "+cell[0]+"---"+cell[1]);
             //set the location of the cell in the grid
             var xyz = cell[0];
-            
+
+            console.log("phase: ", phase);
+            console.log("LOCATION OF INTEREST: ", xyz, x1, x2);
+
+            // var plane = [0,0,0];
+            // plane[x1]
+            // console.log("PLANE OF INTEREST: ", )
             if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {  // only operate on cells appropriate for this phase
                 if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
+                
                 var move = getMove(xyz, x1, x2);
                 //alert("xyz: "+xyz + "...." + "move[] "+move);
+                console.log("move is first declared!!!!!!!!", move);
                 if (move) {
                     var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
                     //if there isn't a cell in the move to location
                     // AND the move isn't conflicted (swap rule below)
                     //then push the move to the "moves" array
+                    console.log("fucking mvto, wtf: ", mvto);
                     if(!getGrid(mvto)) {
+                        
                         // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
                         var mv = getMove(mvto, x1, x2);
-                                                     
+                        console.log(" check one two one two:", mv, mvto, move);                  
                         //I think this is the SWAP rule
                         //why does each condition sum to zero?
                         //this is because the coordinates are negative... ???
@@ -518,12 +529,17 @@ function mainLoop(noRender) {
                         if (mv && mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
                             if(DEBUG) console.log("  mvto:", mvto);
                             
-                            
-                            //need to put a CellObj in here in stead of cell[1]                            
+                            console.log("$$$$$$$$$ mvto:", mvto);
+                            //need to put a CellObj in here in stead of cell[1]
+                            mvto[0] = mvto[0]+xyz[0];
+                            mvto[1] = mvto[1]+xyz[1];
+                            mvto[2] = mvto[2]+xyz[2];
+
                             moves.push([xyz, cell[1], mvto]);
                         }
                     }
-                }
+                }else{ console.log("-----failure-------");}
+
             }
         }
         
@@ -589,7 +605,7 @@ function mainLoop(noRender) {
             
             //moveCell(oldxyz, cell_obj, newxyz)
             moveCell(args[0], args[1], args[2]);
-            console.log("args: "+args[0]+"---"+args[1]+"---"+args[2]);
+           // console.log("args: "+args[0]+"---"+args[1]+"---"+args[2]);
         }
         
         
@@ -636,7 +652,7 @@ function getMove(xyz, x1, x2) {
     // else{
 
     // };
-    console.log("length: ", knightsMoveRules.xOffset);
+    //console.log("length: ", knightsMoveRules.xOffset);
     for (i = 0; i < knightsMoveRules.length; i++) {
         // on any given planes there are 8 things you need to check--BECAUSE OF THE KNIGHT MOVE
 
@@ -652,8 +668,13 @@ function getMove(xyz, x1, x2) {
 
         offsetPosition[x1] = COI.xOffset;
         offsetPosition[x2] = COI.yOffset;
+        if(i == 0){
+            console.log("offset position when looking at first knights move rule (1, 0, 4): ", offsetPosition);
+        }
+        // console.log("fucking offsetPosition ", offsetPosition);
+        // console.log("and grid ", visual_and_numerical_grid[xyz]);
         
-        //d represents the cells the are a knight's move away from the reference cell 0, 0, 0
+        //offsetPosition represents the cells the are a knight's move away from the reference cell 0, 0, 0
         //if ther is a cell a knight's move away from cell we are getting move for, then return move
         if (getGrid([ xyz[0] + offsetPosition[0], xyz[1] + offsetPosition[1], xyz[2] + offsetPosition[2] ])) {
             //var mv = [0, 0, 0];
@@ -663,6 +684,7 @@ function getMove(xyz, x1, x2) {
             mv[x1] = COI.xMove;
             mv[x2] = COI.yMove;
             
+            console.log("duh mv ", mv);
 
             //move1 and move2 are all the "swaps" that can occur
             // var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -698,8 +720,6 @@ function getMove(xyz, x1, x2) {
             }
         }
     }
-
-    console.log("THE DAMN MOVE: ", move);
 
     return move
 }
@@ -890,7 +910,8 @@ function onDocumentKeyDown( event ) {
             mainLoop();
             isRunning = false;
             break;
-        case 32:                           // SPACE
+        case 10:
+        case 13:                           // ENTER
             event.preventDefault();
             toggleRunning();
             break;
@@ -956,8 +977,8 @@ function onDocumentKeyDown( event ) {
             adjustCamera();
             render();
             break;
-        case 10:                           // RETURN
-        case 13:
+        case 32:                           // SPACE
+        
             event.preventDefault();
             if (isRunning) break;
             var obj = getGrid(cursor);
