@@ -23,14 +23,14 @@ var thirdStateRules = [
 
 
 var knightsMoveRules = [
-                            {xOffset: 2, yOffset: 1, xMove: 1, yMove: -1},
+                            {xOffset: 4, yOffset: 1, xMove: 1, yMove: -1},
                             {xOffset: 1, yOffset: 2, xMove: -1, yMove: 1},
                             {xOffset: -1, yOffset: 2, xMove: 1, yMove: 1},
                             {xOffset: -2, yOffset: 1, xMove: -1, yMove: -1},
                             {xOffset: 2, yOffset: -1, xMove: 1, yMove: 1},
                             {xOffset: 1, yOffset: -2, xMove: -1, yMove: -1},
                             {xOffset: -1, yOffset: -2, xMove: 1, yMove: -1},
-                            {xOffset: -2, yOffset: -1, xMove: -1, yMove: +3},
+                            {xOffset: -2, yOffset: -1, xMove: -1, yMove: +1},
                         ];
 
 var rules = [];
@@ -89,6 +89,10 @@ ray, brush, objectHovered,
 isMouseDown = false, onMouseDownPosition,
 radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
 randWidth = 4, randCount = 12, randRatio = 0.5;
+
+var mainGrid;
+
+
 init();
 render();
 
@@ -141,6 +145,8 @@ function parseQueryArgs() {
 
 
 function init() {
+    
+
     if (DEBUG) console.log("init start");
     qargs = parseQueryArgs();
     
@@ -199,12 +205,13 @@ function init() {
     scene = new THREE.Scene();
     
     
-    // Grid
+    //Graphical Grid
     var geometry = new THREE.Geometry();
     geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( axisMin * 50, 0, 0 ) ) );
     geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( (axisMax+1) * 50, 0, 0 ) ) );
     linesMaterial = new THREE.LineColorMaterial( 0x000000, 0.2 );
     
+
     
     
     if (!qargs.nogrid) {
@@ -345,6 +352,9 @@ function init() {
     //g means Global
     gInitialHash = gUpdateHash;
     gInitialFrame = frame;
+
+    // mainGrid = new Grid(24, 24, 24);
+    // mainGrid.put(12,12,12,1);
     setInterval(mainLoopFast, 14);
     setInterval(mainLoopSlow, 140);
     setTimeout(mainLoopScience, 10);
@@ -418,7 +428,7 @@ function mainLoop(noRender) {
 
 
         ///////////////
-        if(DEBUG) console.log("frame:", frame)
+        if(DEBUG) console.log("frame: ", frame)
         ///////////////
         
         
@@ -444,14 +454,14 @@ function mainLoop(noRender) {
         }
 
         ///////////////
-        if(DEBUG) console.log("cells:", cells)
+        if(DEBUG) console.log("cells:", cells);
         ///////////////        
         
-        var moves = []
+        var moves = [];
         
         //THIS is BusyBoxes specific
         //these are the only two axes we use
-        var x1, x2                                          // our two axes for today
+        var x1, x2;                                          // our two axes for today
         
         //trueMod seems to be something to make modulus work with negative
         switch( trueMod(frame, 3) ) {                      // ach, Javascript you old goat
@@ -531,14 +541,15 @@ function mainLoop(noRender) {
                             
                             console.log("$$$$$$$$$ mvto:", mvto);
                             //need to put a CellObj in here in stead of cell[1]
-                            mvto[0] = mvto[0]+xyz[0];
-                            mvto[1] = mvto[1]+xyz[1];
-                            mvto[2] = mvto[2]+xyz[2];
+                            // mvto[0] = mvto[0]+xyz[0];
+                            // mvto[1] = mvto[1]+xyz[1];
+                            // mvto[2] = mvto[2]+xyz[2];
 
                             moves.push([xyz, cell[1], mvto]);
+                            console.log("after the change mvto:", mvto);
                         }
                     }
-                }else{ console.log("-----failure-------");}
+                }else{ console.log("-----failure,no move-------");}
 
             }
         }

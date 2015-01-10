@@ -1,3 +1,5 @@
+var DEBUG = true;
+
 function Grid(x, y, z, mod_range, mode){
   this.dimx = x;
   this.dimy = y;
@@ -28,6 +30,7 @@ function Grid(x, y, z, mod_range, mode){
 			delete this.new_cells[key];
 		}
 	}
+
 
   this.iterate = function(cb){
   	var new_cells = {};
@@ -77,10 +80,11 @@ test_rule = function(grid, x,y,z){
 	//if cell at -1,y,z then come alive
 }
 
-grid.put(5, 5, 5, 1);
-grid.set_cells();
-console.log("grid cells: ", grid.new_cells);
-grid.iterate(test_rule);
-console.log("grid cells: ", grid.cells);
-
+if (DEBUG === true){
+  grid.put(5, 5, 5, 1);
+  grid.set_cells();
+  console.log("grid cells: ", grid.new_cells);
+  grid.iterate(test_rule);
+  console.log("grid cells: ", grid.cells);
+}
 
