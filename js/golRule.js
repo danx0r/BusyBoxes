@@ -16,7 +16,7 @@ golRule = function(grid, x,y,z){
 	if(nabes == 0){
 		return 0;		
 	}
-	console.log("NABES and xyz: ", nabes, [x,y,z]);
+	// console.log("NABES and xyz: ", nabes, [x,y,z]);
 	if(grid.get(x,y,z)){
 		if(nabes<2 || nabes > 3){
 			return 0;
