@@ -1,5 +1,5 @@
 //<![CDATA[
-var DEBUG = true;
+var DEBUG = false;
 var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
@@ -430,13 +430,13 @@ function bugg_used() {
 	return r;
 }
 
-function bugg_unused() {
-	var r = [];
-	for(i=0; i<gThreeUnused.length; i++) {
-		r.push(gThreeUnused[i].bugg);
-	}
-	return r;
-}
+// function bugg_unused() {
+	// var r = [];
+	// for(i=0; i<gThreeUnused.length; i++) {
+		// r.push(gThreeUnused[i].bugg);
+	// }
+	// return r;
+// }
 
 function liveCell(xyz, color) {
 	var cell_obj = visual_and_numerical_grid[xyz];
@@ -447,19 +447,19 @@ function liveCell(xyz, color) {
 		  	cell_obj = new CellObj(threejs, 1 );
 			cell_obj.threejs.overdraw = true;
 			scene.addObject( cell_obj.threejs );
-            console.log("liveCell: creating new obj:", xyz, cell_obj);
+            // console.log("liveCell: creating new obj:", xyz, cell_obj);
 		}
 		else {
 			cell_obj = gThreeUnused.pop(0);
-            console.log("liveCell: reusing obj:", xyz, cell_obj);
+            // console.log("liveCell: reusing obj:", xyz, cell_obj);
 			// deal with color somehow
 		}
 		gThreeInUse.push(cell_obj);
 		setObjPosition(cell_obj.threejs, xyz);
 		putGrid(cell_obj, xyz);
-		console.log("live gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
+		// console.log("live gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
 	}
-	else console.log("liveCell: already live, doing nuttin", xyz);
+	// else console.log("liveCell: already live, doing nuttin", xyz);
     return cell_obj;
 }
 
@@ -471,15 +471,15 @@ function killCell(xyz) {
 			console.log("killCell: not found in gThreeInUse:", xyz, obj);
 		}
 		else {
-			console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
+			// console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
 			gThreeInUse.splice(i, 1);
 			gThreeUnused.push(obj);
 		}
 		delGrid(xyz);
 	    setObjPosition(obj.threejs, [-1111,-1111,-1111]);
-		console.log("kill gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
+		// console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
 	}
-	else console.log("killCell: obj not vangrid, doing nothing", xyz, xyz);
+	// else console.log("killCell: obj not vangrid, doing nothing", xyz, xyz);
 }
 
 //most important
@@ -511,10 +511,10 @@ function mainLoop(noRender) {
         //calling iterate with an anonymous function as callback(cb)
         mainGrid.iterate_nop(function(grid, x, y, z){
             if(grid.get(x, y, z) && !grid.get_new(x, y, z)){
-                console.log("WE ARE KILLING!", [x,y,z]);
+                // console.log("WE ARE KILLING!", [x,y,z]);
                 killCell([x,y,z]);
             }else if(!grid.get(x, y, z) && grid.get_new(x, y, z)){
-                console.log("WE ARE CREATING!", [x,y,z]);
+                // console.log("WE ARE CREATING!", [x,y,z]);
                 liveCell([x,y,z], 0x00ffff);
             }
         });
@@ -906,9 +906,9 @@ function getGrid(xyz) {
     return visual_and_numerical_grid[xyz]
 }
 function delGrid(xyz) {
-    console.log("delete: ", visual_and_numerical_grid[xyz]);
+    // console.log("delete: ", visual_and_numerical_grid[xyz]);
     delete visual_and_numerical_grid[xyz];
-    console.log("deleted: ", visual_and_numerical_grid[xyz]);
+    // console.log("deleted: ", visual_and_numerical_grid[xyz]);
 }
 
 function toggleRunning(){
@@ -1085,9 +1085,9 @@ function onDocumentKeyDown( event ) {
             event.preventDefault();
             if (isRunning) break;
             var obj = getGrid(cursor);
-            console.log("OBJ: ", obj);
+            // console.log("OBJ: ", obj);
             if(obj){
-              console.log("State!: ", obj.state)
+              // console.log("State!: ", obj.state)
             }
             
             if (!obj){
