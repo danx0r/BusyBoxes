@@ -1,3 +1,5 @@
+GOL3D_VALS = [4, 5, 5];
+
 gol3DRule455 = function(grid, x,y,z){
 	//var neighbor = grid.get(x-1,y+1,z);
 	var nabes = 0;
@@ -16,13 +18,13 @@ gol3DRule455 = function(grid, x,y,z){
 	}
 	// console.log("NABES and xyz: ", nabes, [x,y,z]);
 	if(grid.get(x,y,z)){
-		if(nabes<4 || nabes > 5){
+		if(nabes<GOL3D_VALS[0] || nabes > GOL3D_VALS[1]){
 			return 0;
 		}else{
 			return 1;
 		}
 	}else{
-		if(nabes === 5){
+		if(nabes === GOL3D_VALS[2]){
 			return 1;
 		}else{
 			return 0;
@@ -31,3 +33,9 @@ gol3DRule455 = function(grid, x,y,z){
 	}
 }
 
+gol3DRule235 = function(grid, x, y, z) {
+	GOL3D_VALS[0] = 2;
+	GOL3D_VALS[1] = 3;
+	GOL3D_VALS[2] = 5;
+	return gol3DRule455(grid, x, y, z);
+}
