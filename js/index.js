@@ -1,22 +1,29 @@
 //<![CDATA[
-var DEBUG = false;
+var DEBUG = true;
 var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
 var cell_trail_a = [];
 
 
-//adding these to a cell's coords gives you its knight-move bretheren
-var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
-var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
+// adding these to a cell's coords gives you its knight-move bretheren
+// var offs1 = [+2, +1, -1, -2, +2, +1, -1, -2];
+// var offs2 = [+1, +2, +2, +1, -1, -2, -2, -1];
 
-//adding these to 
-var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
-var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+// adding these to 
+// var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
+// var move2 = [-1, +1, +1, -1, +1, -1, -1, +1];
+
+var thirdStateRules = [
+                        {xOffset: 2, yOffset: 1, xMove: 1, yMove: -1},
+                        {xOffset: 2, yOffset: 1, xMove: 1, yMove: -1}
+                        ];
+
+
 
 
 var knightsMoveRules = [
-                            {xOffset: 2, yOffset: 1, xMove: 1, yMove: -1},
+                            {xOffset: 4, yOffset: 1, xMove: 1, yMove: -1},
                             {xOffset: 1, yOffset: 2, xMove: -1, yMove: 1},
                             {xOffset: -1, yOffset: 2, xMove: 1, yMove: 1},
                             {xOffset: -2, yOffset: 1, xMove: -1, yMove: -1},
@@ -82,6 +89,12 @@ ray, brush, objectHovered,
 isMouseDown = false, onMouseDownPosition,
 radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
 randWidth = 4, randCount = 12, randRatio = 0.5;
+
+var mainGrid;
+mainGrid = new Grid(24, 24, 24);  
+var gThreeInUse = [];
+var gThreeUnused = [];
+
 init();
 render();
 
@@ -90,6 +103,7 @@ function CellObj(threejs, state, xyz){
   this.state = state;
   this.xyz = xyz;
 }
+
 
 //breaks up the hash string and returns different elements of the query
 
@@ -133,10 +147,16 @@ function parseQueryArgs() {
 
 
 function init() {
+    
+
     if (DEBUG) console.log("init start");
+
+    //parses out url query (after "?") and turns them into arguments
     qargs = parseQueryArgs();
     
-    //parses out url query (after "?") and turns them into arguments
+    if (qargs.rule) {
+    	gRule = window[qargs.rule]
+    }
     
     if (qargs.dir) {
         direction = qargs.dir;
@@ -191,12 +211,13 @@ function init() {
     scene = new THREE.Scene();
     
     
-    // Grid
+    //Graphical Grid
     var geometry = new THREE.Geometry();
     geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( axisMin * 50, 0, 0 ) ) );
     geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( (axisMax+1) * 50, 0, 0 ) ) );
     linesMaterial = new THREE.LineColorMaterial( 0x000000, 0.2 );
     
+
     
     
     if (!qargs.nogrid) {
@@ -296,7 +317,7 @@ function init() {
             buildFromHash(qargs.hash);
             if (qargs.sel) {
                 lastSelectedEl = document.getElementById(qargs.sel);
-                lastSelectedEl.style.backgroundColor = "cyan";
+                lastSelectedEl.style.backgroundColor = 0x00f0ff;
                 if (history.replaceState) {
                     var url = "" + window.location;
                     var i = url.indexOf('&sel=');
@@ -337,6 +358,11 @@ function init() {
     //g means Global
     gInitialHash = gUpdateHash;
     gInitialFrame = frame;
+
+      
+    // mainGrid.put(0,0,0,1);
+    // mainGrid.update();
+
     setInterval(mainLoopFast, 14);
     setInterval(mainLoopSlow, 140);
     setTimeout(mainLoopScience, 10);
@@ -395,13 +421,52 @@ function mainLoopScience() {
 }
 
 
+
+function liveCell(xyz, color) {
+	var cell_obj = visual_and_numerical_grid[xyz];
+    if (!cell_obj) {
+
+		if (!gThreeUnused.length) {
+			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+		}
+		else {
+			var threejs = gThreeUnused.pop(0);
+			// deal with color somehow
+		}
+		gThreeInUse.push(threejs);
+	  	cell_obj = new CellObj(threejs, 1 );
+		setObjPosition(cell_obj.threejs, xyz);
+		cell_obj.threejs.overdraw = true;
+		scene.addObject( cell_obj.threejs );
+		putGrid(cell_obj, xyz);
+	}
+    console.log("LOOK AT THIS: ", cell_obj);
+    return cell_obj;
+}
+
+function killCell(xyz) {
+	var obj = visual_and_numerical_grid[xyz];
+	if (obj) {
+		var i = gThreeInUse.indexOf(obj);
+		if (i < 0) {
+			console.log("FIXME: cell not in gThreeInUse");
+		}
+		else {
+			gThreeInUse.pop(i);
+			gThreeUnused.push(obj);
+		}
+		delGrid(xyz);
+	    setObjPosition(obj.threejs, [-1111,-1111,-1111]);
+	}
+}
+
 //most important
 function mainLoop(noRender) {
     //these are updating those little numbers that are keeping tack of the generation, etc.
     document.getElementById("generation").innerHTML = frame;
     document.getElementById("showphase").innerHTML = (frame % 6 + 6) %6;
     document.getElementById("direction").innerHTML = direction;
-    
+    var phase = (frame % 6 + 6) %6;
     
     if (isRunning) {
         if (direction == "reverse") {
@@ -410,189 +475,220 @@ function mainLoop(noRender) {
 
 
         ///////////////
-        if(DEBUG) console.log("frame:", frame)
-        ///////////////
-        
-        
-        var cells = [];
-        
-        //what is "grid"
-        for(var key in visual_and_numerical_grid) {
-            var xyz = eval('[' + key + ']')
-            
-            // this is how the cells array works--has a bunch of arrays with 2 objects [location, grid]
-            // if (visual_and_numerical_grid[key].state !== "undefined"){
-            //   cells.push([xyz, visual_and_numerical_grid[key].threejs]);
-            // }
-            // else{
-            //   // visual_and_numerical_grid[key] == the mesh!
-            //   cells.push([xyz, visual_and_numerical_grid[key]]);
-            // }
-            
-            cells.push([xyz, visual_and_numerical_grid[key]]);
-            
-            console.log(visual_and_numerical_grid[key]);
-        }
 
-        
-        
+        if(DEBUG) console.log("frame: ", frame)
+
+        if(DEBUG) console.log("frame:", frame, "grid:", visual_and_numerical_grid);
+        if(DEBUG) console.log("mainGrid.cells: ", mainGrid.cells);
         ///////////////
-        if(DEBUG) console.log("cells:", cells)
-        ///////////////
+
+		// killCell([0, 0, 0]);
+		// liveCell([1, 1, 1], 0x00ffff);
         
-        
-        var moves = []
-        
-        
-        //THIS is BusyBoxes specific
-        //these are the only two axes we use
-        var x1, x2                                          // our two axes for today
-        
-        //trueMod seems to be something to make modulus work with negative
-        switch( trueMod(frame, 3) ) {                      // ach, Javascript you old goat
-            
-            //depending on odd/even number, makes boxes blue or red or whatever
-            //WE MUST CHANGE THIS FOR 3 STATES
-            //also make this more modular
-            
-            // these are the 3 different planes
-            case 0: x1=0; x2=1; break;
-            case 1: x1=1; x2=2; break;
-            case 2: x1=2; x2=0; break;
-            
-            
-            // 2 states are on/off
-            // 3 states are positive/negative/no box
-            
-            // how do the cells interact?
-            // we come up with a way that the positive and negative cells work
-            // e.g., one might be clockwise and other counterclockwise
-            
-            // positive and negative cells do the same thing that the cells in the 2 state would do
-            
-            // it will still conserve those states
-            
-            
-            // how would you set a cell to an on state
-            //
-            
-        }
-        
-        
-        ///////////////
-        if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
-        console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
-        ///////////////
-        
-                            
-        for (var i in cells) {
-            //cell[0] == xyz
-            //cell[1] == CellObj
-            var cell = cells[i];
-            
-            if(DEBUG) console.log(cell[0], cell[1]);
-            
-            //console.log("cell: "+cell[0]+"---"+cell[1]);
-            //set the location of the cell in the grid
-            var xyz = cell[0];
-            
-            if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {  // only operate on cells appropriate for this phase
-                if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
-                var move = getMove(xyz, x1, x2);
-                //alert("xyz: "+xyz + "...." + "move[] "+move);
-                if (move) {
-                    var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
-                    //if there isn't a cell in the move to location
-                    // AND the move isn't conflicted (swap rule below)
-                    //then push the move to the "moves" array
-                    if(!getGrid(mvto)) {
-                        // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
-                        var mv = getMove(mvto, x1, x2);
-                                                     
-                        //I think this is the SWAP rule
-                        //why does each condition sum to zero?
-                        //this is because the coordinates are negative... ???
-                        //one is -1, -1, 0 and the other is
-                        //3 dimensional, 8 possibilities
-                        
-                        if (mv && mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
-                            if(DEBUG) console.log("  mvto:", mvto);
-                            
-                            
-                            //need to put a CellObj in here in stead of cell[1]                            
-                            moves.push([xyz, cell[1], mvto]);
-                        }
-                    }
-                }
+        mainGrid.iterate(gRule);
+        //calling iterate with an anonymous function as callback(cb)
+        mainGrid.iterate_nop(function(grid, x, y, z){
+            if(grid.get(x, y, z) && !grid.get_new(x, y, z)){
+                killCell([x,y,z]);
+            }else if(!grid.get(x, y, z) && grid.get_new(x, y, z)){
+                console.log("WE ARE CREATING!", [x,y,z]);
+                liveCell([x,y,z], 0x00ffff);
             }
-        }
-        
-        
-        if (AVG_TRAIL) {
-            avg = [0, 0, 0];
-            var len = 0;
-            for (var key in visual_and_numerical_grid) {
-                len++;
-                var cell;
-                eval("cell=[" + key + "]");
-                for (var j = 0; j < 3; j++) {
-                    avg[j] += cell[j];
-                }
-            }
-            for (var j = 0; j < 3; j++) {
-                avg[j] /= len;
-            }
-            var make = true;
-            if (avg_trail_a.length) {
-                var obj = avg_trail_a[avg_trail_a.length - 1];
-                var x = avg[0] * 50 + 25;
-                var y = avg[1] * 50 + 25;
-                var z = avg[2] * -50 - 25;
-                if (x == obj.position.x && y == obj.position.y && z == obj.position.z) make = false; // don't add one if nothing has changed
-            }
-            if (make) {
-                if (qargs.logtrail) {
-                    log("LOG_TO_FILE\ntrail.log\n" + avg[0] + "," + avg[1]+','+avg[2] + "\n")
-                }
-                var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[2]));
-                setObjPosition(voxel, avg);
-                voxel.overdraw = true;
-                scene.addObject(voxel);
-                avg_trail_a.push(voxel);
-                if (avg_trail_a.length > AVG_TRAIL) {
-                    scene.removeObject(avg_trail_a[0]);
-                    avg_trail_a = avg_trail_a.splice(1);
-                }
-            }
-            //console.log("trail length:", trail.length)
-        }
-        if (qargs.info) {
-            moveFifo = moveFifo.slice(1).concat(moves.length);
-            var avg = 0;
-            for (var i = 0; i < moveFifo.length; i++) {
-                avg += moveFifo[i];
-            }
-            avg /= moveFifo.length;
-            document.getElementById("showinfo").innerHTML = "moves: " + 
-                htmlPadSpaces(moves.length, 3) +
-                " avg: " + avg.toFixed(3) + " per cell: " + (avg / cellCount).toFixed(3)
-                + "<br/>";
-            if (qargs.info=="log") {
-                log("LOG_TO_FILE\ninfo.log\n" + avg + "," + (avg / cellCount) + "\n");
-            }
-        }
-        for (i in moves) {
-            //moves[0] == xyz
-            //moves[1] == CellObj
-            //moves[2] == mvto
-            var args = moves[i];
-            
-            //moveCell(oldxyz, cell_obj, newxyz)
-            moveCell(args[0], args[1], args[2]);
-            console.log("args: "+args[0]+"---"+args[1]+"---"+args[2]);
-        }
-        
-        
+        });
+
+        mainGrid.update();
+
+
+
+        // var cells = [];
+//         
+        // //what is "grid"
+        // for(var key in visual_and_numerical_grid) {
+            // var xyz = eval('[' + key + ']')
+//             
+            // // this is how the cells array works--has a bunch of arrays with 2 objects [location, grid]
+            // // if (visual_and_numerical_grid[key].state !== "undefined"){
+            // //   cells.push([xyz, visual_and_numerical_grid[key].threejs]);
+            // // }
+            // // else{
+            // //   // visual_and_numerical_grid[key] == the mesh!
+            // //   cells.push([xyz, visual_and_numerical_grid[key]]);
+            // // }
+//             
+            // cells.push([xyz, visual_and_numerical_grid[key]]);
+            // var bob = [xyz, visual_and_numerical_grid[key]];
+            // console.log("cell put into cells array: ", bob );
+            // //console.log(visual_and_numerical_grid[key]);
+        // }
+// 
+        // ///////////////
+        // if(DEBUG) console.log("cells:", cells)
+        // ///////////////        
+//         
+        // var moves = []
+//         
+        // //THIS is BusyBoxes specific
+        // //these are the only two axes we use
+        // var x1, x2                                          // our two axes for today
+//         
+        // //trueMod seems to be something to make modulus work with negative
+        // switch( trueMod(frame, 3) ) {                      // ach, Javascript you old goat
+//             
+            // //depending on odd/even number, makes boxes blue or red or whatever
+            // //WE MUST CHANGE THIS FOR 3 STATES
+            // //also make this more modular
+//             
+            // // these are the 3 different planes
+            // case 0: x1=0; x2=1; break; //XY [x, y, constant]
+            // case 1: x1=1; x2=2; break; //YZ [constant, y, z]
+            // case 2: x1=2; x2=0; break; //ZX
+//         
+            // // 2 states are on/off
+            // // 3 states are positive/negative/no box
+//             
+            // // how do the cells interact?
+            // // we come up with a way that the positive and negative cells work
+            // // e.g., one might be clockwise and other counterclockwise
+//             
+            // // positive and negative cells do the same thing that the cells in the 2 state would do
+//             
+            // // it will still conserve those states
+//             
+//             
+            // // how would you set a cell to an on state
+            // //   
+        // }     
+//         
+        // ///////////////
+        // if (DEBUG) console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
+        // console.log("frame:", frame, "parity:", frame & 1, ['red','blue'][frame & 1], ['x','y','z'][x1], ['x','y','z'][x2]);
+        // ///////////////   
+//                             
+        // for (var i in cells) {
+            // //cell[0] == xyz
+            // //cell[1] == CellObj
+            // var cell = cells[i];
+//             
+            // if(DEBUG) console.log(cell[0], cell[1]);
+//             
+            // //console.log("cell: "+cell[0]+"---"+cell[1]);
+            // //set the location of the cell in the grid
+            // var xyz = cell[0];
+// 
+            // console.log("phase: ", phase);
+            // console.log("LOCATION OF INTEREST: ", xyz, x1, x2);
+// 
+            // // var plane = [0,0,0];
+            // // plane[x1]
+            // // console.log("PLANE OF INTEREST: ", )
+            // if (((xyz[0] + xyz[1] + xyz[2]) & 1) == (frame & 1)) {  // only operate on cells appropriate for this phase
+                // if(DEBUG) console.log("DEBUG cell:", xyz, "-----------------------------------");
+//                 
+                // var move = getMove(xyz, x1, x2);
+                // //alert("xyz: "+xyz + "...." + "move[] "+move);
+                // console.log("move is first declared!!!!!!!!", move);
+                // if (move) {
+                    // var mvto = [xyz[0] + move[0], xyz[1] + move[1], xyz[2] + move[2]];
+                    // //if there isn't a cell in the move to location
+                    // // AND the move isn't conflicted (swap rule below)
+                    // //then push the move to the "moves" array
+                    // console.log("fucking mvto, wtf: ", mvto);
+                    // if(!getGrid(mvto)) {
+//                         
+                        // // tricky -- read the paper. Can only move if the location we move to would have moved to us (swap)
+                        // var mv = getMove(mvto, x1, x2);
+                        // console.log(" check one two one two:", mv, mvto, move);                  
+                        // //I think this is the SWAP rule
+                        // //why does each condition sum to zero?
+                        // //this is because the coordinates are negative... ???
+                        // //one is -1, -1, 0 and the other is
+                        // //3 dimensional, 8 possibilities
+//                         
+                        // if (mv && mv[0] + move[0] == 0 && mv[1] + move[1] == 0 && mv[2] + move[2] == 0) {
+                            // if(DEBUG) console.log("  mvto:", mvto);
+//                             
+                            // console.log("$$$$$$$$$ mvto:", mvto);
+                            // //need to put a CellObj in here in stead of cell[1]
+                            // mvto[0] = mvto[0]+xyz[0];
+                            // mvto[1] = mvto[1]+xyz[1];
+                            // mvto[2] = mvto[2]+xyz[2];
+// 
+                            // moves.push([xyz, cell[1], mvto]);
+                        // }
+                    // }
+                // }else{ console.log("-----failure-------");}
+// 
+            // }
+        // }
+//         
+//         
+        // if (AVG_TRAIL) {
+            // avg = [0, 0, 0];
+            // var len = 0;
+            // for (var key in visual_and_numerical_grid) {
+                // len++;
+                // var cell;
+                // eval("cell=[" + key + "]");
+                // for (var j = 0; j < 3; j++) {
+                    // avg[j] += cell[j];
+                // }
+            // }
+
+            // for (var j = 0; j < 3; j++) {
+                // avg[j] /= len;
+            // }
+            // var make = true;
+            // if (avg_trail_a.length) {
+                // var obj = avg_trail_a[avg_trail_a.length - 1];
+                // var x = avg[0] * 50 + 25;
+                // var y = avg[1] * 50 + 25;
+                // var z = avg[2] * -50 - 25;
+                // if (x == obj.position.x && y == obj.position.y && z == obj.position.z) make = false; // don't add one if nothing has changed
+            // }
+            // if (make) {
+                // if (qargs.logtrail) {
+                    // log("LOG_TO_FILE\ntrail.log\n" + avg[0] + "," + avg[1]+','+avg[2] + "\n")
+                // }
+                // var voxel = new THREE.Mesh(cubette, new THREE.MeshColorFillMaterial(colors[2]));
+                // setObjPosition(voxel, avg);
+                // voxel.overdraw = true;
+                // scene.addObject(voxel);
+                // avg_trail_a.push(voxel);
+                // if (avg_trail_a.length > AVG_TRAIL) {
+                    // scene.removeObject(avg_trail_a[0]);
+                    // avg_trail_a = avg_trail_a.splice(1);
+                // }
+            // }
+            // //console.log("trail length:", trail.length)
+        // }
+        // if (qargs.info) {
+            // moveFifo = moveFifo.slice(1).concat(moves.length);
+            // var avg = 0;
+            // for (var i = 0; i < moveFifo.length; i++) {
+                // avg += moveFifo[i];
+            // }
+            // avg /= moveFifo.length;
+            // document.getElementById("showinfo").innerHTML = "moves: " + 
+                // htmlPadSpaces(moves.length, 3) +
+                // " avg: " + avg.toFixed(3) + " per cell: " + (avg / cellCount).toFixed(3)
+                // + "<br/>";
+            // if (qargs.info=="log") {
+                // log("LOG_TO_FILE\ninfo.log\n" + avg + "," + (avg / cellCount) + "\n");
+            // }
+        // }
+        // for (i in moves) {
+            // //moves[0] == xyz
+            // //moves[1] == CellObj
+            // //moves[2] == mvto
+            // var args = moves[i];
+//             
+            // //moveCell(oldxyz, cell_obj, newxyz)
+            // moveCell(args[0], args[1], args[2]);
+           // // console.log("args: "+args[0]+"---"+args[1]+"---"+args[2]);
+        // }
+//         
+//         
+
         
         /// this is where the cells are rendered!!!
         
@@ -636,7 +732,7 @@ function getMove(xyz, x1, x2) {
     // else{
 
     // };
-    console.log("length: ", knightsMoveRules.xOffset);
+    //console.log("length: ", knightsMoveRules.xOffset);
     for (i = 0; i < knightsMoveRules.length; i++) {
         // on any given planes there are 8 things you need to check--BECAUSE OF THE KNIGHT MOVE
 
@@ -652,8 +748,13 @@ function getMove(xyz, x1, x2) {
 
         offsetPosition[x1] = COI.xOffset;
         offsetPosition[x2] = COI.yOffset;
+        if(i == 0){
+            console.log("offset position when looking at first knights move rule (1, 0, 4): ", offsetPosition);
+        }
+        // console.log("fucking offsetPosition ", offsetPosition);
+        // console.log("and grid ", visual_and_numerical_grid[xyz]);
         
-        //d represents the cells the are a knight's move away from the reference cell 0, 0, 0
+        //offsetPosition represents the cells the are a knight's move away from the reference cell 0, 0, 0
         //if ther is a cell a knight's move away from cell we are getting move for, then return move
         if (getGrid([ xyz[0] + offsetPosition[0], xyz[1] + offsetPosition[1], xyz[2] + offsetPosition[2] ])) {
             //var mv = [0, 0, 0];
@@ -663,6 +764,7 @@ function getMove(xyz, x1, x2) {
             mv[x1] = COI.xMove;
             mv[x2] = COI.yMove;
             
+            console.log("duh mv ", mv);
 
             //move1 and move2 are all the "swaps" that can occur
             // var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -698,8 +800,6 @@ function getMove(xyz, x1, x2) {
             }
         }
     }
-
-    console.log("THE DAMN MOVE: ", move);
 
     return move
 }
@@ -890,7 +990,8 @@ function onDocumentKeyDown( event ) {
             mainLoop();
             isRunning = false;
             break;
-        case 32:                           // SPACE
+        case 10:
+        case 13:                           // ENTER
             event.preventDefault();
             toggleRunning();
             break;
@@ -956,8 +1057,8 @@ function onDocumentKeyDown( event ) {
             adjustCamera();
             render();
             break;
-        case 10:                           // RETURN
-        case 13:
+        case 32:                           // SPACE
+        
             event.preventDefault();
             if (isRunning) break;
             var obj = getGrid(cursor);
@@ -967,48 +1068,50 @@ function onDocumentKeyDown( event ) {
             }
             
             if (!obj){
-              var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
-              var cell_obj = new CellObj(threejs, 1 );
-              //add third parameter--negative
-              //contstruct object: mesh(THREE.js), state()
-              putGrid(cell_obj, cursor);
-              setObjPosition(cell_obj.threejs, cursor);
-              cell_obj.threejs.overdraw = true;
-              scene.addObject( cell_obj.threejs );
+              // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
+              // var cell_obj = new CellObj(threejs, 1 );
+              // //add third parameter--negative
+              // //contstruct object: mesh(THREE.js), state()
+              // putGrid(cell_obj, cursor);
+              // setObjPosition(cell_obj.threejs, cursor);
+              // cell_obj.threejs.overdraw = true;
+              // scene.addObject( cell_obj.threejs );
+              liveCell(cursor, 0x00ffff);
+
+              mainGrid.put(cursor[0],cursor[1],cursor[2], 1)
               
               //console.log("cell_obj: ", cell_obj)
               //console.log("grid: ", visual_and_numerical_grid)
             }
-            else if (obj.state === -1) {
-                scene.removeObject(obj.threejs);
-                delGrid(cursor);
-            }
-            else if (obj.state === 1) {
-                // alert("yes I'm here");
-                if((cursor[0] + cursor[1] + cursor[2]) % 2 == 0){
-                  minusColor = 0
-                }
-                else{
-                  minusColor = 1
-                }
-                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( minusColors[ minusColor ] ) );
-                var cell_obj = new CellObj(threejs, -1 )
-                scene.removeObject(obj.threejs);
-                delGrid(cursor);
-                //add third parameter--negative
-                //contstruct object: mesh(THREE.js), state()
-                putGrid(cell_obj, cursor);
-                setObjPosition(cell_obj.threejs, cursor);
-                cell_obj.threejs.overdraw = true;
-                scene.addObject( cell_obj.threejs );
-                
-                
+            // else if (obj.state === -1) {
+            //     scene.removeObject(obj.threejs);
+            //     delGrid(cursor);
 
-                
-            }
+            // }
+            // else if (obj.state === 1) {
+            //     // alert("yes I'm here");
+            //     if((cursor[0] + cursor[1] + cursor[2]) % 2 == 0){
+            //       minusColor = 0
+            //     }
+            //     else{
+            //       minusColor = 1
+            //     }
+            //     var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( minusColors[ minusColor ] ) );
+            //     var cell_obj = new CellObj(threejs, -1 )
+            //     scene.removeObject(obj.threejs);
+            //     delGrid(cursor);
+            //     //add third parameter--negative
+            //     //contstruct object: mesh(THREE.js), state()
+            //     putGrid(cell_obj, cursor);
+            //     setObjPosition(cell_obj.threejs, cursor);
+            //     cell_obj.threejs.overdraw = true;
+            //     scene.addObject( cell_obj.threejs );                
+            // }
             else{
-              scene.removeObject(obj.threejs);
-              delGrid(cursor);
+              // scene.removeObject(obj.threejs);
+              // delGrid(cursor);
+              killCell(cursor);
+              mainGrid.put(cursor[0],cursor[1],cursor[2], 0)
             }
             
             updateHash();
@@ -1158,13 +1261,16 @@ function buildFromHash(hash) {
                 //   putGrid(voxel, [current.x, current.y, current.z])
                 //   
                 var special_xyz = [current.x, current.y, current.z];
-                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
-                var cell_obj = new CellObj(threejs, 1 );
+                // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                // var cell_obj = new CellObj(threejs, 1 );
+                var cell_obj = liveCell(special_xyz, 0x00ffff);
+                mainGrid.put(special_xyz[0],special_xyz[1],special_xyz[2])
+
                 //voxel.position.x = cur[0] * 50 + 25;
                 //voxel.position.y = cur[1] * 50 + 25;
                 //voxel.position.z = cur[2] * 50 + 25;
                 var overdraw_bool = true;
-                putTheCellInTheGridAndRedraw(cell_obj,special_xyz , overdraw_bool);
+                cell_obj.threejs.overdraw = true;
                 
             }
         }
@@ -1198,13 +1304,17 @@ function buildFromHash(hash) {
                 //when we instantiate this voxel, we have to give it a state (+ or -)
                 //on the other side, when someone gets it out of a dictionary, ask if it is + or -
                 // package the voxel in a dictionary object with an int                             
-                var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
-                var cell_obj = new CellObj(threejs, 1 );
+                // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                // var cell_obj = new CellObj(threejs, 1 );
+
+                var cell_obj = liveCell(cur, 0x00ffff);
+                mainGrid.put(cur[0],cur[1],cur[2], 1)
+
                 //voxel.position.x = cur[0] * 50 + 25;
                 //voxel.position.y = cur[1] * 50 + 25;
                 //voxel.position.z = cur[2] * 50 + 25;
                 var overdraw_bool = true;
-                putTheCellInTheGridAndRedraw(cell_obj, cur, overdraw_bool);
+                cell_obj.threejs.overdraw = true;
               
             }
         }
@@ -1231,14 +1341,18 @@ function buildFromHash(hash) {
                     // scene.addObject(voxel);
                     // putGrid(voxel, cur);
                                        
-                    var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
-                    var cell_obj = new CellObj(threejs, 1 );
+                    // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
+                    // var cell_obj = new CellObj(threejs, 1 );
+
+                    var cell_obj = liveCell(cur, 0x00ffff);
+                    mainGrid.put(cur[0],cur[1],cur[2], 1)
+
                     //voxel.position.x = cur[0] * 50 + 25;
                     //voxel.position.y = cur[1] * 50 + 25;
                     //voxel.position.z = cur[2] * 50 + 25;
                     console.log("bloody cell: ", cell_obj);
                     var overdraw_bool = true;
-                    putTheCellInTheGridAndRedraw(cell_obj, cur, overdraw_bool);
+                    cell_obj.threejs.overdraw = true;
                     
                 }
             }
@@ -1651,14 +1765,3 @@ function scienceTestLoop(){
     }
 }
 //]]>
-
-
-
-
-
-
-
-
-
-
-
