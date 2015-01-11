@@ -38,12 +38,23 @@ function Grid(x, y, z, mod_range, mode){
 	this.put= function(x, y, z, cell_state){
 		var key = ""+x+","+y+","+z;
 		if(cell_state){
-			this.new_cells[key] = cell_state;
+			this.cells[key] = cell_state;
 		}else{
 			//research this
-			delete this.new_cells[key];
+			delete this.cells[key];
 		}
 	}
+
+  this.put_new= function(x, y, z, cell_state){
+    var key = ""+x+","+y+","+z;
+    if(cell_state){
+      this.new_cells[key] = cell_state;
+    }else{
+      //research this
+      delete this.new_cells[key];
+    }
+  }
+
 
 
   this.iterate = function(cb){
@@ -53,7 +64,7 @@ function Grid(x, y, z, mod_range, mode){
   		for(var y = -this.halfY; y < this.halfY; y++){
   			for(var z = -this.halfZ; z < this.halfZ; z++){
   				var new_state = cb(this, x,y,z);
-  				this.put(x,y,z,new_state);
+  				this.put_new(x,y,z,new_state);
 
   			}
   		}
