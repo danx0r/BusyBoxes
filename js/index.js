@@ -431,13 +431,13 @@ function bugg_used() {
 	return r;
 }
 
-// function bugg_unused() {
-	// var r = [];
-	// for(i=0; i<gThreeUnused.length; i++) {
-		// r.push(gThreeUnused[i].bugg);
-	// }
-	// return r;
-// }
+function bugg_unused() {
+	var r = [];
+	for(i=0; i<gThreeUnused.length; i++) {
+		r.push(gThreeUnused[i].bugg);
+	}
+	return r;
+}
 
 function liveCell(xyz, color) {
 	var cell_obj = visual_and_numerical_grid[xyz];
@@ -448,17 +448,17 @@ function liveCell(xyz, color) {
 		  	cell_obj = new CellObj(threejs, 1 );
 			cell_obj.threejs.overdraw = true;
 			scene.addObject( cell_obj.threejs );
-            // console.log("liveCell: creating new obj:", xyz, cell_obj);
+            if (DEBUG) console.log("liveCell: creating new obj:", xyz, cell_obj);
 		}
 		else {
 			cell_obj = gThreeUnused.pop(0);
-            // console.log("liveCell: reusing obj:", xyz, cell_obj);
+            if (DEBUG) console.log("liveCell: reusing obj:", xyz, cell_obj);
 			// deal with color somehow
 		}
 		gThreeInUse.push(cell_obj);
 		setObjPosition(cell_obj.threejs, xyz);
 		putGrid(cell_obj, xyz);
-		// console.log("live gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
+		if (DEBUG) console.log("live gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
 	}
 	// else console.log("liveCell: already live, doing nuttin", xyz);
     return cell_obj;
@@ -472,13 +472,13 @@ function killCell(xyz) {
 			console.log("killCell: not found in gThreeInUse:", xyz, obj);
 		}
 		else {
-			// console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
+			if (DEBUG) console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
 			gThreeInUse.splice(i, 1);
 			gThreeUnused.push(obj);
 		}
 		delGrid(xyz);
 	    setObjPosition(obj.threejs, [-1111,-1111,-1111]);
-		// console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
+		if (DEBUG) console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
 	}
 	// else console.log("killCell: obj not vangrid, doing nothing", xyz, xyz);
 }
@@ -1549,6 +1549,9 @@ function selectHash(hash, el, size, trail) {
 function clearScreen() {
     isRunning = false;
     visual_and_numerical_grid = {};
+    mainGrid.clear();
+    gThreeUsed = [];			// these guys are trooublesome
+    gThreeUnused = [];
     var i = 0;
     while ( i < scene.objects.length ) {
         object = scene.objects[ i ];
