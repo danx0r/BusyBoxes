@@ -353,8 +353,10 @@ function init() {
     gInitialHash = gUpdateHash;
     gInitialFrame = frame;
 
-    // mainGrid = new Grid(24, 24, 24);
-    // mainGrid.put(12,12,12,1);
+    mainGrid = new Grid(24, 24, 24);    
+    mainGrid.put(0,0,0,1);
+    mainGrid.update();
+
     setInterval(mainLoopFast, 14);
     setInterval(mainLoopSlow, 140);
     setTimeout(mainLoopScience, 10);
@@ -471,9 +473,24 @@ function mainLoop(noRender) {
 
         ///////////////
 
-		killCell([0, 0, 0]);
-		liveCell([1, 1, 1], 0x00ffff);
+		// killCell([0, 0, 0]);
+		// liveCell([1, 1, 1], 0x00ffff);
         
+        mainGrid.iterate(test_rule);
+        //calling iterate with an anonymous function as callback(cb)
+        mainGrid.iterate_nop(function(grid, x, y, z){
+            if(grid.get(x, y, z) && !grid.get_new(x, y, z)){
+                killCell([x,y,z]);
+            }else if(!grid.get(x, y, z) && grid.get_new(x, y, z)){
+                console.log("WE ARE CREATING!", [x,y,z]);
+                liveCell([x,y,z], 0x00ffff);
+            }
+        });
+
+        mainGrid.update();
+
+
+
         // var cells = [];
 //         
         // //what is "grid"

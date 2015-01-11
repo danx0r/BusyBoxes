@@ -20,6 +20,16 @@ function Grid(x, y, z, mod_range, mode){
   	return 0;
   }
 
+  this.get_new = function(x, y, z){
+    //turn xyz into key
+    var key = ""+x+","+y+","+z;
+    var cell_state = this.new_cells[key]
+    if(cell_state){
+      return cell_state
+    }
+    return 0;
+  }
+
   //update new set of cells
 	this.put= function(x, y, z, cell_state){
 		var key = ""+x+","+y+","+z;
@@ -44,26 +54,30 @@ function Grid(x, y, z, mod_range, mode){
   			}
   		}
   	}
+  }
 
-  	this.cells = this.new_cells;
-  	this.new_cells = {};
+  this.iterate_nop = function(cb){
+    var new_cells = {};
+
+    for(var x = 0; x < this.dimx; x++){
+      for(var y = 0; y < this.dimy; y++){
+        for(var z = 0; z < this.dimz; z++){
+          var new_state = cb(this, x,y,z);
+          
+
+        }
+      }
+    }
   }
   
   // copy new_cells to cells for setup and tests
-  this.set_cells = function() {
+  this.update = function() {
     this.cells = this.new_cells;
     this.new_cells = {};
   }
 }
 
-//TESTS
-var grid = new Grid(10, 10, 10);
-grid.put(5, 5, 5, 1);
-console.log("Should be 0: ", grid.get(3,3,3));
-console.log("Should be 1: ", grid.get(5,5,5));
-grid.put(5, 5, 5, 0);
-console.log("We deleted. Should be 0: ", grid.get(5,5,5));
-console.log("Should be empty: ", grid.cells);
+
 
 
 //C2
@@ -81,8 +95,16 @@ test_rule = function(grid, x,y,z){
 }
 
 if (DEBUG === true){
+  //TESTS
+  var grid = new Grid(10, 10, 10);
   grid.put(5, 5, 5, 1);
-  grid.set_cells();
+  console.log("Should be 0: ", grid.get(3,3,3));
+  console.log("Should be 1: ", grid.get(5,5,5));
+  grid.put(5, 5, 5, 0);
+  console.log("We deleted. Should be 0: ", grid.get(5,5,5));
+  console.log("Should be empty: ", grid.cells);
+  grid.put(5, 5, 5, 1);
+  grid.update();
   console.log("grid cells: ", grid.new_cells);
   grid.iterate(test_rule);
   console.log("grid cells: ", grid.cells);
