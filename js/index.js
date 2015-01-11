@@ -4,6 +4,7 @@ var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
 var cell_trail_a = [];
+DEFAULT_COLOR = 0x8090aa;  
 
 
 // adding these to a cell's coords gives you its knight-move bretheren
@@ -91,7 +92,7 @@ radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
 randWidth = 4, randCount = 12, randRatio = 0.5;
 
 var mainGrid;
-mainGrid = new Grid(24, 24, 24);  
+mainGrid = new Grid(24, 24, 24); //FIXME TODO: set size acc to qargs
 var gThreeInUse = [];
 var gThreeUnused = [];
 
@@ -255,7 +256,7 @@ bugg = 1000;
         adjustCamera();
     }
     else {
-        cube = new Cube( 50, 50, 50 );
+        cube = new Cube( 42, 42, 42 );
     }
     
     cubette = new Cube(10, 10, 10);
@@ -505,7 +506,7 @@ function mainLoop(noRender) {
         ///////////////
 
 		// killCell([0, 0, 0]);
-		// liveCell([1, 1, 1], 0x00ffff);
+		// liveCell([1, 1, 1], DEFAULT_COLOR);
         
         mainGrid.iterate(gRule);
         //calling iterate with an anonymous function as callback(cb)
@@ -515,7 +516,7 @@ function mainLoop(noRender) {
                 killCell([x,y,z]);
             }else if(!grid.get(x, y, z) && grid.get_new(x, y, z)){
                 // console.log("WE ARE CREATING!", [x,y,z]);
-                liveCell([x,y,z], 0x00ffff);
+                liveCell([x,y,z], DEFAULT_COLOR);
             }
         });
 
@@ -1099,7 +1100,7 @@ function onDocumentKeyDown( event ) {
               // setObjPosition(cell_obj.threejs, cursor);
               // cell_obj.threejs.overdraw = true;
               // scene.addObject( cell_obj.threejs );
-              liveCell(cursor, 0x00ffff);
+              liveCell(cursor, DEFAULT_COLOR);
 
               mainGrid.put(cursor[0],cursor[1],cursor[2], 1)
               
@@ -1286,7 +1287,7 @@ function buildFromHash(hash) {
                 var special_xyz = [current.x, current.y, current.z];
                 // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
                 // var cell_obj = new CellObj(threejs, 1 );
-                var cell_obj = liveCell(special_xyz, 0x00ffff);
+                var cell_obj = liveCell(special_xyz, DEFAULT_COLOR);
                 mainGrid.put(special_xyz[0],special_xyz[1],special_xyz[2])
 
                 //voxel.position.x = cur[0] * 50 + 25;
@@ -1330,7 +1331,7 @@ function buildFromHash(hash) {
                 // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
                 // var cell_obj = new CellObj(threejs, 1 );
 
-                var cell_obj = liveCell(cur, 0x00ffff);
+                var cell_obj = liveCell(cur, DEFAULT_COLOR);
                 mainGrid.put(cur[0],cur[1],cur[2], 1)
 
                 //voxel.position.x = cur[0] * 50 + 25;
@@ -1367,7 +1368,7 @@ function buildFromHash(hash) {
                     // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
                     // var cell_obj = new CellObj(threejs, 1 );
 
-                    var cell_obj = liveCell(cur, 0x00ffff);
+                    var cell_obj = liveCell(cur, DEFAULT_COLOR);
                     mainGrid.put(cur[0],cur[1],cur[2], 1)
 
                     //voxel.position.x = cur[0] * 50 + 25;
