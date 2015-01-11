@@ -57,28 +57,63 @@ function Grid(x, y, z, mod_range, mode) {
 
 	this.iterate = function(cb) {
 		new_cells = {};
-
-		for (var x = -this.halfX; x < this.halfX; x++) {
-			for (var y = -this.halfY; y < this.halfY; y++) {
-				for (var z = -this.halfZ; z < this.halfZ; z++) {
-					var new_state = cb(this, x, y, z);
-					this.put_new(x, y, z, new_state);
+		var hit = {};
+		
+		for (var non0 in this.cells) {
+			if (non0 != undefined) {
+				var xyz = eval('['+non0+']');
+				var x=xyz[0];
+				var y=xyz[1];
+				var z=xyz[2];
+				for (var i=x-1; i<=x+1; i++) {
+					for (var j=y-1; j<=y+1; j++) {
+						for (var k=z-1; k<=z+1; k++) {
+							if (hit[[i, j, k]] == null) {
+								hit[[i, j, k]] = true;
+								var new_state = cb(this, i, j, k);
+								this.put_new(i, j, k, new_state);
+							}
+						}
+					}
 				}
 			}
 		}
+
+		// for (var x = -this.halfX; x < this.halfX; x++) {
+			// for (var y = -this.halfY; y < this.halfY; y++) {
+				// for (var z = -this.halfZ; z < this.halfZ; z++) {
+					// var new_state = cb(this, x, y, z);
+					// this.put_new(x, y, z, new_state);
+				// }
+			// }
+		// }
 	}
 
 	this.iterate_nop = function(cb) {
 		var new_cells = {};
 
-		for (var x = -this.halfX; x < this.halfX; x++) {
-			for (var y = -this.halfY; y < this.halfY; y++) {
-				for (var z = -this.halfZ; z < this.halfZ; z++) {
-					cb(this, x, y, z);
+		var hit = {};
+		
+		for (var non0 in this.cells) {
+			if (non0 != undefined) {
+				var xyz = eval('['+non0+']');
+				var x=xyz[0];
+				var y=xyz[1];
+				var z=xyz[2];
+				for (var i=x-1; i<=x+1; i++) {
+					for (var j=y-1; j<=y+1; j++) {
+						for (var k=z-1; k<=z+1; k++) {
+							if (hit[[i, j, k]] == null) {
+								hit[[i, j, k]] = true;
+								cb(this, i, j, k);
+							}
+						}
+					}
 				}
 			}
 		}
 	}
+
 	// copy new_cells to cells for setup and tests
 	this.update = function() {
 		this.cells = this.new_cells;
