@@ -155,7 +155,7 @@ function init() {
     qargs = parseQueryArgs();
     
     if (qargs.rule) {
-    	gRule = eval(qargs.rule);
+    	gRule = window[qargs.rule]
     }
     
     if (qargs.dir) {
