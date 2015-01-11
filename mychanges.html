@@ -1,0 +1,49 @@
+<html>
+<head>
+	<title>User's Interface</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
+  <script src="bower_components/simple-sidebar/dist/jquery.simplesidebar.min.js"></script>
+  </head>
+
+<body>
+  
+  <div class="wrapper">
+    <!--content-->
+  </div>
+  
+  <section class="sidebar">
+    <!--content-->
+  </section>
+  
+  <section class="navbar">
+    <div id="open-sb" class="menu-icon menu-button menu-left">
+  </section>
+  
+  <script>
+  $( ".sidebar" ).simpleSidebar({
+      settings: {
+        opener: "#open-sb",
+        wrapper: ".wrapper",
+        animation: {
+          easing: "easeOutQuint"
+        }
+      },
+      sidebar: {
+        align: "left",
+        width: 200,
+        closingLinks: 'a',
+      }
+    });
+  </script>
+
+</body>
+</html>
