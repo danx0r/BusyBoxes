@@ -150,9 +150,13 @@ function init() {
     
 
     if (DEBUG) console.log("init start");
+
+    //parses out url query (after "?") and turns them into arguments
     qargs = parseQueryArgs();
     
-    //parses out url query (after "?") and turns them into arguments
+    if (qargs.rule) {
+    	gRule = eval(qargs.rule);
+    }
     
     if (qargs.dir) {
         direction = qargs.dir;
@@ -1761,14 +1765,3 @@ function scienceTestLoop(){
     }
 }
 //]]>
-
-
-
-
-
-
-
-
-
-
-

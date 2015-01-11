@@ -1,4 +1,4 @@
-gRule = function(grid, x,y,z){
+golRule = function(grid, x,y,z){
 	//if cell is alive--kill it
 	//var cell = this.get(x,y,z);
 
