@@ -421,6 +421,7 @@ function mainLoopScience() {
 function liveCell(xyz, color) {
 	var cell_obj = visual_and_numerical_grid[xyz];
     if (!cell_obj) {
+
 		if (!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
 		}
@@ -473,14 +474,14 @@ function mainLoop(noRender) {
 
         if(DEBUG) console.log("frame: ", frame)
 
-        if(DEBUG) console.log("frame:", frame, "grid:", visual_and_numerical_grid)
-
+        if(DEBUG) console.log("frame:", frame, "grid:", visual_and_numerical_grid);
+        if(DEBUG) console.log("mainGrid.cells: ", mainGrid.cells);
         ///////////////
 
 		// killCell([0, 0, 0]);
 		// liveCell([1, 1, 1], 0x00ffff);
         
-        mainGrid.iterate(test_rule);
+        mainGrid.iterate(gRule);
         //calling iterate with an anonymous function as callback(cb)
         mainGrid.iterate_nop(function(grid, x, y, z){
             if(grid.get(x, y, z) && !grid.get_new(x, y, z)){
@@ -1303,7 +1304,7 @@ function buildFromHash(hash) {
                 // var cell_obj = new CellObj(threejs, 1 );
 
                 var cell_obj = liveCell(cur, 0x00ffff);
-                mainGrid.put(cur[0],cur[1],cur[2])
+                mainGrid.put(cur[0],cur[1],cur[2], 1)
 
                 //voxel.position.x = cur[0] * 50 + 25;
                 //voxel.position.y = cur[1] * 50 + 25;
@@ -1340,7 +1341,7 @@ function buildFromHash(hash) {
                     // var cell_obj = new CellObj(threejs, 1 );
 
                     var cell_obj = liveCell(cur, 0x00ffff);
-                    mainGrid.put(cur[0],cur[1],cur[2])
+                    mainGrid.put(cur[0],cur[1],cur[2], 1)
 
                     //voxel.position.x = cur[0] * 50 + 25;
                     //voxel.position.y = cur[1] * 50 + 25;
