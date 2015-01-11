@@ -4,6 +4,10 @@ function Grid(x, y, z, mod_range, mode){
   this.dimx = x;
   this.dimy = y;
   this.dimz = z;
+  this.halfX = Math.floor(x/2);
+  this.halfY = Math.floor(y/2);
+  this.halfZ = Math.floor(z/2);
+
   this.mode = mode;
   this.mod_range = mod_range;
 
@@ -45,9 +49,9 @@ function Grid(x, y, z, mod_range, mode){
   this.iterate = function(cb){
   	var new_cells = {};
 
-  	for(var x = 0; x < this.dimx; x++){
-  		for(var y = 0; y < this.dimy; y++){
-  			for(var z = 0; z < this.dimz; z++){
+  	for(var x = -this.halfX; x < this.halfX; x++){
+  		for(var y = -this.halfY; y < this.halfY; y++){
+  			for(var z = -this.halfZ; z < this.halfZ; z++){
   				var new_state = cb(this, x,y,z);
   				this.put(x,y,z,new_state);
 
@@ -59,9 +63,9 @@ function Grid(x, y, z, mod_range, mode){
   this.iterate_nop = function(cb){
     var new_cells = {};
 
-    for(var x = 0; x < this.dimx; x++){
-      for(var y = 0; y < this.dimy; y++){
-        for(var z = 0; z < this.dimz; z++){
+    for(var x = -this.halfX; x < this.halfX; x++){
+      for(var y = -this.halfY; y < this.halfY; y++){
+        for(var z = -this.halfZ; z < this.halfZ; z++){
           var new_state = cb(this, x,y,z);
           
 
@@ -84,7 +88,7 @@ function Grid(x, y, z, mod_range, mode){
 test_rule = function(grid, x,y,z){
 	//if cell is alive--kill it
 	//var cell = this.get(x,y,z);
-	var neighbor = grid.get(x-1,y,z);
+	var neighbor = grid.get(x+1,y,z);
 	if(neighbor){
 		console.log("nabe @", x, y, z);
 		return 1;
