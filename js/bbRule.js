@@ -29,7 +29,7 @@ bbRule = function(grid, x, y, z, frm) {
 			if(bb_TEST) console.log("x:", x, "y:", y, "ox:", bb_offsetx[i], "oy:", bb_offsety[i], "xxyyz:", xx, yy, z);
 			if (grid.get(xx, yy, z)) {
 				if(bb_TEST) console.log("SWAP");
-				if (swapx != null) {		// swap confict, forgeddaboudit
+				if ((swapx != null) && (swapx != bb_swapx[i] || swapy != bb_swapy[i]) ) {		// swap confict, forgeddaboudit
 					if(bb_TEST) console.log("CRAP swap already:", swapx, swapy);
 					return null;
 				}
