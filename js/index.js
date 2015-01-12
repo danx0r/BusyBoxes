@@ -890,12 +890,12 @@ function putGrid2(obj, xyz){
   visual_and_numerical_grid[xyz] = [obj.threejs, obj.state];
 }
 
-function trueMod(v, base) {
-    if (v < 0) {
-        return ((v % base) + base) % base;
-    }
-    return v % base;
-}
+// function trueMod(v, base) {
+    // if (v < 0) {
+        // return ((v % base) + base) % base;
+    // }
+    // return v % base;
+// }
 
 function getGrid(xyz) {
     if (mode == "wrap") {
