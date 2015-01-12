@@ -55,7 +55,7 @@ function Grid(x, y, z, mod_range, mode) {
 		}
 	}
 
-	this.iterate = function(cb) {
+	this.iterate = function(cb, frm) {
 		new_cells = {};
 		var hit = {};
 		
@@ -70,7 +70,7 @@ function Grid(x, y, z, mod_range, mode) {
 						for (var k=z-1; k<=z+1; k++) {
 							if (hit[[i, j, k]] == null) {
 								hit[[i, j, k]] = true;
-								var new_state = cb(this, i, j, k);
+								var new_state = cb(this, i, j, k, frm);
 								this.put_new(i, j, k, new_state);
 							}
 						}
@@ -89,7 +89,7 @@ function Grid(x, y, z, mod_range, mode) {
 		// }
 	}
 
-	this.iterate_nop = function(cb) {
+	this.iterate_nop = function(cb, frm) {
 		var new_cells = {};
 
 		var hit = {};
@@ -105,7 +105,7 @@ function Grid(x, y, z, mod_range, mode) {
 						for (var k=z-1; k<=z+1; k++) {
 							if (hit[[i, j, k]] == null) {
 								hit[[i, j, k]] = true;
-								cb(this, i, j, k);
+								cb(this, i, j, k, frm);
 							}
 						}
 					}

@@ -159,6 +159,7 @@ bugg = 1000;
     
     if (qargs.rule) {
     	gRule = window[qargs.rule]
+    	if (!gRule) alert("rule " + qargs.rule + " not defined");
     }
     
     if (qargs.dir) {
@@ -508,7 +509,7 @@ function mainLoop(noRender) {
 		// killCell([0, 0, 0]);
 		// liveCell([1, 1, 1], DEFAULT_COLOR);
         
-        mainGrid.iterate(gRule);
+        mainGrid.iterate(gRule, frame);
         //calling iterate with an anonymous function as callback(cb)
         mainGrid.iterate_nop(function(grid, x, y, z){
             if(grid.get(x, y, z) && !grid.get_new(x, y, z)){
@@ -518,7 +519,7 @@ function mainLoop(noRender) {
                 // console.log("WE ARE CREATING!", [x,y,z]);
                 liveCell([x,y,z], DEFAULT_COLOR);
             }
-        });
+        }, frame);
 
         mainGrid.update();
 
