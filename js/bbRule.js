@@ -84,20 +84,20 @@ bbRule = function(grid, x, y, z, frm) {
 		swpz = bb_swapz;
 	}
 	if (m==1) {
-		offx = bb_offsety;
-		offy = bb_offsetz;
-		offz = bb_offsetx;
-		swpx = bb_swapy;
-		swpy = bb_swapz;
-		swpz = bb_swapx;
-	}
-	if (m==2) {
 		offx = bb_offsetz;
 		offy = bb_offsetx;
 		offz = bb_offsety;
 		swpx = bb_swapz;
 		swpy = bb_swapx;
 		swpz = bb_swapy;
+	}
+	if (m==2) {
+		offx = bb_offsety;
+		offy = bb_offsetz;
+		offz = bb_offsetx;
+		swpx = bb_swapy;
+		swpy = bb_swapz;
+		swpz = bb_swapx;
 	}
 	return onePlane();
 }
