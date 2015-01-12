@@ -37,11 +37,11 @@ bbRule = function(grid, x, y, z, frm) {
 			var xx = x+offx[i];
 			var yy = y+offy[i];
 			var zz = z+offz[i];
-			if(bb_TEST) console.log("x:", x, "y:", y, "ox:", offx[i], "oy:", offy[i], "xxyyz:", xx, yy, z);
+			// if(bb_TEST) console.log("x:", x, "y:", y, "ox:", offx[i], "oy:", offy[i], "xxyyz:", xx, yy, z);
 			if (grid.get(xx, yy, zz)) {
-				if(bb_TEST) console.log("SWAP");
+				// if(bb_TEST) console.log("SWAP");
 				if ((swapx != null) && (swapx != swpx[i] || swapy != swpy[i] || swapz != swpz[i]) ) {		// swap confict, forgeddaboudit
-					if(bb_TEST) console.log("CRAP swap already:", swapx, swapy);
+					// if(bb_TEST) console.log("CRAP swap already:", swapx, swapy);
 					return null;
 				}
 				swapx = swpx[i];
@@ -55,13 +55,13 @@ bbRule = function(grid, x, y, z, frm) {
 
 	function onePlane() {
 		var swap = getSwap(x, y, z);													// proposed swap cell as delta from xyz
-		if(bb_TEST) console.log("swap =", swap);
+		// if(bb_TEST) console.log("swap =", swap);
 		if (swap != null) {																// if valid (no immediate conflicts)
 			var swapper = grid.get(x+swap[0], y+swap[1], z+swap[2]);   					// get state at swap cell
-			if(bb_TEST) console.log("swapper =", swapper, "coi:", coi);
+			// if(bb_TEST) console.log("swapper =", swapper, "coi:", coi);
 			if (swapper != coi) {														// if state is different from ours, we might swap
 				var revswap = getSwap(x+swap[0], y+swap[1], z+swap[2]);							// proposed swap for swap cell
-				if(bb_TEST) console.log("revswap =", revswap, "from:", x+swap[0], y+swap[1], z);
+				// if(bb_TEST) console.log("revswap =", revswap, "from:", x+swap[0], y+swap[1], z);
 				if (revswap != null) {
 					if ( (swap[0] + revswap[0] == 0) && 
 						 (swap[1] + revswap[1] == 0) &&									// if it matches (mutual proposed swaps), do this thing

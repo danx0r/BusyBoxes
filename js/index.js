@@ -1378,7 +1378,7 @@ function buildFromHash(hash) {
                     //voxel.position.x = cur[0] * 50 + 25;
                     //voxel.position.y = cur[1] * 50 + 25;
                     //voxel.position.z = cur[2] * 50 + 25;
-                    console.log("bloody cell: ", cell_obj);
+                    // console.log("bloody cell: ", cell_obj);
                     var overdraw_bool = true;
                     cell_obj.threejs.overdraw = true;
                     
@@ -1489,7 +1489,7 @@ function updateHash(noLink) {
         gInitialFrame = frame;
     }
     lasthash = data;
-    if (!isRunning && typeof(console) != "undefined" && console.log) console.log("last hash:", data);
+    // if (!isRunning && typeof(console) != "undefined" && console.log) console.log("last hash:", data);
     if (data.length > 12) {
         data = data.substr(0,5) + ".." + data.substr(data.length-5)
     }
