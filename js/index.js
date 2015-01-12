@@ -161,6 +161,9 @@ bugg = 1000;
     	gRule = window[qargs.rule]
     	if (!gRule) alert("rule " + qargs.rule + " not defined");
     }
+    else {
+    	gRule = bbRule; // for nows
+    }
     
     if (qargs.dir) {
         direction = qargs.dir;
