@@ -71,6 +71,9 @@ function Grid(x, y, z, mod_range, mode) {
 							if (hit[[i, j, k]] == null) {
 								hit[[i, j, k]] = true;
 								var new_state = cb(this, i, j, k, frm);
+								if (new_state == null) {
+									new_state = this.get(i, j, k);
+								}
 								this.put_new(i, j, k, new_state);
 							}
 						}
