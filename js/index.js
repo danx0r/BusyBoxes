@@ -512,16 +512,18 @@ function mainLoop(noRender) {
 		// killCell([0, 0, 0]);
 		// liveCell([1, 1, 1], DEFAULT_COLOR);
         
-        mainGrid.iterate(gRule, frame);
         //calling iterate with an anonymous function as callback(cb)
-        mainGrid.iterate_nop(function(grid, x, y, z){
-            if(grid.get(x, y, z) && !grid.get_new(x, y, z)){
+        mainGrid.iterate(function(grid, x, y, z, f){
+        	var old = grid.get(x, y, z);
+        	var coi = gRule(grid, x, y, z, f);
+            if(old && !coi){
                 // console.log("WE ARE KILLING!", [x,y,z]);
                 killCell([x,y,z]);
-            }else if(!grid.get(x, y, z) && grid.get_new(x, y, z)){
+            }else if(!old && coi){
                 // console.log("WE ARE CREATING!", [x,y,z]);
                 liveCell([x,y,z], DEFAULT_COLOR);
             }
+            return coi;
         }, frame);
 
         mainGrid.update();

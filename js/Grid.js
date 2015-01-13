@@ -89,31 +89,6 @@ function Grid(x, y, z, mod_range, mode) {
 		// }
 	}
 
-	this.iterate_nop = function(cb, frm) {
-		var new_cells = {};
-
-		var hit = {};
-		
-		for (var non0 in this.cells) {
-			if (non0 != undefined) {
-				var xyz = eval('['+non0+']');
-				var x=xyz[0];
-				var y=xyz[1];
-				var z=xyz[2];
-				for (var i=x-1; i<=x+1; i++) {
-					for (var j=y-1; j<=y+1; j++) {
-						for (var k=z-1; k<=z+1; k++) {
-							if (hit[[i, j, k]] == null) {
-								hit[[i, j, k]] = true;
-								cb(this, i, j, k, frm);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
 	// copy new_cells to cells for setup and tests
 	this.update = function() {
 		this.cells = this.new_cells;
