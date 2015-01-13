@@ -15,8 +15,6 @@ golRule = function(grid, x,y,z){
 	if(grid.get(x,y,z)){
 		if(nabes < 2 || nabes > 3){
 			return 0;
-		}else{
-			return;
 		}
 	}else{
 		if(nabes === 3){
