@@ -516,6 +516,7 @@ function mainLoop(noRender) {
         mainGrid.iterate(function(grid, x, y, z, f){
         	var old = grid.get(x, y, z);
         	var coi = gRule(grid, x, y, z, f);
+        	if (coi == null) coi = old;
             if(old && !coi){
                 // console.log("WE ARE KILLING!", [x,y,z]);
                 killCell([x,y,z]);
