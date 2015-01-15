@@ -1,9 +1,10 @@
 //<![CDATA[
-var DEBUG = true;
+var DEBUG = false;
 var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
 var cell_trail_a = [];
+DEFAULT_COLOR = 0x8090aa;  
 
 
 // adding these to a cell's coords gives you its knight-move bretheren
@@ -91,7 +92,7 @@ radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
 randWidth = 4, randCount = 12, randRatio = 0.5;
 
 var mainGrid;
-mainGrid = new Grid(24, 24, 24);  
+mainGrid = new Grid(24, 24, 24); //FIXME TODO: set size acc to qargs
 var gThreeInUse = [];
 var gThreeUnused = [];
 
@@ -101,7 +102,8 @@ render();
 function CellObj(threejs, state, xyz){
   this.threejs = threejs;
   this.state = state;
-  this.xyz = xyz;
+  this.bugg = bugg++;
+  // this.xyz = xyz;
 }
 
 
@@ -147,6 +149,7 @@ function parseQueryArgs() {
 
 
 function init() {
+bugg = 1000;
     
 
     if (DEBUG) console.log("init start");
@@ -156,6 +159,10 @@ function init() {
     
     if (qargs.rule) {
     	gRule = window[qargs.rule]
+    	if (!gRule) alert("rule " + qargs.rule + " not defined");
+    }
+    else {
+    	gRule = bbRule; // for nows
     }
     
     if (qargs.dir) {
@@ -253,7 +260,7 @@ function init() {
         adjustCamera();
     }
     else {
-        cube = new Cube( 50, 50, 50 );
+        cube = new Cube( 42, 42, 42 );
     }
     
     cubette = new Cube(10, 10, 10);
@@ -420,7 +427,21 @@ function mainLoopScience() {
     }
 }
 
+function bugg_used() {
+	var r = [];
+	for(i=0; i<gThreeInUse.length; i++) {
+		r.push(gThreeInUse[i].bugg);
+	}
+	return r;
+}
 
+function bugg_unused() {
+	var r = [];
+	for(i=0; i<gThreeUnused.length; i++) {
+		r.push(gThreeUnused[i].bugg);
+	}
+	return r;
+}
 
 function liveCell(xyz, color) {
 	var cell_obj = visual_and_numerical_grid[xyz];
@@ -428,19 +449,22 @@ function liveCell(xyz, color) {
 
 		if (!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+		  	cell_obj = new CellObj(threejs, 1 );
+			cell_obj.threejs.overdraw = true;
+			scene.addObject( cell_obj.threejs );
+            if (DEBUG) console.log("liveCell: creating new obj:", xyz, cell_obj);
 		}
 		else {
-			var threejs = gThreeUnused.pop(0);
+			cell_obj = gThreeUnused.pop(0);
+            if (DEBUG) console.log("liveCell: reusing obj:", xyz, cell_obj);
 			// deal with color somehow
 		}
-		gThreeInUse.push(threejs);
-	  	cell_obj = new CellObj(threejs, 1 );
+		gThreeInUse.push(cell_obj);
 		setObjPosition(cell_obj.threejs, xyz);
-		cell_obj.threejs.overdraw = true;
-		scene.addObject( cell_obj.threejs );
 		putGrid(cell_obj, xyz);
+		if (DEBUG) console.log("live gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
 	}
-    console.log("LOOK AT THIS: ", cell_obj);
+	// else console.log("liveCell: already live, doing nuttin", xyz);
     return cell_obj;
 }
 
@@ -449,15 +473,18 @@ function killCell(xyz) {
 	if (obj) {
 		var i = gThreeInUse.indexOf(obj);
 		if (i < 0) {
-			console.log("FIXME: cell not in gThreeInUse");
+			console.log("killCell: not found in gThreeInUse:", xyz, obj);
 		}
 		else {
-			gThreeInUse.pop(i);
+			if (DEBUG) console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
+			gThreeInUse.splice(i, 1);
 			gThreeUnused.push(obj);
 		}
 		delGrid(xyz);
 	    setObjPosition(obj.threejs, [-1111,-1111,-1111]);
+		if (DEBUG) console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
 	}
+	// else console.log("killCell: obj not vangrid, doing nothing", xyz, xyz);
 }
 
 //most important
@@ -483,18 +510,22 @@ function mainLoop(noRender) {
         ///////////////
 
 		// killCell([0, 0, 0]);
-		// liveCell([1, 1, 1], 0x00ffff);
+		// liveCell([1, 1, 1], DEFAULT_COLOR);
         
-        mainGrid.iterate(gRule);
         //calling iterate with an anonymous function as callback(cb)
-        mainGrid.iterate_nop(function(grid, x, y, z){
-            if(grid.get(x, y, z) && !grid.get_new(x, y, z)){
+        mainGrid.iterate(function(grid, x, y, z, f){
+        	var old = grid.get(x, y, z);
+        	var coi = gRule(grid, x, y, z, f);
+        	if (coi == null) coi = old;
+            if(old && !coi){
+                // console.log("WE ARE KILLING!", [x,y,z]);
                 killCell([x,y,z]);
-            }else if(!grid.get(x, y, z) && grid.get_new(x, y, z)){
-                console.log("WE ARE CREATING!", [x,y,z]);
-                liveCell([x,y,z], 0x00ffff);
+            }else if(!old && coi){
+                // console.log("WE ARE CREATING!", [x,y,z]);
+                liveCell([x,y,z], DEFAULT_COLOR);
             }
-        });
+            return coi;
+        }, frame);
 
         mainGrid.update();
 
@@ -865,12 +896,12 @@ function putGrid2(obj, xyz){
   visual_and_numerical_grid[xyz] = [obj.threejs, obj.state];
 }
 
-function trueMod(v, base) {
-    if (v < 0) {
-        return ((v % base) + base) % base;
-    }
-    return v % base;
-}
+// function trueMod(v, base) {
+    // if (v < 0) {
+        // return ((v % base) + base) % base;
+    // }
+    // return v % base;
+// }
 
 function getGrid(xyz) {
     if (mode == "wrap") {
@@ -883,9 +914,9 @@ function getGrid(xyz) {
     return visual_and_numerical_grid[xyz]
 }
 function delGrid(xyz) {
-    console.log("delete: ", visual_and_numerical_grid[xyz]);
+    // console.log("delete: ", visual_and_numerical_grid[xyz]);
     delete visual_and_numerical_grid[xyz];
-    console.log("deleted: ", visual_and_numerical_grid[xyz]);
+    // console.log("deleted: ", visual_and_numerical_grid[xyz]);
 }
 
 function toggleRunning(){
@@ -1062,9 +1093,9 @@ function onDocumentKeyDown( event ) {
             event.preventDefault();
             if (isRunning) break;
             var obj = getGrid(cursor);
-            console.log("OBJ: ", obj);
+            // console.log("OBJ: ", obj);
             if(obj){
-              console.log("State!: ", obj.state)
+              // console.log("State!: ", obj.state)
             }
             
             if (!obj){
@@ -1076,7 +1107,7 @@ function onDocumentKeyDown( event ) {
               // setObjPosition(cell_obj.threejs, cursor);
               // cell_obj.threejs.overdraw = true;
               // scene.addObject( cell_obj.threejs );
-              liveCell(cursor, 0x00ffff);
+              liveCell(cursor, DEFAULT_COLOR);
 
               mainGrid.put(cursor[0],cursor[1],cursor[2], 1)
               
@@ -1263,7 +1294,7 @@ function buildFromHash(hash) {
                 var special_xyz = [current.x, current.y, current.z];
                 // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
                 // var cell_obj = new CellObj(threejs, 1 );
-                var cell_obj = liveCell(special_xyz, 0x00ffff);
+                var cell_obj = liveCell(special_xyz, DEFAULT_COLOR);
                 mainGrid.put(special_xyz[0],special_xyz[1],special_xyz[2])
 
                 //voxel.position.x = cur[0] * 50 + 25;
@@ -1307,7 +1338,7 @@ function buildFromHash(hash) {
                 // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
                 // var cell_obj = new CellObj(threejs, 1 );
 
-                var cell_obj = liveCell(cur, 0x00ffff);
+                var cell_obj = liveCell(cur, DEFAULT_COLOR);
                 mainGrid.put(cur[0],cur[1],cur[2], 1)
 
                 //voxel.position.x = cur[0] * 50 + 25;
@@ -1344,13 +1375,13 @@ function buildFromHash(hash) {
                     // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ parity * 5 ] ) );
                     // var cell_obj = new CellObj(threejs, 1 );
 
-                    var cell_obj = liveCell(cur, 0x00ffff);
+                    var cell_obj = liveCell(cur, DEFAULT_COLOR);
                     mainGrid.put(cur[0],cur[1],cur[2], 1)
 
                     //voxel.position.x = cur[0] * 50 + 25;
                     //voxel.position.y = cur[1] * 50 + 25;
                     //voxel.position.z = cur[2] * 50 + 25;
-                    console.log("bloody cell: ", cell_obj);
+                    // console.log("bloody cell: ", cell_obj);
                     var overdraw_bool = true;
                     cell_obj.threejs.overdraw = true;
                     
@@ -1461,7 +1492,7 @@ function updateHash(noLink) {
         gInitialFrame = frame;
     }
     lasthash = data;
-    if (!isRunning && typeof(console) != "undefined" && console.log) console.log("last hash:", data);
+    // if (!isRunning && typeof(console) != "undefined" && console.log) console.log("last hash:", data);
     if (data.length > 12) {
         data = data.substr(0,5) + ".." + data.substr(data.length-5)
     }
@@ -1525,6 +1556,9 @@ function selectHash(hash, el, size, trail) {
 function clearScreen() {
     isRunning = false;
     visual_and_numerical_grid = {};
+    mainGrid.clear();
+    gThreeUsed = [];			// these guys are trooublesome
+    gThreeUnused = [];
     var i = 0;
     while ( i < scene.objects.length ) {
         object = scene.objects[ i ];
