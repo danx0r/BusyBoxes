@@ -39,3 +39,10 @@ gol3DRule235 = function(grid, x, y, z) {
 	GOL3D_VALS[2] = 5;
 	return gol3DRule455(grid, x, y, z);
 }
+
+gol3DRule135 = function(grid, x, y, z) {
+	GOL3D_VALS[0] = 1;
+	GOL3D_VALS[1] = 3;
+	GOL3D_VALS[2] = 5;
+	return gol3DRule455(grid, x, y, z);
+}
