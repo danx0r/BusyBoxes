@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/javascript" href="js/bootstrap.min.js">
 <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
 <link rel="stylesheet" type="text/javascript" href="js/jquery.min.js">
-<link rel="stylesheet" type="text/css" href="css/sidenavbar.css">
+<link rel="stylesheet" type="text/css" href="css/SideNavBar.css">
 <link rel="stylesheet" type="text/css" href="css/topbar.css">
 <link rel="stylesheet" type="text/css" href="css/PopUp.css">
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -24,8 +24,12 @@
     <style type="text/css">
 
     .slider{
-        margin-top: 30px;
+        
+
     }
+body {
+    background-image: url("1874845.jpg");
+}
 
 
 
@@ -39,10 +43,11 @@
 
 
     <div id="wrapper">
-
+<a href="#menu-toggle" class="slider btn btn-default" id="menu-toggle"><i class="fa fa-bars fa-2x"></i></a>
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
+            <ul class="sidebar-nav"> 
+                    
                 <li class="sidebar-brand">
                     <a href="#">
                         Lyfe Craft
@@ -119,15 +124,7 @@
                     <div class="col-lg-12">
                     <div class="topbar">
                         <div id="topbarcontent">
-                           <!--  </p><button class="bannerButtons" onclick="toggleRunning()">RUN/STOP</button>
-                        <button class="bannerButtons" onclick="fastSlow()">FAST/SLOW</button>
-                        <button class="bannerButtons" onclick="isRunning = true; mainLoop(); isRunning = false;">STEP</button>
-                        <button class="bannerButtons" onclick="reverseDirection()">DIRECTION</button>
-                        <button class="bannerButtons" onclick="randomCells(12, -2, 1)">RANDOM</button>
-                        <button class="bannerButtons" onclick="playStopMusic()">MUSIC</button>
-                        <button class="bannerButtons" onclick="toggleTrails()">TRAILS</button>
-                        <button class="bannerButtons" onclick="clearGrid()">CLEAR</button>
-                        <button class="bannerButtons" onclick="update()">UPDATE</button> -->
+                       
                         
                          <button class="btn btn-default active"><i class="icon-music icon-white"></i> Run/Stop</button>
                         <button class="btn btn-default active"><i class="icon-music icon-white"></i> Fast/Slow</button>
@@ -147,18 +144,14 @@
                 <a href="faq.html" target="_blank" style="font-size:larger"></a>
                
                 
-                <a href="https://github.com/danx0r/BusyBoxes" target="_blank" style="font-size:larger"> <i class="fa fa-github fa-2x"></i></a>
+                <a href="https://github.com/codefaction/BusyBoxes" target="_blank" style="font-size:larger"> <i class="fa fa-github fa-2x"></i></a>
             </div>
         </div>
 
                         </div>
                     </div>
             
-                       <!--  <h1>Simple Sidebar</h1>
-                        <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
-                        <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p> -->
-                        <a href="#menu-toggle" class="slider btn btn-default" id="menu-toggle"><i class="fa fa-bars fa-2x"></i></a>
-                    
+                        
                     </div>
                 </div>
             </div>
@@ -168,10 +161,7 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- Dialog Module -->
 
-<!-- Add an optional button to open the popup -->
-  <button class="my_popup_open btn btn-default">Help</button>
 
   <!-- Add content to the popup -->
 <div id="my_popup">
@@ -222,6 +212,15 @@
         <td> To create a LyfeCraft Box press:</td>
         <td></td>
         <td ><img id="ekey" src="Ekey.png"></td>
+        </tr>
+        <tr>
+      
+        </tr>
+
+        <tr class="icons" >
+        <td> To move LyfeCraft Cursor (transparent box) use:</td>
+        <td></td>
+        <td ><img id="ekey" src="arrow_keys-01.jpg"></td>
         </tr>
         <tr>
       
@@ -282,8 +281,8 @@
     <script src="js/bootstrap.min.js"></script>
 
     <!-- Puttting in Module Pop Up -->
-    // <script>
-    // $(document).ready(function() {
+    <script>
+    $(document).ready(function() {
 
       // Initialize the plugin
       $('#fadeandscale').popup({
