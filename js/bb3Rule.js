@@ -45,7 +45,7 @@ bb3Rule = function(grid, x, y, z, frm) {
 		return coi;
 	}
 	
-	var m = trueMod(frame, 3);													// set up offsets & swap coords dep on phase
+	var m = trueMod(frame, 6);													// set up offsets & swap coords dep on phase
 	if (m==0) {
 		offx = bb_offsetx;
 		offy = bb_offsety;
@@ -58,9 +58,9 @@ bb3Rule = function(grid, x, y, z, frm) {
 		offx = bb_offsetz;
 		offy = bb_offsetx;
 		offz = bb_offsety;
-		swpx = bb_swapz;
-		swpy = bb_swapx;
-		swpz = bb_swapy;
+		swpx = bb_swapz_cc;
+		swpy = bb_swapx_cc;
+		swpz = bb_swapy_cc;
 	}
 	if (m==2) {
 		offx = bb_offsety;
@@ -69,6 +69,30 @@ bb3Rule = function(grid, x, y, z, frm) {
 		swpx = bb_swapy;
 		swpy = bb_swapz;
 		swpz = bb_swapx;
+	}
+	if (m==3) {
+		offx = bb_offsetx;
+		offy = bb_offsety;
+		offz = bb_offsetz;
+		swpx = bb_swapx_cc;
+		swpy = bb_swapy_cc;
+		swpz = bb_swapz_cc;
+	}
+	if (m==4) {
+		offx = bb_offsetz;
+		offy = bb_offsetx;
+		offz = bb_offsety;
+		swpx = bb_swapz;
+		swpy = bb_swapx;
+		swpz = bb_swapy;
+	}
+	if (m==5) {
+		offx = bb_offsety;
+		offy = bb_offsetz;
+		offz = bb_offsetx;
+		swpx = bb_swapy_cc;
+		swpy = bb_swapz_cc;
+		swpz = bb_swapx_cc;
 	}
 	return onePlane();
 }
@@ -80,9 +104,15 @@ var bb_offsetz = [0, 0, 0, 0];
 
 // corresponding swap offsets
 // clockwise
-var bb_swapx = [-1, -1, +1, +1];
-var bb_swapy = [+1, -1, +1, -1];
+var bb_swapx = [-1, +1, -1, +1];
+var bb_swapy = [-1, -1, +1, +1];
 var bb_swapz = [0, 0, 0, 0];
+
+// corresponding swap offsets
+// counter-clockwise
+var bb_swapx_cc = [-1, -1, +1, +1];
+var bb_swapy_cc = [+1, -1, +1, -1];
+var bb_swapz_cc = [0, 0, 0, 0];
 
 // Javascript ftw
 function trueMod(v, base) {
