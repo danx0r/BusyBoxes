@@ -1238,6 +1238,17 @@ function setBrushColor( value ) {
     brush.material[ 0 ].color.setHex( colors[ color ] ^ 0x4C000000 );
     render();
 }
+
+function setRule(rule){
+    var url = rule;
+    cursor = gLastCursor;
+    setBrushPosition(cursor);
+    clearScreen();
+    reset();
+    history.replaceState(url, url, url);
+    gLastRefreshedUrl = url;
+}
+
 function refreshUrl(hash) {
     //console.log("should refresh:", url);
     var url = hash2url(hash);
@@ -1250,6 +1261,7 @@ function refreshUrl(hash) {
         gLastRefreshedUrl = url;
     }
     else {
+        
         document.location = url;
     }
 }
@@ -1447,6 +1459,7 @@ function hash2url(hash){
 // Dan is using a hash but it is a quick and dirty solution. Might be something better
 function updateHash(noLink) {
     var key, keys = [];
+
     for (key in visual_and_numerical_grid) {
         keys.push(key);
     }
@@ -1521,7 +1534,7 @@ function reset(hash) {
     clearScreen();
     buildFromHash(hash);
     refreshUrl(gUpdateHash);
-    document.getElementById("duplicates").innerHTML = ""; 
+    document.getElementById("duplicates").innerHTML = "";
 }
 
 function update(){
@@ -1531,6 +1544,8 @@ function update(){
     updateHash();
     refreshUrl(gUpdateHash);
 }
+
+
 
 function selectHash(hash, el, size, trail) {
     if (!trail) {
@@ -1543,16 +1558,19 @@ function selectHash(hash, el, size, trail) {
             trailopt = "&trail=" + trail;
         }
         document.location = "/?size=" + size + trailopt + "&sel=" + el.id + "&hash=" + hash;
+        console.log("size and size!!!");
     }
     else {
         if (lastSelectedEl) {
             lastSelectedEl.style.backgroundColor = "#ddd";
         }
+        console.log("no pick me!!!");
         reset(hash);
         el.style.backgroundColor = "cyan";
         lastSelectedEl = el;
     }
 }
+
 function clearScreen() {
     isRunning = false;
     visual_and_numerical_grid = {};
