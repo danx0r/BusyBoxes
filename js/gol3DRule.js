@@ -1,4 +1,4 @@
-GOL3D_VALS = [4, 5, 5];
+GOL3D_VALS = [1, 3, 5];
 
 gol3DRule455 = function(grid, x,y,z){
 	//var neighbor = grid.get(x-1,y+1,z);

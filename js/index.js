@@ -89,7 +89,7 @@ minusColor = 0, minusColors = [0x4e9258,0xffff00 ],
 ray, brush, objectHovered,
 isMouseDown = false, onMouseDownPosition,
 radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
-randWidth = 4, randCount = 12, randRatio = 0.5;
+randWidth = 4, randCount = 33, randRatio = 0.5;
 
 var mainGrid;
 mainGrid = new Grid(24, 24, 24); //FIXME TODO: set size acc to qargs
@@ -416,7 +416,7 @@ function mainLoopSlow() {
 
 function mainLoopScience() {
     if (isRunning && processSpeed == "science") {
-        for (var i=0; i<1000; i++) {
+        for (var i=0; i<100; i++) {
             mainLoop(true);                     // no render during main loop for speed
         }
         render();
@@ -1455,7 +1455,7 @@ function updateHash(noLink) {
     cellCount = 0;
     var data = [];
     var cur = [0, 0, 0];
-    if (qargs.science == true) var coords = [];
+    if (qargs.science  == true) var coords = [];
     for (var k in keys) {
         key = keys[k];
         xyz = eval("[" + key + "]");
@@ -1497,7 +1497,7 @@ function updateHash(noLink) {
         data = data.substr(0,5) + ".." + data.substr(data.length-5)
     }
     document.getElementById('showhash').innerHTML = data;
-    if (qargs.science == true && typeof(console) != "undefined" && console.log) console.log(''+coords)
+    // if (qargs.science == true && typeof(console) != "undefined" && console.log) console.log(''+coords)
 }
 
 function render() {
