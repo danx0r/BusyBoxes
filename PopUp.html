@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<link rel="stylesheet" type="text/css" href="css/PopUp.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+
+
+  <meta charset="utf-8">
+  <title>Site Title</title>
+
+
+<style type="text/css">
+  
+ 
+
+
+    .slider{
+        margin-top: 30px;
+    }
+
+
+
+
+</style>
+
+
+
+</head>
+<body>
+  <!-- Add an optional button to open the popup -->
+  <button class="my_popup_open">Open popup</button>
+
+  <!-- Add content to the popup -->
+<div id="my_popup">
+
+
+
+    <!-- Add an optional button to close the popup -->
+    <!-- <button class="my_popup_close">Close</button> -->
+
+  <div id="fadeandscale" class="my_popup_close well popup_content" data-popup-initialized="true" aria-hidden="false" role="dialog" aria-labelledby="open_10981174" style="opacity: 1; visibility: visible; display: inline-block; outline: none; transition: all 0.3s; -webkit-transition: all 0.3s; text-align: left; position: relative; vertical-align: middle;" tabindex="-1"
+
+    <div class="InfoBox">
+    <h1><b>Game Controls</b></h1>
+    <h1> <b>For LyfeCraft</b> </h1>
+
+            <hr />
+    <!-- List of controls -->
+      <ul class="HowTo">
+          
+
+        <li><b> Click & drag to rotate view</b> </li>
+        <li> <b>Scroll to zoom</b> </li>
+        <li> <b>Arrows move cursor</b> </li>
+        <li>  <b>U & D for up/down</b> </li>
+        <li> <b>ENTER to create/delete</b> </li>
+        <li> <b>S to step</b> </li>
+
+      </ul>
+      
+        <hr />
+
+    <button class="my_popup_close fadeandscale_close btn btn_default ">Close</button>
+    </div>
+
+
+
+</div>
+
+  <!-- Include jQuery -->
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+
+  <!-- Include jQuery Popup Overlay -->
+  <script src="http://vast-engineering.github.io/jquery-popup-overlay/jquery.popupoverlay.js"></script>
+
+  <script>
+    $(document).ready(function() {
+
+      // Initialize the plugin
+      $('#fadeandscale').popup({
+    transition: 'all 0.3s'
+    });
+     $('#my_popup').popup('show');
+
+    });
+  </script>
+
+</body>
+</html>
