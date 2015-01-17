@@ -55,7 +55,6 @@ bb3Rule = function(grid, x, y, z, frm) {
 		swpz = bb_swapz;
 	}
 	if (m==1) {
-		return;
 		offx = bb_offsetz;
 		offy = bb_offsetx;
 		offz = bb_offsety;
@@ -64,7 +63,6 @@ bb3Rule = function(grid, x, y, z, frm) {
 		swpz = bb_swapy_cc;
 	}
 	if (m==2) {
-		return;
 		offx = bb_offsety;
 		offy = bb_offsetz;
 		offz = bb_offsetx;
@@ -81,7 +79,6 @@ bb3Rule = function(grid, x, y, z, frm) {
 		swpz = bb_swapz_cc;
 	}
 	if (m==4) {
-		return;
 		offx = bb_offsetz;
 		offy = bb_offsetx;
 		offz = bb_offsety;
@@ -90,7 +87,6 @@ bb3Rule = function(grid, x, y, z, frm) {
 		swpz = bb_swapy;
 	}
 	if (m==5) {
-		return;
 		offx = bb_offsety;
 		offy = bb_offsetz;
 		offz = bb_offsetx;
