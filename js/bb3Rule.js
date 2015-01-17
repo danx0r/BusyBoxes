@@ -27,21 +27,19 @@ bb3Rule = function(grid, x, y, z, frm) {
 	}
 
 	function onePlane() {														// process one of 3 planes dep on phase
-		if (!coi) {
-			var swap = getSwap(x, y, z);											// proposed swap cell as delta from xyz
-			if (swap != null) {														// if valid (no immediate conflicts)
-				var swapper = grid.get(x+swap[0], y+swap[1], z+swap[2]);   			// get state at swap cell
-				if (swapper != coi) {														// if state is different from ours, we might swap
-					// var revswap = getSwap(x+swap[0], y+swap[1], z+swap[2]);			// proposed swap for swap cell
-					// if (revswap != null) {
-						// if ( (swap[0] + revswap[0] == 0) && 
-							 // (swap[1] + revswap[1] == 0) &&							// if it matches (mutual proposed swaps), do this thing
-							 // (swap[2] + revswap[2] == 0)) {							// we return his state; he will return ours.
-							/// for now, no conflict resolution
-							return swapper;											// That's what we call a swap, Scooby Doo
-						// }
+		var swap = getSwap(x, y, z);											// proposed swap cell as delta from xyz
+		if (swap != null) {														// if valid (no immediate conflicts)
+			var swapper = grid.get(x+swap[0], y+swap[1], z+swap[2]);   			// get state at swap cell
+			if (swapper != coi) {														// if state is different from ours, we might swap
+				// var revswap = getSwap(x+swap[0], y+swap[1], z+swap[2]);			// proposed swap for swap cell
+				// if (revswap != null) {
+					// if ( (swap[0] + revswap[0] == 0) && 
+						 // (swap[1] + revswap[1] == 0) &&							// if it matches (mutual proposed swaps), do this thing
+						 // (swap[2] + revswap[2] == 0)) {							// we return his state; he will return ours.
+						/// for now, no conflict resolution
+						return swapper;											// That's what we call a swap, Scooby Doo
 					// }
-				}
+				// }
 			}
 		}
 		return coi;
