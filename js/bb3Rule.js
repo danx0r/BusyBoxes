@@ -47,72 +47,72 @@ bb3Rule = function(grid, x, y, z, frm) {
 	
 	var m = trueMod(frame, 6);													// set up offsets & swap coords dep on phase
 	if (m==0) {
-		offx = bb_offsetx;
-		offy = bb_offsety;
-		offz = bb_offsetz;
-		swpx = bb_swapx;
-		swpy = bb_swapy;
-		swpz = bb_swapz;
+		offx = bb3_offsetx;
+		offy = bb3_offsety;
+		offz = bb3_offsetz;
+		swpx = bb3_swapx;
+		swpy = bb3_swapy;
+		swpz = bb3_swapz;
 	}
 	if (m==1) {
-		offx = bb_offsetz;
-		offy = bb_offsetx;
-		offz = bb_offsety;
-		swpx = bb_swapz_cc;
-		swpy = bb_swapx_cc;
-		swpz = bb_swapy_cc;
+		offx = bb3_offsetz;
+		offy = bb3_offsetx;
+		offz = bb3_offsety;
+		swpx = bb3_swapz_cc;
+		swpy = bb3_swapx_cc;
+		swpz = bb3_swapy_cc;
 	}
 	if (m==2) {
-		offx = bb_offsety;
-		offy = bb_offsetz;
-		offz = bb_offsetx;
-		swpx = bb_swapy;
-		swpy = bb_swapz;
-		swpz = bb_swapx;
+		offx = bb3_offsety;
+		offy = bb3_offsetz;
+		offz = bb3_offsetx;
+		swpx = bb3_swapy;
+		swpy = bb3_swapz;
+		swpz = bb3_swapx;
 	}
 	if (m==3) {
-		offx = bb_offsetx;
-		offy = bb_offsety;
-		offz = bb_offsetz;
-		swpx = bb_swapx_cc;
-		swpy = bb_swapy_cc;
-		swpz = bb_swapz_cc;
+		offx = bb3_offsetx;
+		offy = bb3_offsety;
+		offz = bb3_offsetz;
+		swpx = bb3_swapx_cc;
+		swpy = bb3_swapy_cc;
+		swpz = bb3_swapz_cc;
 	}
 	if (m==4) {
-		offx = bb_offsetz;
-		offy = bb_offsetx;
-		offz = bb_offsety;
-		swpx = bb_swapz;
-		swpy = bb_swapx;
-		swpz = bb_swapy;
+		offx = bb3_offsetz;
+		offy = bb3_offsetx;
+		offz = bb3_offsety;
+		swpx = bb3_swapz;
+		swpy = bb3_swapx;
+		swpz = bb3_swapy;
 	}
 	if (m==5) {
-		offx = bb_offsety;
-		offy = bb_offsetz;
-		offz = bb_offsetx;
-		swpx = bb_swapy_cc;
-		swpy = bb_swapz_cc;
-		swpz = bb_swapx_cc;
+		offx = bb3_offsety;
+		offy = bb3_offsetz;
+		offz = bb3_offsetx;
+		swpx = bb3_swapy_cc;
+		swpy = bb3_swapz_cc;
+		swpz = bb3_swapx_cc;
 	}
 	return onePlane();
 }
 
 // Knight's move offsets
-var bb_offsetx = [+0, -1, +1, -0];
-var bb_offsety = [+1, +0, -0, -1];
-var bb_offsetz = [0, 0, 0, 0];
+var bb3_offsetx = [+0, -1, +1, -0];
+var bb3_offsety = [+1, +0, -0, -1];
+var bb3_offsetz = [0, 0, 0, 0];
 
 // corresponding swap offsets
 // clockwise
-var bb_swapx = [+1, -1, +1, -1];
-var bb_swapy = [+1, +1, -1, -1];
-var bb_swapz = [0, 0, 0, 0];
+var bb3_swapx = [+1, -1, +1, -1];
+var bb3_swapy = [+1, +1, -1, -1];
+var bb3_swapz = [0, 0, 0, 0];
 
 // corresponding swap offsets
 // counter-clockwise
-var bb_swapx_cc = [-1, -1, +1, +1];
-var bb_swapy_cc = [+1, -1, +1, -1];
-var bb_swapz_cc = [0, 0, 0, 0];
+var bb3_swapx_cc = [-1, -1, +1, +1];
+var bb3_swapy_cc = [+1, -1, +1, -1];
+var bb3_swapz_cc = [0, 0, 0, 0];
 
 // Javascript ftw
 function trueMod(v, base) {
@@ -123,8 +123,8 @@ function trueMod(v, base) {
 }
 
 // and TDD also ftw
-bb_TEST=0;
-if(bb_TEST) {
+bb3_TEST=0;
+if(bb3_TEST) {
 	var grid = new Grid(10, 10, 10);
 	grid.put(0, 0, 0, 1);
 	grid.put(1, 2, 0, 1);
