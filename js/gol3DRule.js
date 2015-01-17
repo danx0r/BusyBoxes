@@ -29,7 +29,6 @@ gol3DRule455 = function(grid, x,y,z){
 		}else{
 			return 0;
 		}
-		
 	}
 }
 

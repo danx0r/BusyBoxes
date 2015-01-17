@@ -4,9 +4,11 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
 <link rel="stylesheet" type="text/javascript" href="js/bootstrap.min.js">
+<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
 <link rel="stylesheet" type="text/javascript" href="js/jquery.min.js">
-<link rel="stylesheet" type="text/css" href="css/sidenavbar.css">
+<link rel="stylesheet" type="text/css" href="css/SideNavBar.css">
 <link rel="stylesheet" type="text/css" href="css/topbar.css">
+<link rel="stylesheet" type="text/css" href="css/PopUp.css">
 <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="http://fonts.googleapis.com/css?family=Roboto:400,400italic,300italic,300" rel="stylesheet" type="text/css">
 
@@ -22,8 +24,14 @@
     <style type="text/css">
 
     .slider{
-        margin-top: 30px;
+        
+
     }
+body {
+    background-image: url("1874845.jpg");
+    max-width: 1500px;
+    min-width: 900px;
+}
 
 
 
@@ -37,10 +45,11 @@
 
 
     <div id="wrapper">
-
+<a href="#menu-toggle" class="slider btn btn-default" id="menu-toggle"><i class="fa fa-bars fa-2x"></i></a>
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
-            <ul class="sidebar-nav">
+            <ul class="sidebar-nav"> 
+                    
                 <li class="sidebar-brand">
                     <a href="#">
                         Lyfe Craft
@@ -56,7 +65,7 @@
                     <a href="#">Glider</a>
   ...
   <li role="presentation" class="dropdown-header">Dropdown header</li>
-  ...
+  
 </ul>
 
 					</ul>
@@ -117,44 +126,34 @@
                     <div class="col-lg-12">
                     <div class="topbar">
                         <div id="topbarcontent">
-                           <!--  </p><button class="bannerButtons" onclick="toggleRunning()">RUN/STOP</button>
-                        <button class="bannerButtons" onclick="fastSlow()">FAST/SLOW</button>
-                        <button class="bannerButtons" onclick="isRunning = true; mainLoop(); isRunning = false;">STEP</button>
-                        <button class="bannerButtons" onclick="reverseDirection()">DIRECTION</button>
-                        <button class="bannerButtons" onclick="randomCells(12, -2, 1)">RANDOM</button>
-                        <button class="bannerButtons" onclick="playStopMusic()">MUSIC</button>
-                        <button class="bannerButtons" onclick="toggleTrails()">TRAILS</button>
-                        <button class="bannerButtons" onclick="clearGrid()">CLEAR</button>
-                        <button class="bannerButtons" onclick="update()">UPDATE</button> -->
-                         <button class="btn btn-inverse active"><i class="icon-music icon-white"></i> Run/Stop</button>
-                        <button class="btn btn-inverse active"><i class="icon-music icon-white"></i> Fast/Slow</button>
-                        <button class="btn btn-inverse active"><i class="icon-music icon-white"></i> Step</button>
-                        <button class="btn btn-inverse active"><i class="icon-music icon-white"></i> Direction </button>
-                        <button class="btn btn-inverse active"><i class="icon-music icon-white"></i> Random</button>
-                        <button class="btn btn-inverse active"><i class="icon-music icon-white"></i> Music</button>
-                        <button class="btn btn-inverse active"><i class="icon-music icon-white"></i> Trials</button>
-                       <button class="btn btn-inverse active"><i class="icon-music icon-white"> </i>Clear</button>
-                        <button class="btn btn-inverse active"> <i class="icon-large icon-search"> </i>Update</button>
+                       
+                        
+                         <button class="btn btn-default active"><i class="icon-music icon-white"></i> Run/Stop</button>
+                        <button class="btn btn-default active"><i class="icon-music icon-white"></i> Fast/Slow</button>
+                        <button class="btn btn-default active"><i class="icon-music icon-white"></i> Step</button>
+                        <button class="btn btn-default active"><i class="icon-music icon-white"></i> Direction </button>
+                        <button class="btn btn-default active"><i class="icon-music icon-white"></i> Random</button>
+                        <button class="btn btn-default active"><i class="icon-music icon-white"></i> Music</button>
+                        <button class="btn btn-default active"><i class="icon-music icon-white"></i> Trials</button>
+                       <button class="btn btn-default active"><i class="icon-music icon-white"> </i>Clear</button>
+                        <button class="btn btn-default active"> <i class="icon-large icon-search"> </i>Update</button>
+                        <button class="my_popup_open btn btn-default active">Help</button>
 
                        <div id="banner">
              <!--    <span style="background-color: #fff; opacity:0.5; border-bottom: 1px solid #ddd; padding: 8px 10px; font-size:medium"> -->
-                    <b>click & drag to rotate view | scroll to zoom | arrows move cursor; U & D for up/down | ENTER to create/delete | S to step</b>
                 </span>
                 
-                <a href="faq.html" target="_blank" style="font-size:larger">faq</a>
+                <a href="faq.html" target="_blank" style="font-size:larger"></a>
+               
                 
-                <a href="https://github.com/danx0r/BusyBoxes" target="_blank" style="font-size:larger">source</a>
+                <a href="https://github.com/codefaction/BusyBoxes" target="_blank" style="font-size:larger"> <i class="fa fa-github fa-2x"></i></a>
             </div>
         </div>
 
                         </div>
                     </div>
             
-                       <!--  <h1>Simple Sidebar</h1>
-                        <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
-                        <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p> -->
-                        <a href="#menu-toggle" class="slider btn btn-default" id="menu-toggle">Toggle Menu</a>
-                    
+                        
                     </div>
                 </div>
             </div>
@@ -164,11 +163,137 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+
+
+  <!-- Add content to the popup -->
+<div id="my_popup">
+
+
+
+    <!-- Add an optional button to close the popup -->
+    <!-- <button class="my_popup_close">Close</button> -->
+
+  <div id="fadeandscale" class="my_popup_close well popup_content" data-popup-initialized="true" aria-hidden="false" role="dialog" aria-labelledby="open_10981174" style="opacity: 1; visibility: visible; display: inline-block; outline: none; transition: all 0.3s; -webkit-transition: all 0.3s; text-align: left; position: relative; vertical-align: middle;" tabindex="-1"
+
+    <div class="InfoBox">
+    <!-- <button id="closeme" class="my_popup_close fadeandscale_close btn btn_default ">&#10006;</button> -->
+    <h1 class="popUpText"><b>LyfeCraft Controls</b></h1>
+                <hr />
+    <table>
+    <tr>
+  <th class="howtoplay">Directions</th>
+  <th></th>
+ <th class="whattopress">Keys</th>
+    </tr>
+
+    <tr class="icons">
+         <td>Click & drag to rotate view</td>
+         <td></td>
+         <td><img id="clickdrag" src="click.jpg"></td>
+    </tr>
+
+    <tr class="icons">
+        <td>Scroll to zoom </td>
+        <td></td>
+        <td><img id="scrolltozoom" src="scroll.png"></td>
+    </tr>
+
+    <tr class="icons">
+        <td>To move transparent box up press:</td>
+        <td></td>
+        <td><img id="directionu" src="imgres.png"></td>
+    </tr>
+
+    <tr class="icons">
+        <td>To move transparent box down press:</td>
+        <td> </td>
+        <td ><img id="directionu" src="Dkey.jpg"></td>
+    </tr>
+
+    <tr class="icons" >
+        <td> To create a LyfeCraft Box press:</td>
+        <td></td>
+        <td ><img id="ekey" src="Ekey.png"></td>
+        </tr>
+        <tr>
+      
+        </tr>
+
+        <tr class="icons" >
+        <td> To move LyfeCraft Cursor (transparent box) use:</td>
+        <td></td>
+        <td ><img id="ekey" src="arrow_keys-01.jpg"></td>
+        </tr>
+        <tr>
+      
+        </tr>
+
+        </table>
+         <h6 class="popUpText"> Click any where to close this box </h6>
+
+<!-- 
+    <h1><b>Game Controls</b></h1>
+    <h1> <b>For LyfeCraft</b> </h1> -->
+
+
+
+            
+    <!-- List of controls -->
+     <!--  <ul class="HowTo"> -->
+          
+<!-- 
+        <li>
+        Want to change your view?
+        <b> Click & drag to rotate view</b> </li>
+
+
+    or
+
+         <b>scroll to zoom.</b> </li>
+
+
+
+        <li> <p>Need a little movement?</p>
+
+        <b>Arrows move cursor</b> </li>
+        <li>  <b><img id="directionu" src="imgres.png"> & <img id="directionu" src="SButton.jpg"> for up/down</b> </li>
+        <li> <b>ENTER to create/delete</b> </li>
+        <li> <b>S to step</b> </li>
+
+      </ul>
+      
+        <hr /> -->
+
+    
+    </div> 
+
+
+
+ </div> 
+
+
+<!-- Include jQuery -->
+  <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+
+  <!-- Include jQuery Popup Overlay -->
+  <script src="http://vast-engineering.github.io/jquery-popup-overlay/jquery.popupoverlay.js"></script>
+
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+
+    <!-- Puttting in Module Pop Up -->
+    <script>
+    $(document).ready(function() {
+
+      // Initialize the plugin
+      $('#fadeandscale').popup({
+    transition: 'all 0.3s'
+    });
+     $('#my_popup').popup('show');
+
+    });
+  </script>
 
     <!-- Menu Toggle Script -->
     <script>
