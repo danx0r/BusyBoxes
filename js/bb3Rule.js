@@ -2,7 +2,7 @@
  * implements the BusyBoxes reversible CA as outlined here:
  * http://arxiv.org/abs/1206.2060
  */
-STATES=3;
+
 
 bb3Rule = function(grid, x, y, z, frm) {
 	var offx, offy, offz, swpx, swpy, swpz;

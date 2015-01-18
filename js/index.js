@@ -443,37 +443,56 @@ function bugg_unused() {
 	return r;
 }
 
-function liveCell(xyz, color) {
+function liveCell(xyz, color, state) {
 	var cell_obj = visual_and_numerical_grid[xyz];
+    
     if (!cell_obj) {
-
+        //console.log("liveCell gThreeUnused: ", gThreeUnused);
 		if (!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
-		  	cell_obj = new CellObj(threejs, 1 );
+		  	cell_obj = new CellObj(threejs, state );
+                    ///////
+                    //console.log("liveCell works--WHY???: ", cell_obj);
 			cell_obj.threejs.overdraw = true;
 			scene.addObject( cell_obj.threejs );
             if (DEBUG) console.log("liveCell: creating new obj:", xyz, cell_obj);
+
 		}
+        else if(state === -1){
+            var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+            cell_obj = new CellObj(threejs, state );
+                    ///////
+                    //console.log("liveCell works--WHY???: ", cell_obj);
+            cell_obj.threejs.overdraw = true;
+            scene.addObject( cell_obj.threejs );
+        }
 		else {
 			cell_obj = gThreeUnused.pop(0);
             if (DEBUG) console.log("liveCell: reusing obj:", xyz, cell_obj);
 			// deal with color somehow
+                    ///////
+                    //console.log("liveCell threeUnused length is nil: ", cell_obj);
 		}
 		gThreeInUse.push(cell_obj);
 		setObjPosition(cell_obj.threejs, xyz);
 		putGrid(cell_obj, xyz);
+        
 		if (DEBUG) console.log("live gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
 	}
+    //console.log("liveCell cell_obj:  ", cell_obj);
 	// else console.log("liveCell: already live, doing nuttin", xyz);
     return cell_obj;
 }
 
 function killCell(xyz) {
 	var obj = visual_and_numerical_grid[xyz];
+            //////
+            //console.log("killed this cell: ", obj);
 	if (obj) {
 		var i = gThreeInUse.indexOf(obj);
+        console.log("killCell gThreeInUse index: ", i);
 		if (i < 0) {
-			console.log("killCell: not found in gThreeInUse:", xyz, obj);
+			//console.log("killCell: not found in gThreeInUse:", xyz, obj);
 		}
 		else {
 			if (DEBUG) console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
@@ -481,7 +500,10 @@ function killCell(xyz) {
 			gThreeUnused.push(obj);
 		}
 		delGrid(xyz);
+                    ///////
+                    //console.log("after killing: ", visual_and_numerical_grid[xyz], gThreeUnused);
 	    setObjPosition(obj.threejs, [-1111,-1111,-1111]);
+
 		if (DEBUG) console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
 	}
 	// else console.log("killCell: obj not vangrid, doing nothing", xyz, xyz);
@@ -1094,9 +1116,9 @@ function onDocumentKeyDown( event ) {
             if (isRunning) break;
             var obj = getGrid(cursor);
             // console.log("OBJ: ", obj);
-            if(obj){
-              // console.log("State!: ", obj.state)
-            }
+            // if(obj){
+            //   // console.log("State!: ", obj.state)
+            // }
             
             if (!obj){
               // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
@@ -1107,9 +1129,12 @@ function onDocumentKeyDown( event ) {
               // setObjPosition(cell_obj.threejs, cursor);
               // cell_obj.threejs.overdraw = true;
               // scene.addObject( cell_obj.threejs );
-              liveCell(cursor, DEFAULT_COLOR);
+              
+              liveCell(cursor, DEFAULT_COLOR, 1);
+              
+              
 
-              mainGrid.put(cursor[0],cursor[1],cursor[2], 1)
+              mainGrid.put(cursor[0],cursor[1],cursor[2], 1);
               
               //console.log("cell_obj: ", cell_obj)
               //console.log("grid: ", visual_and_numerical_grid)
@@ -1138,17 +1163,31 @@ function onDocumentKeyDown( event ) {
             //     cell_obj.threejs.overdraw = true;
             //     scene.addObject( cell_obj.threejs );                
             // }
+
+
+            else if (STATES == 3 && obj.state === 1){
+                killCell(cursor);
+                console.log("3rd state ThreeUnused after killing: ", gThreeUnused)
+                mainGrid.put(cursor[0],cursor[1],cursor[2], 0);
+                updateHash(); 
+                gInitialHash = lasthash;
+                gInitialFrame = frame;
+                render();
+                liveCell(cursor, 0xffff00, -1 );
+                mainGrid.put(cursor[0],cursor[1],cursor[2], -1);
+            }
             else{
               // scene.removeObject(obj.threejs);
               // delGrid(cursor);
               killCell(cursor);
               mainGrid.put(cursor[0],cursor[1],cursor[2], 0)
+              
             }
             
-            updateHash();
+            updateHash(); 
             gInitialHash = lasthash;
             gInitialFrame = frame;
-            render(); 
+            render();
             break;
     }
 }
