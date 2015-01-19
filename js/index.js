@@ -453,22 +453,43 @@ function liveCell(xyz, color, state) {
 		  	cell_obj = new CellObj(threejs, state );
                     ///////
                     //console.log("liveCell works--WHY???: ", cell_obj);
-			cell_obj.threejs.overdraw = true;
+			// if(state === 1){
+   //              console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
+   //              cell_obj.state = -1;
+   //              cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+   //              cell_obj.threejs.overdraw = true;
+   //              scene.addObject( cell_obj.threejs );
+   //          }
+            cell_obj.threejs.overdraw = true;
 			scene.addObject( cell_obj.threejs );
             if (DEBUG) console.log("liveCell: creating new obj:", xyz, cell_obj);
 
 		}
-        else if(state === -1){
-            var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
-            cell_obj = new CellObj(threejs, state );
-                    ///////
-                    //console.log("liveCell works--WHY???: ", cell_obj);
-            cell_obj.threejs.overdraw = true;
-            scene.addObject( cell_obj.threejs );
-        }
+        // else if(state === -1){
+        //     var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+        //     cell_obj = new CellObj(threejs, state );
+        //             ///////
+        //             //console.log("liveCell works--WHY???: ", cell_obj);
+        //     cell_obj.threejs.overdraw = true;
+        //     scene.addObject( cell_obj.threejs );
+        // }
 		else {
 			cell_obj = gThreeUnused.pop(0);
             if (DEBUG) console.log("liveCell: reusing obj:", xyz, cell_obj);
+            if(state === -1){               
+                cell_obj.state = -1;
+                cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+                cell_obj.threejs.overdraw = true;
+                scene.addObject( cell_obj.threejs );
+                console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
+            }
+            else if(state === 1){
+                cell_obj.state = 1;
+                cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+                cell_obj.threejs.overdraw = true;
+                scene.addObject( cell_obj.threejs );
+                console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
+            }
 			// deal with color somehow
                     ///////
                     //console.log("liveCell threeUnused length is nil: ", cell_obj);
@@ -490,12 +511,13 @@ function killCell(xyz) {
             //console.log("killed this cell: ", obj);
 	if (obj) {
 		var i = gThreeInUse.indexOf(obj);
-        console.log("killCell gThreeInUse index: ", i);
+        //console.log("killCell gThreeInUse index: ", i);
 		if (i < 0) {
 			//console.log("killCell: not found in gThreeInUse:", xyz, obj);
 		}
 		else {
 			if (DEBUG) console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
+            console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
 			gThreeInUse.splice(i, 1);
 			gThreeUnused.push(obj);
 		}
@@ -505,6 +527,7 @@ function killCell(xyz) {
 	    setObjPosition(obj.threejs, [-1111,-1111,-1111]);
 
 		if (DEBUG) console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
+        console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
 	}
 	// else console.log("killCell: obj not vangrid, doing nothing", xyz, xyz);
 }
@@ -1168,7 +1191,7 @@ function onDocumentKeyDown( event ) {
             else if (STATES == 3 && obj.state === 1){
                 killCell(cursor);
                 console.log("3rd state ThreeUnused after killing: ", gThreeUnused)
-                mainGrid.put(cursor[0],cursor[1],cursor[2], 0);
+                //mainGrid.put(cursor[0],cursor[1],cursor[2], 0);
                 updateHash(); 
                 gInitialHash = lasthash;
                 gInitialFrame = frame;
