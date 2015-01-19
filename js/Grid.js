@@ -1,6 +1,6 @@
 var DEBUG = true;
 
-function Grid(x, y, z, mod_range, mode) {
+function Grid(x, y, z, mod_range, mode, state) {
 	this.dimx = x;
 	this.dimy = y;
 	this.dimz = z;
@@ -37,11 +37,16 @@ function Grid(x, y, z, mod_range, mode) {
 	//update new set of cells
 	this.put = function(x, y, z, cell_state) {
 		var key = "" + x + "," + y + "," + z;
-		if (cell_state) {
+
+		if (cell_state == 1 || cell_state === -1) {
 			this.cells[key] = cell_state;
+			console.log("mission accomplished");
+			console.log("cell state: ", cell_state);
 		} else {
 			//research this
 			delete this.cells[key];
+			console.log("nay");
+			console.log("cell state: ", cell_state);
 		}
 	}
 

@@ -5,12 +5,31 @@
 
 STATES=3;
 
-bbRule = function(grid, x, y, z, frm) {
+bb3StateRule = function(grid, x, y, z, frm) {
 	var offx, offy, offz, swpx, swpy, swpz;
 	var coi = grid.get(x, y, z);
 	if ((x + y + z & 1) != (frm & 1)) return coi; 								// only process if field parity is correct
 
 	function getSwap(x, y, z) {													// return valid swap offset or null if there is contention
+		var swapx = null, swapy = null;
+		for (var i=0; i<8; i++) {
+			var xx = x+offx[i];
+			var yy = y+offy[i];
+			var zz = z+offz[i];
+			if (grid.get(xx, yy, zz)) {
+				if ((swapx != null) && (swapx != swpx[i] || swapy != swpy[i] || swapz != swpz[i]) ) { // swap confict, forgeddaboudit
+					return null;
+				}
+				swapx = swpx[i];
+				swapy = swpy[i];
+				swapz = swpz[i];
+			}
+		}
+		if (swapx == null) return null;
+		return [swapx, swapy, swapz];
+	}
+
+	function getSwap2(x, y, z) {													// return valid swap offset or null if there is contention
 		var swapx = null, swapy = null;
 		for (var i=0; i<8; i++) {
 			var xx = x+offx[i];
