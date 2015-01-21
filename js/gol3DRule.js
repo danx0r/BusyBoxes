@@ -1,6 +1,6 @@
 GOL3D_VALS = [1, 3, 5];
 
-gol3DRule455 = function(grid, x,y,z){
+gol3DRule135 = function(grid, x,y,z){
 	//var neighbor = grid.get(x-1,y+1,z);
 	var nabes = 0;
 
@@ -36,12 +36,12 @@ gol3DRule235 = function(grid, x, y, z) {
 	GOL3D_VALS[0] = 2;
 	GOL3D_VALS[1] = 3;
 	GOL3D_VALS[2] = 5;
-	return gol3DRule455(grid, x, y, z);
+	return gol3DRule135(grid, x, y, z);
 }
 
-gol3DRule135 = function(grid, x, y, z) {
-	GOL3D_VALS[0] = 1;
-	GOL3D_VALS[1] = 3;
+gol3DRule455 = function(grid, x, y, z) {
+	GOL3D_VALS[0] = 4;
+	GOL3D_VALS[1] = 5;
 	GOL3D_VALS[2] = 5;
-	return gol3DRule455(grid, x, y, z);
+	return gol3DRule135(grid, x, y, z);
 }

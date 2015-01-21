@@ -517,7 +517,6 @@ function killCell(xyz) {
 		}
 		else {
 			if (DEBUG) console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
-            console.log("killCell", xyz, "index:", i, "obj:", obj.bugg);
 			gThreeInUse.splice(i, 1);
 			gThreeUnused.push(obj);
 		}
@@ -527,7 +526,6 @@ function killCell(xyz) {
 	    setObjPosition(obj.threejs, [-1111,-1111,-1111]);
 
 		if (DEBUG) console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
-        console.log("kill gThreeInUse:", gThreeInUse.length, "gThreeUnused:", gThreeUnused.length);
 	}
 	// else console.log("killCell: obj not vangrid, doing nothing", xyz, xyz);
 }
@@ -1190,7 +1188,7 @@ function onDocumentKeyDown( event ) {
 
             else if (STATES == 3 && obj.state === 1){
                 killCell(cursor);
-                console.log("3rd state ThreeUnused after killing: ", gThreeUnused)
+                // console.log("3rd state ThreeUnused after killing: ", gThreeUnused)
                 //mainGrid.put(cursor[0],cursor[1],cursor[2], 0);
                 updateHash(); 
                 gInitialHash = lasthash;
