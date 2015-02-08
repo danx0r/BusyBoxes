@@ -28,6 +28,9 @@
         <title>BUSY BOXES</title>
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="css/application.css"></link>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" ></script>
+        <script src="js/bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     </head>
     <body >
         <div id="big_chris_container">
@@ -77,6 +80,17 @@
                 <span id="showinfo"></span>
                 <span id="duplicates"></span>
             </div>
+
+            <!-- drop down explorations -->
+            <div class="btn-group">
+                <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Action <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="?rule=bbRule">Basic</a></li>
+                    <li><a href="?rule=golRule">Game of Life</a></li>
+                    <li><a href="?rule=gol3DRule">Game of Life 3D</a></li>
+                </ul>
+            </div>
+
             <span id="debug"></span>
             <br/>
             <button class="goHash" onclick="setRule('?rule=golRule')" id="x"> choose a rule</button>
