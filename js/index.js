@@ -4,7 +4,11 @@ var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
 var cell_trail_a = [];
-DEFAULT_COLOR = 0x8090aa;  
+DEFAULT_COLOR = 0x8090aa;
+POS_EVEN = 0xff3333;
+POS_ODD = 0x3333ff;
+NEG_EVEN = 0xffcc00;
+NEG_ODD = 0x00ccff;
 
 
 // adding these to a cell's coords gives you its knight-move bretheren
@@ -85,7 +89,7 @@ var container, interval,
 camera, scene, renderer,
 projector, plane, cube, linesMaterial,
 color = 0,colors = [ 0xDF1F1F, 0xDFAF1F, 0x80DF1F, 0x1FDF50, 0x1FDFDF, 0x1F4FDF, 0x7F1FDF, 0xDF1FAF, 0xEFEFEF, 0x303030 ],
-minusColor = 0, minusColors = [0x4e9258,0xffff00 ],
+// minusColor = 0, minusColors = [0x4e9258,0xffff00 ],
 ray, brush, objectHovered,
 isMouseDown = false, onMouseDownPosition,
 radius = 2000, theta = 0, onMouseDownTheta = 45, phi = 60, onMouseDownPhi = 60;
@@ -451,28 +455,11 @@ function liveCell(xyz, color, state) {
 		if (!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
 		  	cell_obj = new CellObj(threejs, state );
-                    ///////
-                    //console.log("liveCell works--WHY???: ", cell_obj);
-			// if(state === 1){
-   //              console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
-   //              cell_obj.state = -1;
-   //              cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
-   //              cell_obj.threejs.overdraw = true;
-   //              scene.addObject( cell_obj.threejs );
-   //          }
             cell_obj.threejs.overdraw = true;
 			scene.addObject( cell_obj.threejs );
             if (DEBUG) console.log("liveCell: creating new obj:", xyz, cell_obj);
 
 		}
-        // else if(state === -1){
-        //     var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
-        //     cell_obj = new CellObj(threejs, state );
-        //             ///////
-        //             //console.log("liveCell works--WHY???: ", cell_obj);
-        //     cell_obj.threejs.overdraw = true;
-        //     scene.addObject( cell_obj.threejs );
-        // }
 		else {
 			cell_obj = gThreeUnused.pop(0);
             if (DEBUG) console.log("liveCell: reusing obj:", xyz, cell_obj);
@@ -491,8 +478,6 @@ function liveCell(xyz, color, state) {
                 console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
 			// deal with color somehow
-                    ///////
-                    //console.log("liveCell threeUnused length is nil: ", cell_obj);
 		}
 		gThreeInUse.push(cell_obj);
 		setObjPosition(cell_obj.threejs, xyz);
@@ -1011,6 +996,8 @@ function onDocumentKeyDown( event ) {
     
     // THIS is the navigation interface
     // We should think about redesigning
+    var field = (cursor[0] ^ cursor[1] ^ cursor[2]) & 1;
+    console.log("FIELD:", field);
     switch( event.keyCode ) {
         case 37:                           // LEFT
             event.preventDefault();
@@ -1151,8 +1138,13 @@ function onDocumentKeyDown( event ) {
               // cell_obj.threejs.overdraw = true;
               // scene.addObject( cell_obj.threejs );
               
-              liveCell(cursor, DEFAULT_COLOR, 1);
-              
+//              liveCell(cursor, DEFAULT_COLOR, 1);
+                if (field==1) {
+	                liveCell(cursor, POS_ODD, 1 );          	
+                }
+                else {
+                	liveCell(cursor, POS_EVEN, 1 );
+                }
               
 
               mainGrid.put(cursor[0],cursor[1],cursor[2], 1);
@@ -1194,7 +1186,12 @@ function onDocumentKeyDown( event ) {
                 gInitialHash = lasthash;
                 gInitialFrame = frame;
                 render();
-                liveCell(cursor, 0xffff00, -1 );
+                if (field==1) {
+	                liveCell(cursor, NEG_ODD, -1 );          	
+                }
+                else {
+                	liveCell(cursor, NEG_EVEN, -1 );
+                }
                 mainGrid.put(cursor[0],cursor[1],cursor[2], -1);
             }
             else{
