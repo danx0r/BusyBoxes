@@ -83,7 +83,7 @@
 
             <!-- drop down explorations -->
             <div class="btn-group">
-                <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Action <span class="caret"></span></button>
+                <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Rule Set <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="?rule=bbRule">Basic</a></li>
                     <li><a href="?rule=golRule">Game of Life</a></li>
@@ -91,75 +91,80 @@
                 </ul>
             </div>
 
-            <span id="debug"></span>
-            <br/>
-            <button class="goHash" onclick="setRule('?rule=golRule')" id="x"> choose a rule</button>
-            <button class="goHash" id="introHash" onclick="selectHash('PeciXwDuTA0', this)">Intro</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('GJR0', this)">Glider 1</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('UMlSpB0', this)">Glider 2</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('IYKmDcRzB0', this)">Glider 3</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('IYKmDIA0', this)">Glider 4</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('PB0jwU0vAB0', this)">Glider 5</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('PR0cME0nAA0', this)">Glider 6</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('IFIWA0', this)">Cycle 1 (12)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('csmKB0', this)">Cycle 2 (12)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('AQGk0', this)">Cycle 3 (24)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('BwF6Ao40', this)">Cycle 4 (36)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('UMXTUukA0', this)">Cycle 5 (42)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('ACRAs0', this)">Cycle 6 (60)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('sIECiMgQKE0', this)">Cycle 7 (84)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('IDYCyj0B5', this)">Cycle 8 (144)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('cICOg2CB0', this)">Cycle 9 (582)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('sICMBZBAULIB0', this)">Cycle 10 (3966)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('Tc9FLA0', this)">Boomerang (60)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('HS8UNxTp0', this)">Deflect (Routing)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('XUcUN4Ab3pB0', this)">Logic (Interaction Gate)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('cs6dxwG0', this)">Move</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('MLDQ3S82JzTA0', this)">Fast and Slow</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('EAHuexNzTmB0', this)">Capture and emit</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('QAgIjoICCzCBB0', this)">Delayed release</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('vwB3JyPaCCCPQCCCPQCCCPQCCD1dPHzPM0', this)">Attraction</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('MnCTi7uMxOftTl7px47ec4vgSHgMH4FTu5zo-AZk5eecBOvjnR8BSU5ecunSHFwcvwEh4BOm.APh4eTqSB0', this, 24)" id="order_chaos">Order Out of Chaos</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('UHfALungB5AgUEEegIFBBHoCBwAj0BAoII9AQKCDydXwCsA0', this, 24)" id="struct_decay">Decay</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('UkDEoQIHETAnBgQo9IUYECBwzo6Q4AQSdAUmCBDhoQOAcCCDOjoIBAgcAUmCnB0CBAgcQ9Abg6KHATBSdAYOE4OkUUIFBejBAgcIJOgIEDgBBJ1BwnBgwcQ9AUY9ACToCBxE6QoIJwdIcI9IUKPQECBwBB0', this)">
-                Big Bang (Entropy)</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('EOjuPgFiYmJieAY8AnwIPgL4BzwBw0NDYnKeANLzngEo0aNH4DnwGSpUqVLR0', this, 40)" id="octave">Octave</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('cDvPgDiQ0NiYngHPAN8CD4EeAc8AweA2Gh8DMSGhuc8APMcyWjRSpaPwGPgOlS0aB0', this, 40)" id="strung_out">Harmonic Chaos</button>
-            <br/>
-            <button class="goHash" onclick="selectHash('RZejhMkpklOTtLA0', this, 40, 250)" id="circular">Circular Motion</button>
-            <br/>
-        </div>
+                        <div class="btn-group">
+                <button type="button" data-toggle="dropdown" class="btn btn-default dropdown-toggle">Configurations <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+<li><a href="#" onclick="setRule('?rule=golRule')" id="x"> choose a rule</a></li>
+            <li><a href="#" id="introHash" onclick="selectHash('PeciXwDuTA0', this)">Intro</a></li>
+            
+            <li><a href="#" onclick="selectHash('GJR0', this)">Glider 1</a></li>
+            
+            <li><a href="#" onclick="selectHash('UMlSpB0', this)">Glider 2</a></li>
+            
+            <li><a href="#" onclick="selectHash('IYKmDcRzB0', this)">Glider 3</a></li>
+            
+            <li><a href="#" onclick="selectHash('IYKmDIA0', this)">Glider 4</a></li>
+            
+            <li><a href="#" onclick="selectHash('PB0jwU0vAB0', this)">Glider 5</a></li>
+            
+            <li><a href="#" onclick="selectHash('PR0cME0nAA0', this)">Glider 6</a></li>
+            
+            <li><a href="#" onclick="selectHash('IFIWA0', this)">Cycle 1 (12)</a></li>
+            
+            <li><a href="#" onclick="selectHash('csmKB0', this)">Cycle 2 (12)</a></li>
+            
+            <li><a href="#" onclick="selectHash('AQGk0', this)">Cycle 3 (24)</a></li>
+            
+            <li><a href="#" onclick="selectHash('BwF6Ao40', this)">Cycle 4 (36)</a></li>
+            
+            <li><a href="#" onclick="selectHash('UMXTUukA0', this)">Cycle 5 (42)</a></li>
+            
+            <li><a href="#" onclick="selectHash('ACRAs0', this)">Cycle 6 (60)</a></li>
+            
+            <li><a href="#" onclick="selectHash('sIECiMgQKE0', this)">Cycle 7 (84)</a></li>
+            
+            <li><a href="#" onclick="selectHash('IDYCyj0B5', this)">Cycle 8 (144)</a></li>
+            
+            <li><a href="#" onclick="selectHash('cICOg2CB0', this)">Cycle 9 (582)</a></li>
+            
+            <li><a href="#" onclick="selectHash('sICMBZBAULIB0', this)">Cycle 10 (3966)</a></li>
+            
+            <li><a href="#" onclick="selectHash('Tc9FLA0', this)">Boomerang (60)</a></li>
+            
+            <li><a href="#" onclick="selectHash('HS8UNxTp0', this)">Deflect (Routing)</a></li>
+            
+            <li><a href="#" onclick="selectHash('XUcUN4Ab3pB0', this)">Logic (Interaction Gate)</a></li>
+            
+            <li><a href="#" onclick="selectHash('cs6dxwG0', this)">Move</a></li>
+            
+            <li><a href="#" onclick="selectHash('MLDQ3S82JzTA0', this)">Fast and Slow</a></li>
+            
+            <li><a href="#" onclick="selectHash('EAHuexNzTmB0', this)">Capture and emit</a></li>
+            
+            <li><a href="#" onclick="selectHash('QAgIjoICCzCBB0', this)">Delayed release</a></li>
+            
+            <li><a href="#" onclick="selectHash('vwB3JyPaCCCPQCCCPQCCCPQCCD1dPHzPM0', this)">Attraction</a></li>
+            
+            <li><a href="#" onclick="selectHash('MnCTi7uMxOftTl7px47ec4vgSHgMH4FTu5zo-AZk5eecBOvjnR8BSU5ecunSHFwcvwEh4BOm.APh4eTqSB0', this, 24)" id="order_chaos">Order Out of Chaos</a></li>
+            
+            <li><a href="#" onclick="selectHash('UHfALungB5AgUEEegIFBBHoCBwAj0BAoII9AQKCDydXwCsA0', this, 24)" id="struct_decay">Decay</a></li>
+            
+            <li><a href="#" onclick="selectHash('UkDEoQIHETAnBgQo9IUYECBwzo6Q4AQSdAUmCBDhoQOAcCCDOjoIBAgcAUmCnB0CBAgcQ9Abg6KHATBSdAYOE4OkUUIFBejBAgcIJOgIEDgBBJ1BwnBgwcQ9AUY9ACToCBxE6QoIJwdIcI9IUKPQECBwBB0', this)">
+                Big Bang (Entropy)</a></li>
+            
+            <li><a href="#" onclick="selectHash('HefAXExMTE8Axy.Ag7vAMcuJicpw854AUqVKlSpUqVL8Bz4JUaKVKl0', this, 40)" id="strung_out">Strung out</a></li>
+            
+            <li><a href="#" onclick="selectHash('EOjuPgFiYmJieAY8AnwIPgL4BzwBw0NDYnKeANLzngEo0aNH4DnwGSpUqVLR0', this, 40)" id="octave">Octave</a></li>
+            
+            <li><a href="#" onclick="selectHash('cDvPgDiQ0NiYngHPAN8CD4EeAc8AweA2Gh8DMSGhuc8APMcyWjRSpaPwGPgOlS0aB0', this, 40)" id="strung_out">Harmonic Chaos</a></li>
+            
+            <li><a href="#" onclick="selectHash('RZejhMkpklOTtLA0', this, 40, 250)" id="circular">Circular Motion</a></li>
+
+                </ul>
+            </div>
+
+            
+            
         <div style="display:none">
             <div id="banner">
                 <span style="background-color: #fff; opacity:0.5; border-bottom: 1px solid #ddd; padding: 8px 10px; font-size:medium">
@@ -197,7 +202,7 @@
         <script type="text/javascript" src="js/bb3StateRule.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         
-        <div style="display:hidden">
+        <div style="display:none">
             <img src="tracking.jpg"></img>
         </div>
     </div>
