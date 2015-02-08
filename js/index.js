@@ -452,12 +452,12 @@ function liveCell(xyz, color, state) {
     
     if (!cell_obj) {
         console.log("liveCell gThreeUnused: ", gThreeUnused);
-		if (!gThreeUnused.length) {
+		if (1||!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
 		  	cell_obj = new CellObj(threejs, state );
             cell_obj.threejs.overdraw = true;
 			scene.addObject( cell_obj.threejs );
-            if (DEBUG) console.log("liveCell: creating new obj:", xyz, cell_obj);
+            if (DEBUG) console.log("liveCell: creating new obj:", xyz, cell_obj, "color:", color);
 
 		}
 		else {
@@ -546,11 +546,28 @@ function mainLoop(noRender) {
         	var coi = gRule(grid, x, y, z, f);
         	if (coi == null) coi = old;
             if(old && !coi){
-                // console.log("WE ARE KILLING!", [x,y,z]);
+                console.log("WE ARE KILLING!", [x,y,z]);
                 killCell([x,y,z]);
             }else if(!old && coi){
-                // console.log("WE ARE CREATING!", [x,y,z]);
-                liveCell([x,y,z], DEFAULT_COLOR);
+                console.log("WE ARE CREATING!", [x,y,z], coi, f);
+                var col;
+                if (f & 1) {
+                	if (coi > 0) {
+                		col = POS_ODD;
+                	}
+                	else {
+                		col = NEG_ODD;
+                	}
+                }
+                else {
+                	if (coi > 0) {
+                		col = POS_EVEN;
+                	}
+                	else {
+                		col = NEG_EVEN;
+                	}
+                }
+                liveCell([x,y,z], col);
             }
             return coi;
         }, frame);
