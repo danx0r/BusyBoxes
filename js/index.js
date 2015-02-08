@@ -1,5 +1,5 @@
 //<![CDATA[
-var DEBUG = false;
+var DEBUG = true;
 var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
@@ -451,7 +451,7 @@ function liveCell(xyz, color, state) {
 	var cell_obj = visual_and_numerical_grid[xyz];
     
     if (!cell_obj) {
-        //console.log("liveCell gThreeUnused: ", gThreeUnused);
+        console.log("liveCell gThreeUnused: ", gThreeUnused);
 		if (!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
 		  	cell_obj = new CellObj(threejs, state );
@@ -485,8 +485,8 @@ function liveCell(xyz, color, state) {
         
 		if (DEBUG) console.log("live gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
 	}
-    //console.log("liveCell cell_obj:  ", cell_obj);
-	// else console.log("liveCell: already live, doing nuttin", xyz);
+	else 
+		console.log("liveCell: already live, doing nuttin", xyz);
     return cell_obj;
 }
 
@@ -1123,22 +1123,7 @@ function onDocumentKeyDown( event ) {
             event.preventDefault();
             if (isRunning) break;
             var obj = getGrid(cursor);
-            // console.log("OBJ: ", obj);
-            // if(obj){
-            //   // console.log("State!: ", obj.state)
-            // }
-            
             if (!obj){
-              // var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ] ) );
-              // var cell_obj = new CellObj(threejs, 1 );
-              // //add third parameter--negative
-              // //contstruct object: mesh(THREE.js), state()
-              // putGrid(cell_obj, cursor);
-              // setObjPosition(cell_obj.threejs, cursor);
-              // cell_obj.threejs.overdraw = true;
-              // scene.addObject( cell_obj.threejs );
-              
-//              liveCell(cursor, DEFAULT_COLOR, 1);
                 if (field==1) {
 	                liveCell(cursor, POS_ODD, 1 );          	
                 }
@@ -1148,40 +1133,9 @@ function onDocumentKeyDown( event ) {
               
 
               mainGrid.put(cursor[0],cursor[1],cursor[2], 1);
-              
-              //console.log("cell_obj: ", cell_obj)
-              //console.log("grid: ", visual_and_numerical_grid)
             }
-            // else if (obj.state === -1) {
-            //     scene.removeObject(obj.threejs);
-            //     delGrid(cursor);
-
-            // }
-            // else if (obj.state === 1) {
-            //     // alert("yes I'm here");
-            //     if((cursor[0] + cursor[1] + cursor[2]) % 2 == 0){
-            //       minusColor = 0
-            //     }
-            //     else{
-            //       minusColor = 1
-            //     }
-            //     var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( minusColors[ minusColor ] ) );
-            //     var cell_obj = new CellObj(threejs, -1 )
-            //     scene.removeObject(obj.threejs);
-            //     delGrid(cursor);
-            //     //add third parameter--negative
-            //     //contstruct object: mesh(THREE.js), state()
-            //     putGrid(cell_obj, cursor);
-            //     setObjPosition(cell_obj.threejs, cursor);
-            //     cell_obj.threejs.overdraw = true;
-            //     scene.addObject( cell_obj.threejs );                
-            // }
-
-
             else if (STATES == 3 && obj.state === 1){
                 killCell(cursor);
-                // console.log("3rd state ThreeUnused after killing: ", gThreeUnused)
-                //mainGrid.put(cursor[0],cursor[1],cursor[2], 0);
                 updateHash(); 
                 gInitialHash = lasthash;
                 gInitialFrame = frame;
@@ -1195,8 +1149,6 @@ function onDocumentKeyDown( event ) {
                 mainGrid.put(cursor[0],cursor[1],cursor[2], -1);
             }
             else{
-              // scene.removeObject(obj.threejs);
-              // delGrid(cursor);
               killCell(cursor);
               mainGrid.put(cursor[0],cursor[1],cursor[2], 0)
               
