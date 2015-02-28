@@ -496,16 +496,18 @@ function liveCell(xyz, color, state) {
 		else {
 			cell_obj = gThreeUnused.pop(0);
             if (DEBUG2) console.log("liveCell: reusing obj:", xyz, cell_obj, "state:", state, "color:", color.toString(16));
-            if(state === -1){               
+            if(state === -1) {
                 cell_obj.state = -1;
-                cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+                // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+                cell_obj.threejs.material[ 0 ].color.setHex(color ^ 0xFF000000)
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
                 if (DEBUG2) console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
             else if(state === 1){
                 cell_obj.state = 1;
-                cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+                // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+                cell_obj.threejs.material[ 0 ].color.setHex(color ^ 0xFF000000)
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
                 if (DEBUG2) console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
