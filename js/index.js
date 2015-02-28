@@ -454,7 +454,7 @@ function liveCell(xyz, color, state) {
     
     if (!cell_obj) {
         if (DEBUG) console.log("liveCell gThreeUnused: ", gThreeUnused);
-		if (1||!gThreeUnused.length) {
+		if (!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
 		  	cell_obj = new CellObj(threejs, state );
             cell_obj.threejs.overdraw = true;
@@ -467,14 +467,14 @@ function liveCell(xyz, color, state) {
             if (DEBUG2) console.log("liveCell: reusing obj:", xyz, cell_obj, "state:", state, "color:", color.toString(16));
             if(state === -1){               
                 cell_obj.state = -1;
-                // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+                cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
                 if (DEBUG2) console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
             else if(state === 1){
                 cell_obj.state = 1;
-                // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( "orange" ) );
+                cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
                 if (DEBUG2) console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
@@ -569,7 +569,7 @@ function mainLoop(noRender) {
                 		col = NEG_EVEN;
                 	}
                 }
-                liveCell([x,y,z], col);
+                liveCell([x,y,z], col, coi);
             }
             return coi;
         }, frame);
