@@ -272,29 +272,34 @@ bugg = 1000;
     
 
     //Add a compass rose to help the user stay oriented
-    var compassRoseOffsetFromCenter = 630;
+    var compassRoseOffsetFromCenter
+    if(size) {
+        compassRoseOffsetFromCenter = size * 25 + 30;
+    } else {
+        compassRoseOffsetFromCenter = 630;
+    }
     compassRoseAlpha = .5;
 
-    compassRose = new THREE.Mesh( new Cube(10, 10, 100), new THREE.MeshColorFillMaterial( 0xFF0000, compassRoseAlpha) );
-    compassRose.position.x = -compassRoseOffsetFromCenter;
-    compassRose.position.y = 0;
-    compassRose.position.z = compassRoseOffsetFromCenter;
-    compassRose.overdraw = true;
-    scene.addObject( compassRose );
+    var compassRose1 = new THREE.Mesh( new Cube(10, 10, 100), new THREE.MeshColorFillMaterial( 0xFF0000, compassRoseAlpha) );
+    compassRose1.position.x = -compassRoseOffsetFromCenter;
+    compassRose1.position.y = 0;
+    compassRose1.position.z = compassRoseOffsetFromCenter;
+    compassRose1.overdraw = true;
+    scene.addObject( compassRose1 );
 
-    compassRose = new THREE.Mesh( new Cube(10, 100, 10), new THREE.MeshColorFillMaterial( 0x00FF00, compassRoseAlpha) );
-    compassRose.position.x = -compassRoseOffsetFromCenter;
-    compassRose.position.y = 0;
-    compassRose.position.z = compassRoseOffsetFromCenter;
-    compassRose.overdraw = true;
-    scene.addObject( compassRose );
+    var compassRose2 = new THREE.Mesh( new Cube(10, 100, 10), new THREE.MeshColorFillMaterial( 0x00FF00, compassRoseAlpha) );
+    compassRose2.position.x = -compassRoseOffsetFromCenter;
+    compassRose2.position.y = 0;
+    compassRose2.position.z = compassRoseOffsetFromCenter;
+    compassRose2.overdraw = true;
+    scene.addObject( compassRose2 );
 
-    compassRose = new THREE.Mesh( new Cube(100, 10, 10), new THREE.MeshColorFillMaterial( 0x0000FF, compassRoseAlpha) );
-    compassRose.position.x = -compassRoseOffsetFromCenter;
-    compassRose.position.y = 0;
-    compassRose.position.z = compassRoseOffsetFromCenter;
-    compassRose.overdraw = true;
-    scene.addObject( compassRose );
+    var compassRose3 = new THREE.Mesh( new Cube(100, 10, 10), new THREE.MeshColorFillMaterial( 0x0000FF, compassRoseAlpha) );
+    compassRose3.position.x = -compassRoseOffsetFromCenter;
+    compassRose3.position.y = 0;
+    compassRose3.position.z = compassRoseOffsetFromCenter;
+    compassRose3.overdraw = true;
+    scene.addObject( compassRose3 );
 
 
     // this is the cursor that shows where you are going to create a cube
