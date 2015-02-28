@@ -14,3 +14,5 @@ The new paper, which makes numerous references to the website running this softw
 It's running live (as of March, 2012) <a href="http://bbx.logqr.com/">here</a>.
 
 More info can be found in the <a href="http://bbx.logqr.com/faq.html">faq.</a>
+
+All of the code is right now in index.html.

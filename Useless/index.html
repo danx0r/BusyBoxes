@@ -29,8 +29,7 @@
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="css/application.css"></link>
     </head>
-    <body >
-        <div id="big_chris_container">
+    <body style="overflow-y:hidden">
         <div id="moodal_background" style="position:absolute;width:100%;height:100%;background-color:black;z-index:100;opacity:0.2;display:none">
         </div>
         <div id="trail_type" style="display:none">
@@ -79,7 +78,6 @@
             </div>
             <span id="debug"></span>
             <br/>
-            <button class="goHash" onclick="setRule('?rule=golRule')" id="x"> choose a rule</button>
             <button class="goHash" id="introHash" onclick="selectHash('PeciXwDuTA0', this)">Intro</button>
             <br/>
             <button class="goHash" onclick="selectHash('GJR0', this)">Glider 1</button>
@@ -132,7 +130,7 @@
             <br/>
             <button class="goHash" onclick="selectHash('MnCTi7uMxOftTl7px47ec4vgSHgMH4FTu5zo-AZk5eecBOvjnR8BSU5ecunSHFwcvwEh4BOm.APh4eTqSB0', this, 24)" id="order_chaos">Order Out of Chaos</button>
             <br/>
-            <button class="goHash" onclick="selectHash('UHfALungB5AgUEEegIFBBHoCBwAj0BAoII9AQKCDydXwCsA0', this, 24)" id="struct_decay">Decay</button>
+            <button class="goHash" onclick="selectHash('UHfALungB5AgUEEegIFBBHoCBwAj0BAoII9AQKCDydXwCsA0', this, 24)" id="struct_decay">Structure And Decay</button>
             <br/>
             <button class="goHash" onclick="selectHash('UkDEoQIHETAnBgQo9IUYECBwzo6Q4AQSdAUmCBDhoQOAcCCDOjoIBAgcAUmCnB0CBAgcQ9Abg6KHATBSdAYOE4OkUUIFBejBAgcIJOgIEDgBBJ1BwnBgwcQ9AUY9ACToCBxE6QoIJwdIcI9IUKPQECBwBB0', this)">
                 Big Bang (Entropy)</button>
@@ -174,18 +172,10 @@
         <script type="text/javascript" src="js/Plane.js"></script>
         <script type="text/javascript" src="js/encdec.js"></script>
         <script type="text/javascript" src="js/moodal.js"></script>
-        <script type="text/javascript" src="js/Grid.js"></script>
-        <script type="text/javascript" src="js/Rule.js"></script>
-        <script type="text/javascript" src="js/golRule.js"></script>
-        <script type="text/javascript" src="js/gol3DRule.js"></script>
-        <script type="text/javascript" src="js/bbRule.js"></script>
-        <script type="text/javascript" src="js/bb3Rule.js"></script>
-        <script type="text/javascript" src="js/bb3StateRule.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         
         <div style="display:hidden">
             <img src="tracking.jpg"></img>
         </div>
-    </div>
     </body>
 </html>
