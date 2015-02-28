@@ -1,5 +1,6 @@
 //<![CDATA[
 var DEBUG = true;
+var DEBUG2 = true;
 var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
@@ -451,7 +452,7 @@ function liveCell(xyz, color, state) {
 	var cell_obj = visual_and_numerical_grid[xyz];
     
     if (!cell_obj) {
-        console.log("liveCell gThreeUnused: ", gThreeUnused);
+        if (DEBUG) console.log("liveCell gThreeUnused: ", gThreeUnused);
 		if (!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
 		  	cell_obj = new CellObj(threejs, state );
@@ -468,14 +469,14 @@ function liveCell(xyz, color, state) {
                 // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
-                console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
+                if (DEBUG) console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
             else if(state === 1){
                 cell_obj.state = 1;
-                // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
+                // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( "orange" ) );
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
-                console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
+                if (DEBUG) console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
 			// deal with color somehow
 		}
@@ -486,7 +487,7 @@ function liveCell(xyz, color, state) {
 		if (DEBUG) console.log("live gThreeInUse:", bugg_used(), "gThreeUnused:", bugg_unused());
 	}
 	else 
-		console.log("liveCell: already live, doing nuttin", xyz);
+		if (DEBUG) console.log("liveCell: already live, doing nuttin", xyz);
     return cell_obj;
 }
 
@@ -546,10 +547,10 @@ function mainLoop(noRender) {
         	var coi = gRule(grid, x, y, z, f);
         	if (coi == null) coi = old;
             if(old && !coi){
-                console.log("WE ARE KILLING!", [x,y,z]);
+                if (DEBUG) console.log("WE ARE KILLING!", [x,y,z]);
                 killCell([x,y,z]);
             }else if(!old && coi){
-                console.log("WE ARE CREATING!", [x,y,z], coi, f);
+                if (DEBUG) console.log("WE ARE CREATING!", [x,y,z], coi, f);
                 var col;
                 if (f & 1) {
                 	if (coi > 0) {
@@ -825,7 +826,7 @@ function getMove(xyz, x1, x2) {
         offsetPosition[x1] = COI.xOffset;
         offsetPosition[x2] = COI.yOffset;
         if(i == 0){
-            console.log("offset position when looking at first knights move rule (1, 0, 4): ", offsetPosition);
+            if (DEBUG) console.log("offset position when looking at first knights move rule (1, 0, 4): ", offsetPosition);
         }
         // console.log("fucking offsetPosition ", offsetPosition);
         // console.log("and grid ", visual_and_numerical_grid[xyz]);
@@ -840,7 +841,7 @@ function getMove(xyz, x1, x2) {
             mv[x1] = COI.xMove;
             mv[x2] = COI.yMove;
             
-            console.log("duh mv ", mv);
+            if (DEBUG) console.log("duh mv ", mv);
 
             //move1 and move2 are all the "swaps" that can occur
             // var move1 = [+1, -1, +1, -1, +1, -1, +1, -1];
@@ -1014,7 +1015,7 @@ function onDocumentKeyDown( event ) {
     // THIS is the navigation interface
     // We should think about redesigning
     var field = (cursor[0] ^ cursor[1] ^ cursor[2]) & 1;
-    console.log("FIELD:", field);
+    if (DEBUG) console.log("FIELD:", field);
     switch( event.keyCode ) {
         case 37:                           // LEFT
             event.preventDefault();
@@ -1309,7 +1310,7 @@ function buildFromHash(hash) {
         hash = hash.substr( 0, hash.length - 1 );
     }
     if ( version == "A" ) {
-        console.log("glider: Version A");
+        if (DEBUG) console.log("glider: Version A");
         var current = { x: 0, y: 0, z: 0, c: 0 }
         var data = decode( hash );
         var i = 0, l = data.length;
@@ -1345,7 +1346,7 @@ function buildFromHash(hash) {
         }
     } else {
         if (version == "X") {
-            console.log("glider: Version X");
+            if (DEBUG) console.log("glider: Version X");
             var data = hash;
             var cur = [0, 0, 0];
             var x = 0;
@@ -1389,7 +1390,7 @@ function buildFromHash(hash) {
         }
         else {
             if (version == "Y") {
-                console.log("glider: Version Y");
+                if (DEBUG) console.log("glider: Version Y");
                 var data = hash;
                 data = encdec_decode(data);
                 var cur = [0, 0, 0];
@@ -1584,13 +1585,13 @@ function selectHash(hash, el, size, trail) {
             trailopt = "&trail=" + trail;
         }
         document.location = "/?size=" + size + trailopt + "&sel=" + el.id + "&hash=" + hash;
-        console.log("size and size!!!");
+        if (DEBUG) console.log("size and size!!!");
     }
     else {
         if (lastSelectedEl) {
             lastSelectedEl.style.backgroundColor = "#ddd";
         }
-        console.log("no pick me!!!");
+        if (DEBUG) console.log("no pick me!!!");
         reset(hash);
         el.style.backgroundColor = "cyan";
         lastSelectedEl = el;
@@ -1630,7 +1631,7 @@ function randomCells(){
     document.getElementById("random_prompt_count").value = '' + randCount;
     document.getElementById("random_prompt_ratio").value = '' + randRatio;
     moodal("random_prompt", function(result){
-        console.log("result:", result)
+        if (DEBUG) console.log("result:", result)
         if (result != "OK") return;
         var width = parseFloat(document.getElementById("random_prompt_width").value);
         var count = parseInt(document.getElementById("random_prompt_count").value);
@@ -1783,7 +1784,7 @@ function log(s){
     }
 }
 function scienceTest(){
-    console.log("SCIENCE!");
+    if (DEBUG) console.log("SCIENCE!");
     gScienceCounterInit = 100000;
     gScienceTrials = 1000;
     gScienceBatch = 1000;
@@ -1794,7 +1795,7 @@ function scienceTestInit() {
     document.getElementById("debug").innerHTML = "" + gScienceTrial + " out of " + gScienceTrials;
     gScienceCounter = gScienceCounterInit;
     randomCells_(5, 12, 0.25);
-    console.log("DEBUG frame at beginning:", frame);
+    if (DEBUG) console.log("DEBUG frame at beginning:", frame);
     gStartHash = lasthash;
     processSpeed = "test";
     //console.log("DEBUG lasthash:", lasthash)
@@ -1819,7 +1820,7 @@ function scienceTestLoop(){
         setTimeout(scienceTestLoop, 1);
     }
     else {
-        console.log("DEBUG trial over. gScienceCounter: ", gScienceCounter, "trial:", gScienceTrial, "hash:", gStartHash)
+        if (DEBUG) console.log("DEBUG trial over. gScienceCounter: ", gScienceCounter, "trial:", gScienceTrial, "hash:", gStartHash)
         isRunning = false;
         processSpeed = "slow";
         var result;
