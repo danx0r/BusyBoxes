@@ -449,34 +449,35 @@ function bugg_unused() {
 }
 
 function liveCell(xyz, color, state) {
+    if (DEBUG2) console.log("color:", color.toString(16));
 	var cell_obj = visual_and_numerical_grid[xyz];
     
     if (!cell_obj) {
         if (DEBUG) console.log("liveCell gThreeUnused: ", gThreeUnused);
-		if (!gThreeUnused.length) {
+		if (1||!gThreeUnused.length) {
 			var threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
 		  	cell_obj = new CellObj(threejs, state );
             cell_obj.threejs.overdraw = true;
 			scene.addObject( cell_obj.threejs );
-            if (DEBUG) console.log("liveCell: creating new obj:", xyz, cell_obj, "color:", color);
+            if (DEBUG2) console.log("liveCell: creating new obj:", xyz, cell_obj, "color:", color.toString(16));
 
 		}
 		else {
 			cell_obj = gThreeUnused.pop(0);
-            if (DEBUG) console.log("liveCell: reusing obj:", xyz, cell_obj);
+            if (DEBUG2) console.log("liveCell: reusing obj:", xyz, cell_obj, "state:", state, "color:", color.toString(16));
             if(state === -1){               
                 cell_obj.state = -1;
                 // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
-                if (DEBUG) console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
+                if (DEBUG2) console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
             else if(state === 1){
                 cell_obj.state = 1;
                 // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( "orange" ) );
                 cell_obj.threejs.overdraw = true;
                 scene.addObject( cell_obj.threejs );
-                if (DEBUG) console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
+                if (DEBUG2) console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
 			// deal with color somehow
 		}
