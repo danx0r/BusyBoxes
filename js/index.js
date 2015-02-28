@@ -221,16 +221,13 @@ bugg = 1000;
 
     //camera.position.y = 200;
     scene = new THREE.Scene();
-    
+
     
     //Graphical Grid
     var geometry = new THREE.Geometry();
     geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( axisMin * 50, 0, 0 ) ) );
     geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( (axisMax+1) * 50, 0, 0 ) ) );
     linesMaterial = new THREE.LineColorMaterial( 0x000000, 0.2 );
-    
-
-    
     
     if (!qargs.nogrid) {
         for (var i = 0; i <= axisMax - axisMin + 1; i++) {
@@ -274,13 +271,47 @@ bugg = 1000;
     //might be to figure out what is in front of the camera
     ray = new THREE.Ray( camera.position, null );
     
+
+    //Add a compass rose to help the user stay oriented
+    var compassRoseOffsetFromCenter
+    if(size) {
+        compassRoseOffsetFromCenter = size * 25 + 30;
+    } else {
+        compassRoseOffsetFromCenter = 630;
+    }
+    compassRoseAlpha = .5;
+
+    var compassRose1 = new THREE.Mesh( new Cube(10, 10, 100), new THREE.MeshColorFillMaterial( 0xFF0000, compassRoseAlpha) );
+    compassRose1.position.x = -compassRoseOffsetFromCenter;
+    compassRose1.position.y = 0;
+    compassRose1.position.z = compassRoseOffsetFromCenter;
+    compassRose1.overdraw = true;
+    scene.addObject( compassRose1 );
+
+    var compassRose2 = new THREE.Mesh( new Cube(10, 100, 10), new THREE.MeshColorFillMaterial( 0x00FF00, compassRoseAlpha) );
+    compassRose2.position.x = -compassRoseOffsetFromCenter;
+    compassRose2.position.y = 0;
+    compassRose2.position.z = compassRoseOffsetFromCenter;
+    compassRose2.overdraw = true;
+    scene.addObject( compassRose2 );
+
+    var compassRose3 = new THREE.Mesh( new Cube(100, 10, 10), new THREE.MeshColorFillMaterial( 0x0000FF, compassRoseAlpha) );
+    compassRose3.position.x = -compassRoseOffsetFromCenter;
+    compassRose3.position.y = 0;
+    compassRose3.position.z = compassRoseOffsetFromCenter;
+    compassRose3.overdraw = true;
+    scene.addObject( compassRose3 );
+
+
     // this is the cursor that shows where you are going to create a cube
     brush = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( colors[ color ], 0.4 ) );
     //brush.position.y = brushY;
     setObjPosition(brush, cursor);
     brush.overdraw = true;
     scene.addObject( brush );
+
     onMouseDownPosition = new THREE.Vector2();
+
     // Lights
     var ambientLight = new THREE.AmbientLight( 0x404040 );
     scene.addLight( ambientLight );
