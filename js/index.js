@@ -1,6 +1,6 @@
 //<![CDATA[
 var DEBUG = false;
-var DEBUG2 = true;
+var DEBUG2 = false;
 var CELL_TRAIL = false;
 var AVG_TRAIL = false;
 var avg_trail_a = [];
@@ -498,18 +498,14 @@ function liveCell(xyz, color, state) {
             if (DEBUG2) console.log("liveCell: reusing obj:", xyz, cell_obj, "state:", state, "color:", color.toString(16));
             if(state === -1) {
                 cell_obj.state = -1;
-                // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
                 cell_obj.threejs.material[ 0 ].color.setHex(color ^ 0xFF000000)
                 cell_obj.threejs.overdraw = true;
-                scene.addObject( cell_obj.threejs );
                 if (DEBUG2) console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
             else if(state === 1){
                 cell_obj.state = 1;
-                // cell_obj.threejs = new THREE.Mesh( cube, new THREE.MeshColorFillMaterial( color ) );
                 cell_obj.threejs.material[ 0 ].color.setHex(color ^ 0xFF000000)
                 cell_obj.threejs.overdraw = true;
-                scene.addObject( cell_obj.threejs );
                 if (DEBUG2) console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
             }
 			// deal with color somehow
