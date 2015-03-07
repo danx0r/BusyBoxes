@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = false;
 
 function Grid(x, y, z, mod_range, mode, state) {
 	this.dimx = x;
@@ -40,13 +40,13 @@ function Grid(x, y, z, mod_range, mode, state) {
 
 		if (cell_state == 1 || cell_state === -1) {
 			this.cells[key] = cell_state;
-			console.log("mission accomplished");
-			console.log("cell state: ", cell_state);
+			if (DEBUG) console.log("mission accomplished");
+			if (DEBUG) console.log("cell state: ", cell_state);
 		} else {
 			//research this
 			delete this.cells[key];
-			console.log("nay");
-			console.log("cell state: ", cell_state);
+			if (DEBUG) console.log("nay");
+			if (DEBUG) console.log("cell state: ", cell_state);
 		}
 	}
 
@@ -115,7 +115,7 @@ test_rule = function(grid, x, y, z) {
 	//var cell = this.get(x,y,z);
 	var neighbor = grid.get(x + 1, y, z);
 	if (neighbor) {
-		console.log("nabe @", x, y, z);
+		if (DEBUG) console.log("nabe @", x, y, z);
 		return 1;
 	} else {
 		return 0;
@@ -126,16 +126,16 @@ if (DEBUG === true) {
 	//TESTS
 	var grid = new Grid(10, 10, 10);
 	grid.put(0,0,0, 1);
-	console.log("Should be 0: ", grid.get(3, 3, 3));
-	console.log("Should be 1: ", grid.get(0,0,0));
+	if (DEBUG) console.log("Should be 0: ", grid.get(3, 3, 3));
+	if (DEBUG) console.log("Should be 1: ", grid.get(0,0,0));
 	grid.put(0,0,0, 0);
-	console.log("We deleted. Should be 0: ", grid.get(0,0,0));
-	console.log("Should be empty: ", grid.cells);
+	if (DEBUG) console.log("We deleted. Should be 0: ", grid.get(0,0,0));
+	if (DEBUG) console.log("Should be empty: ", grid.cells);
 	grid.clear();
 	grid.put(0,0,0, 1);
-	console.log("grid cells: ", grid.cells);
+	if (DEBUG) console.log("grid cells: ", grid.cells);
 	grid.iterate(test_rule);
 	grid.update();
-	console.log("grid cells: ", grid.cells);
+	if (DEBUG) console.log("grid cells: ", grid.cells);
 }
 
