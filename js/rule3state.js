@@ -4,8 +4,7 @@
 rule3state = function(grid, x,y,z, frame){
 	//console.log("grid.get(x, y, z): " + grid.get(x, y, z));
 
-	if ((frame+x+y+z) % 2 === 0)
-		return;
+	if ((x + y + z & 1) != (frame & 1)) return; 								// only process if field parity is correct
 
 	var done = false;
 	var newState;
