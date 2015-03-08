@@ -199,6 +199,8 @@ bugg = 1000;
     
     //Create a scene
     container = document.createElement( 'div' );
+    // container = document.getElementById('canvas-container');
+    console.log(container);
     document.body.appendChild( container );
     var info = document.createElement( 'div' );
     info.style.position = 'absolute';
@@ -331,12 +333,14 @@ bugg = 1000;
     //THREE: create the renderer
     renderer = new THREE.CanvasRenderer();
     
+
     if (renderer.invalid) {
         //alert ("CANVAS element not supported")
         document.location = "nocanvas.html"; 
     }
     renderer.setSize( window.innerWidth, window.innerHeight );
-    
+
+
     //this is the container div we created in the beginning
     container.appendChild(renderer.domElement);
     
@@ -345,7 +349,7 @@ bugg = 1000;
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
     document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-    document.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
+    container.addEventListener( 'mousewheel', onDocumentMouseWheel, false );
     document.addEventListener( 'DOMMouseScroll', onDocumentMouseWheel, false );
     
 
@@ -500,13 +504,17 @@ function liveCell(xyz, color, state) {
                 cell_obj.state = -1;
                 cell_obj.threejs.material[ 0 ].color.setHex(color ^ 0xFF000000)
                 cell_obj.threejs.overdraw = true;
+
                 if (DEBUG2) console.log("look here: ", cell_obj, gThreeInUse, gThreeUnused);
+
             }
             else if(state === 1){
                 cell_obj.state = 1;
                 cell_obj.threejs.material[ 0 ].color.setHex(color ^ 0xFF000000)
                 cell_obj.threejs.overdraw = true;
+
                 if (DEBUG2) console.log("should be grey--look here: ", cell_obj, gThreeInUse, gThreeUnused);
+
             }
 			// deal with color somehow
 		}
@@ -889,6 +897,7 @@ function onDocumentKeyDown( event ) {
             }
             else if (STATES == 3 && obj.state === 1){
                 killCell(cursor);
+
                 updateHash(); 
                 gInitialHash = lasthash;
                 gInitialFrame = frame;
@@ -899,6 +908,7 @@ function onDocumentKeyDown( event ) {
                 else {
                 	liveCell(cursor, NEG_EVEN, -1 );
                 }
+
                 mainGrid.put(cursor[0],cursor[1],cursor[2], -1);
             }
             else{
@@ -969,15 +979,15 @@ function onDocumentMouseUp( event ) {
 function onDocumentMouseWheel( event ) {
     if (gMoodalInEffect) return;
     event.preventDefault();
-if (event.detail) {							/// ugh, dumb Firefox hack
-if (event.detail > 0) {
-radius += 120;
-}
-else {
-radius -= 120;
-}
-}
-else {
+    if (event.detail) {                         /// ugh, dumb Firefox hack
+        if (event.detail > 0) {
+            radius += 120;
+        }
+        else {
+            radius -= 120;
+        }
+    }
+    else {
         if (event.wheelDeltayY) {
             radius -= event.wheelDeltaY;       /// chrome?
         }
@@ -987,13 +997,42 @@ else {
             }
             // else fuggedaboudit
         }
-}
-	if (DEBUG) console.log("mw ev:", radius)
+    }
+    if (DEBUG) console.log("mw ev:", radius)
     camera.position.x = radius * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
     camera.position.y = radius * Math.sin( phi * Math.PI / 360 );
     camera.position.z = radius * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
     camera.updateMatrix();
     render();
+
+
+    
+ //    event.preventDefault();
+ //    if (event.detail) {							/// ugh, dumb Firefox hack
+ //        if (event.detail > 0) {
+ //            radius += 120;
+ //        }
+ //        else {
+ //            radius -= 120;
+ //        }
+ //    }
+ //    else {
+ //        if (event.wheelDeltayY) {
+ //            radius -= event.wheelDeltaY;       /// chrome?
+ //        }
+ //        else {
+ //            if (event.wheelDelta) {             /// IE! & opera I hear
+ //                radius -= event.wheelDelta;
+ //            }
+ //            // else fuggedaboudit
+ //        }
+ //    }
+	// if (DEBUG) console.log("mw ev:", radius)
+ //    camera.position.x = radius * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+ //    camera.position.y = radius * Math.sin( phi * Math.PI / 360 );
+ //    camera.position.z = radius * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+ //    camera.updateMatrix();
+ //    render();
 }
 function setBrushColor( value ) {
     color = value;
