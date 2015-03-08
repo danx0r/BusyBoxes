@@ -3,7 +3,7 @@
  * http://arxiv.org/abs/1206.2060
  */
 
-STATES=3;
+//STATES=3;
 
 bb3StateRule = function(grid, x, y, z, frm) {
 	var offx, offy, offz, swpx, swpy, swpz;
@@ -31,7 +31,7 @@ bb3StateRule = function(grid, x, y, z, frm) {
 
 	function getSwap2(x, y, z) {													// return valid swap offset or null if there is contention
 		var swapx = null, swapy = null;
-		for (var i=0; i<8; i++) {
+		for (var i=0; i<4; i++) {
 			var xx = x+offx[i];
 			var yy = y+offy[i];
 			var zz = z+offz[i];
@@ -48,8 +48,19 @@ bb3StateRule = function(grid, x, y, z, frm) {
 		return [swapx, swapy, swapz];
 	}
 
-	function onePlane() {														// process one of 3 planes dep on phase
-		var swap = getSwap(x, y, z);											// proposed swap cell as delta from xyz
+	function onePlane() {
+		console.log("rule is running", coi );
+		if(coi === 1){
+			console.log("state is 1");
+			var swap = getSwap(x, y, z);
+		}else if(coi === 0){
+			var swap = getSwap(x, y, z);
+		}else if(coi === -1){
+			console.log("state is -1");
+			var swap = getSwap2(x, y, z);
+			
+		}																																// process one of 3 planes dep on phase
+		//var swap = getSwap(x, y, z);											// proposed swap cell as delta from xyz
 		if (swap != null) {														// if valid (no immediate conflicts)
 			var swapper = grid.get(x+swap[0], y+swap[1], z+swap[2]);   			// get state at swap cell
 			if (swapper != coi) {												// if state is different from ours, we might swap
@@ -103,6 +114,17 @@ var bb_offsetz = [0, 0, 0, 0, 0, 0, 0, 0];
 var bb_swapx = [+1, -1, +1, -1, +1, -1, +1, -1];
 var bb_swapy = [-1, +1, +1, -1, +1, -1, -1, +1];
 var bb_swapz = [0, 0, 0, 0, 0, 0, 0, 0];
+
+
+//THIRD STATE STUFF
+var bb3_offsetx = [+2, +1, -1, -2, +2, +1, -1, -2];
+var bb3_offsety = [+1, +2, +2, +1, -1, -2, -2, -1];
+
+var bb3_swapx = [0, 2, -2, 0, 0, -2, 2, 0]
+var bb3_swapy = [2, 0, 0, 2. -2, 0, 0, -2]
+
+
+
 
 // Javascript ftw
 function trueMod(v, base) {
