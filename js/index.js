@@ -437,18 +437,18 @@ function mainLoopFast() {
 }
 
 function mainLoopSlow() {
-    if (document.getElementById("leftLinks").clientHeight >= window.innerHeight) {
-        if (!scrollBarX) {
-            scrollBarX = true;
-            document.body.style.overflowY="scroll";
-        }
-    }
-    else {
-        if (scrollBarX) {
-            scrollBarX = false;
-            document.body.style.overflowY="hidden";
-        }
-    }
+    // if (document.getElementById("leftLinks").clientHeight >= window.innerHeight) {
+    //     if (!scrollBarX) {
+    //         scrollBarX = true;
+    //         document.body.style.overflowY="scroll";
+    //     }
+    // }
+    // else {
+    //     if (scrollBarX) {
+    //         scrollBarX = false;
+    //         document.body.style.overflowY="hidden";
+    //     }
+    // }
     if (processSpeed == "slow") {
         mainLoop();
     }
