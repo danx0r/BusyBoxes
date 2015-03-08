@@ -57,6 +57,7 @@ bb3Rule = function(grid, x, y, z, frm) {
 		swpz = bb3_swapz;
 	}
 	if (m==1) {
+		return;
 		offx = bb3_offsetz;
 		offy = bb3_offsetx;
 		offz = bb3_offsety;
