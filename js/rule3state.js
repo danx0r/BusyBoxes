@@ -81,8 +81,9 @@ getLocationToGetFrom = function(grid, x,y,z) {
 }
 
 rule3state = function(grid, x,y,z, frame){
-	if ((frame+x+y+z) % 2 === 0)
-		return;
+	// if ((frame+x+y+z) % 2 === 0)
+		// return;
+	if ((x + y + z & 1) != (frame & 1)) return; 								// only process if field parity is correct
 
 	var locationToGetFrom = getLocationToGetFrom(grid, x,y,z);
 
